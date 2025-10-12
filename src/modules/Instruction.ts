@@ -1,8 +1,6 @@
 import { ffi } from "@/ffi";
 import { assert } from "@/utils";
 import { BasicBlock } from "./BasicBlock";
-import type { LLVMFunction } from "./Function";
-import type { Module } from "./Module";
 import { User } from "./User";
 
 /**
@@ -20,24 +18,6 @@ export class Instruction extends User {
 		assert(parentRef !== null, "Failed to get instruction parent");
 
 		return new BasicBlock(parentRef);
-	}
-
-	/**
-	 * Get the module that contains this instruction.
-	 * @returns The parent module, or null if not in a module
-	 */
-	public getModule(): Module | null {
-		// TODO: Not implemented yet - need to traverse up to module
-		throw new Error("Instruction.getModule not implemented yet");
-	}
-
-	/**
-	 * Get the function that contains this instruction.
-	 * @returns The parent function, or null if not in a function
-	 */
-	public getFunction(): LLVMFunction | null {
-		// TODO: Not implemented yet - need to traverse up to function
-		throw new Error("Instruction.getFunction not implemented yet");
 	}
 
 	/**

@@ -42,7 +42,7 @@ export class Constant extends User {
 		return ffi.LLVMIsNull(this.ref);
 	}
 
-	// TODO: Implement UndefValue
+	// TODO: Implement UndefValue class
 	public getUndefValue(): Value {
 		const valueRef = ffi.LLVMGetUndef(this.ref);
 		assert(valueRef !== null, "Failed to get undef value");
@@ -50,7 +50,7 @@ export class Constant extends User {
 		return new Value(valueRef);
 	}
 
-	// TODO: Implement PoisonValue
+	// TODO: Implement PoisonValue class
 	public getPoisonValue(): Value {
 		const valueRef = ffi.LLVMGetPoison(this.ref);
 		assert(valueRef !== null, "Failed to get poison value");
