@@ -1,6 +1,8 @@
 import { ffi } from "@/ffi";
-import type { LLVMTypeRef } from "@/utils";
+import { assert, type LLVMTypeRef } from "@/utils";
 import { LLVMTypeKind } from "./Enum";
+import type { FunctionType } from "./FunctionType";
+import type { IntegerType } from "./IntegerType";
 import { LLVMContext } from "./LLVMContext";
 
 export class Type {
@@ -27,49 +29,49 @@ export class Type {
 	/**
 	 * Static method to get int1 type
 	 */
-	static getInt1Ty(): Type {
-		return new Type(ffi.symbols.LLVMInt1Type());
+	static getInt1Ty(): IntegerType {
+		return new Type(ffi.symbols.LLVMInt1Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int8 type
 	 */
-	static getInt8Ty(): Type {
-		return new Type(ffi.symbols.LLVMInt8Type());
+	static getInt8Ty(): IntegerType {
+		return new Type(ffi.symbols.LLVMInt8Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int16 type
 	 */
-	static getInt16Ty(): Type {
-		return new Type(ffi.symbols.LLVMInt16Type());
+	static getInt16Ty(): IntegerType {
+		return new Type(ffi.symbols.LLVMInt16Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int32 type
 	 */
-	static getInt32Ty(): Type {
-		return new Type(ffi.symbols.LLVMInt32Type());
+	static getInt32Ty(): IntegerType {
+		return new Type(ffi.symbols.LLVMInt32Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int64 type
 	 */
-	static getInt64Ty(): Type {
-		return new Type(ffi.symbols.LLVMInt64Type());
+	static getInt64Ty(): IntegerType {
+		return new Type(ffi.symbols.LLVMInt64Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int128 type
 	 */
-	static getInt128Ty(): Type {
-		return new Type(ffi.symbols.LLVMInt128Type());
+	static getInt128Ty(): IntegerType {
+		return new Type(ffi.symbols.LLVMInt128Type()) as IntegerType;
 	}
 	/**
 	 * Static method to get intN type
 	 */
-	static getIntNTy(numBits: number): Type {
-		return new Type(ffi.symbols.LLVMIntType(numBits));
+	static getIntNTy(numBits: number): IntegerType {
+		return new Type(ffi.symbols.LLVMIntType(numBits)) as IntegerType;
 	}
 
 	/**
@@ -107,9 +109,12 @@ export class Type {
 		returnType: Type,
 		paramTypes: Type[] = [],
 		isVarArg: boolean = false,
-	): Type {
+	): FunctionType {
 		if (paramTypes.length === 0) {
-			return new Type(ffi.symbols.LLVMFunctionType(returnType.ref, null, 0, isVarArg));
+			const functionTypeRef = ffi.symbols.LLVMFunctionType(returnType.ref, null, 0, isVarArg);
+			assert(functionTypeRef !== null, "Failed to create function type");
+
+			return new Type(functionTypeRef) as FunctionType;
 		}
 
 		const paramTypesBuffer = new ArrayBuffer(paramTypes.length * 8);
@@ -121,9 +126,16 @@ export class Type {
 			paramTypesView[i] = BigInt(paramTypes[i]!.ref as any);
 		}
 
-		return new Type(
-			ffi.symbols.LLVMFunctionType(returnType.ref, paramTypesView, paramTypes.length, isVarArg),
+		const functionTypeRef = ffi.symbols.LLVMFunctionType(
+			returnType.ref,
+			paramTypesView,
+			paramTypes.length,
+			isVarArg,
 		);
+
+		assert(functionTypeRef !== null, "Failed to create function type");
+
+		return new Type(functionTypeRef) as FunctionType;
 	}
 
 	/**

@@ -36,7 +36,7 @@ export class LLVMFunction extends GlobalObject {
 		assert(funcRef !== null, "Failed to create function");
 
 		// Set the linkage
-		ffi.symbols.LLVMSetGlobalLinkage(funcRef, linkage);
+		ffi.symbols.LLVMSetLinkage(funcRef, linkage);
 
 		return new LLVMFunction(funcRef);
 	}

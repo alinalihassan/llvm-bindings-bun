@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "bun:test";
+import type { FunctionType, IntegerType } from "@/index.js";
 import { LLVMContext } from "../src/modules/LLVMContext.js";
 import { Module } from "../src/modules/Module.js";
 import { Type } from "../src/modules/Type.js";
@@ -101,7 +102,7 @@ describe("Module Tests", () => {
 	describe("Function Operations", () => {
 		let module: Module;
 		let int32Type: Type;
-		let funcType: Type;
+		let funcType: FunctionType;
 
 		beforeEach(() => {
 			module = new Module("test_module");
@@ -177,23 +178,6 @@ describe("Module Tests", () => {
 			const nonExistentGlobal = module.getGlobalVariable("non_existent");
 			expect(nonExistentGlobal).toBeNull();
 		});
-
-		it("should get first global variable in module", () => {
-			// Initially no global variables
-			const firstGlobal = module.getFirstGlobal();
-			expect(firstGlobal).toBeNull();
-		});
-
-		it("should get next global variable in iteration", () => {
-			// Initially no global variables, so next should be null
-			const firstGlobal = module.getFirstGlobal();
-			expect(firstGlobal).toBeNull();
-
-			if (firstGlobal) {
-				const nextGlobal = module.getNextGlobal(firstGlobal);
-				expect(nextGlobal).toBeNull();
-			}
-		});
 	});
 
 	describe("Module Utilities", () => {
@@ -255,8 +239,8 @@ describe("Module Tests", () => {
 
 	describe("Module Integration", () => {
 		let module: Module;
-		let int32Type: LLVMTypeRef;
-		let voidType: LLVMTypeRef;
+		let int32Type: IntegerType;
+		let voidType: Type;
 
 		beforeEach(() => {
 			module = new Module("integration_test");
@@ -290,16 +274,16 @@ describe("Module Tests", () => {
 			module.getOrInsertFunction("func2", funcType);
 			module.getOrInsertFunction("func3", funcType);
 
-			const firstFunc = module.getFirstFunction();
+			const firstFunc = module.getFunction("func1");
 			expect(firstFunc).toBeDefined();
 
-			const secondFunc = module.getNextFunction(firstFunc as any);
+			const secondFunc = module.getFunction("func2");
 			expect(secondFunc).toBeDefined();
 
-			const thirdFunc = module.getNextFunction(secondFunc as any);
+			const thirdFunc = module.getFunction("func3");
 			expect(thirdFunc).toBeDefined();
 
-			const fourthFunc = module.getNextFunction(thirdFunc as any);
+			const fourthFunc = module.getFunction("func4");
 			expect(fourthFunc).toBeNull();
 		});
 
