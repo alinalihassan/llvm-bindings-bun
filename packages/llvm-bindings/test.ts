@@ -1,4 +1,4 @@
-import { FunctionCallee, PassBuilder } from "./src";
+import { FunctionCallee } from "./src";
 import { BasicBlock } from "./src/modules/BasicBlock";
 import { GlobalValueLinkageTypes } from "./src/modules/Enum";
 import { LLVMFunction } from "./src/modules/Function";
