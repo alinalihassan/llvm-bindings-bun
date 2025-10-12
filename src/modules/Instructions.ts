@@ -5,7 +5,7 @@ import type { Constant } from "./Constant";
 import type { ConstantInt } from "./ConstantInt";
 import { LLVMCmpInstOpcode, LLVMCmpInstPredicate } from "./Enum";
 import { Instruction } from "./Instruction";
-import type { Type } from "./Type";
+import { Type } from "./Type";
 import { Value } from "./Value";
 
 /**
@@ -22,13 +22,19 @@ export class AllocaInst extends Instruction {
 	}
 
 	public getAllocatedType(): Type {
-		// TODO: Not implemented yet
-		throw new Error("AllocaInst.getAllocatedType not implemented yet");
+		const allocatedTypeRef = ffi.LLVMGetAllocatedType(this.ref);
+		assert(allocatedTypeRef !== null, "Failed to get allocated type");
+
+		return new Type(allocatedTypeRef);
 	}
 
+	/**
+	 * Get the number of elements allocated. For a simple allocation of a single
+	 * element, this will return a constant 1 value.
+	 * @returns The number of elements allocated
+	 */
 	public getArraySize(): Value {
-		// TODO: Not implemented yet
-		throw new Error("AllocaInst.getArraySize not implemented yet");
+		return this.getOperand(0);
 	}
 }
 
@@ -60,18 +66,15 @@ export class StoreInst extends Instruction {
 	}
 
 	public getValueOperand(): Value {
-		// TODO: Not implemented yet
-		throw new Error("StoreInst.getValueOperand not implemented yet");
+		return this.getOperand(0);
 	}
 
 	public getPointerOperand(): Value {
-		// TODO: Not implemented yet
-		throw new Error("StoreInst.getPointerOperand not implemented yet");
+		return this.getOperand(1);
 	}
 
 	public getPointerOperandType(): Type {
-		// TODO: Not implemented yet
-		throw new Error("StoreInst.getPointerOperandType not implemented yet");
+		return this.getOperand(1).getType();
 	}
 }
 
@@ -494,33 +497,27 @@ export class CallInst extends Instruction {}
  */
 export class SelectInst extends Instruction {
 	public getCondition(): Value {
-		// TODO: Not implemented yet
-		throw new Error("SelectInst.getCondition not implemented yet");
+		return this.getOperand(0);
 	}
 
 	public getTrueValue(): Value {
-		// TODO: Not implemented yet
-		throw new Error("SelectInst.getTrueValue not implemented yet");
+		return this.getOperand(1);
 	}
 
 	public getFalseValue(): Value {
-		// TODO: Not implemented yet
-		throw new Error("SelectInst.getFalseValue not implemented yet");
+		return this.getOperand(2);
 	}
 
 	public setCondition(value: Value): void {
-		// TODO: Not implemented yet
-		throw new Error("SelectInst.setCondition not implemented yet");
+		this.setOperand(0, value);
 	}
 
 	public setTrueValue(value: Value): void {
-		// TODO: Not implemented yet
-		throw new Error("SelectInst.setTrueValue not implemented yet");
+		this.setOperand(1, value);
 	}
 
 	public setFalseValue(value: Value): void {
-		// TODO: Not implemented yet
-		throw new Error("SelectInst.setFalseValue not implemented yet");
+		this.setOperand(2, value);
 	}
 }
 
@@ -593,8 +590,7 @@ export class LandingPadInst extends Instruction {
  */
 export class ReturnInst extends Instruction {
 	public getReturnValue(): Value {
-		// TODO: Not implemented yet
-		throw new Error("ReturnInst.getReturnValue not implemented yet");
+		return this.getNumOperands() > 0 ? this.getOperand(0) : new Value(null);
 	}
 }
 
@@ -604,11 +600,14 @@ export class ReturnInst extends Instruction {
  */
 export class BranchInst extends Instruction {
 	public isUnconditional(): boolean {
-		// TODO: Not implemented yet
-		throw new Error("BranchInst.isUnconditional not implemented yet");
+		// C++ only checks for operand count
+		// return this.getNumOperands() === 3;
+		return !this.isConditional();
 	}
 
 	public isConditional(): boolean {
+		// C++ only checks for operand count
+		// return this.getNumOperands() === 3;
 		const conditionalRef = ffi.LLVMIsConditional(this.ref);
 		assert(conditionalRef !== null, "Failed to check if branch instruction is conditional");
 
@@ -626,6 +625,7 @@ export class BranchInst extends Instruction {
 /**
  * SwitchInst - Switch instruction
  * Based on LLVM's SwitchInst class
+ * TODO: Implement this
  */
 export class SwitchInst extends Instruction {
 	public addCase(onVal: ConstantInt, dest: BasicBlock): void {

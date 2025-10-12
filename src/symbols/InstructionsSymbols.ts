@@ -22,6 +22,10 @@ const InstructionsSymbols = {
 		args: [/* Branch: LLVMValueRef */ FFIType.ptr, /* Condition: LLVMValueRef */ FFIType.ptr],
 		returns: /* void */ FFIType.void,
 	},
+	LLVMGetAllocatedType: {
+		args: [/* Alloca: LLVMValueRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
 } as const;
 
 export { InstructionsSymbols };
