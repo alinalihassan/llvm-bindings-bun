@@ -1,0 +1,93 @@
+# LLVM Bun FFI Project Rules
+
+## LLVM C API Guidelines
+- Reference the official LLVM C API: https://raw.githubusercontent.com/llvm/llvm-project/refs/heads/main/llvm/include/llvm-c/Core.h
+- All LLVM functions return `Pointer | null` in Bun FFI (check for `null` for null pointers, NOT `0`)
+- Use proper C string handling with `cstring()` helper and `CString.toString()`
+- Follow LLVM naming conventions: `LLVMContextCreate`, `LLVMModuleCreateWithName`, etc.
+
+## Bun FFI Best Practices
+- Use Bun's FFI documentation: https://bun.sh/docs/api/ffi
+- Use Bun's CC documentation: https://bun.com/docs/api/cc#primitive-types
+- Use Bun's LLM documentation: https://bun.sh/llms.txt
+- Always use `FFIType` constants instead of string literals
+- Handle null pointer returns properly (check for `null`, not `0` or JavaScript `null`)
+
+## Type Safety
+- Use `Pointer | null` for LLVM reference types that can return null
+- Use `Pointer` for guaranteed non-null references
+- Cast `null` to proper types when needed: `null as LLVMContextRef`
+- Use `null` for JavaScript null values after disposal
+- **IMPORTANT**: Never check LLVM references against integers like `0`. Bun automatically converts null pointers to `null`, so always use `ref === null` instead of `ref === 0`
+
+## Project Structure
+- Keep FFI bindings minimal and focused
+- Use umbrella pattern: `llvm.Context`, `llvm.Module`, `llvm.Type`
+- Centralize helper functions in `types.ts`
+- Follow the established pattern for memory management
+
+## Error Handling
+- Check FFI function returns for `null` (null pointer)
+- Throw descriptive errors for failed LLVM operations
+- Implement proper disposal patterns with `[Symbol.dispose]()`
+
+## Code Style
+- Use TypeScript strict mode
+- Prefer explicit types over `any`
+- Use consistent naming: camelCase for methods, PascalCase for classes
+- Add JSDoc comments for all public methods
+- **IMPORTANT**: When adding incomplete functions, always add `// TODO: Not implemented yet` comment and throw an error right below
+- **IMPORTANT**: Do not cast return types from FFI if not needed. Bun handles the conversion automatically:
+  - For booleans: use `ffi.symbols.LLVMIsOpaqueStruct(this.ref)` instead of `Boolean(ffi.symbols.LLVMIsOpaqueStruct(this.ref))`
+  - For numbers: use `ffi.symbols.LLVMCountParamTypes(this.ref)` instead of `Number(ffi.symbols.LLVMCountParamTypes(this.ref))`
+  - Only cast when absolutely necessary for type safety
+
+## Examples
+
+### Correct null checking:
+```typescript
+const functionTypeRef = ffi.symbols.LLVMFunctionType(returnType.ref, null, 0, isVarArg);
+if (functionTypeRef === null) {
+    throw new Error("Failed to create function type");
+}
+```
+
+### Incorrect null checking:
+```typescript
+// DON'T DO THIS - Bun converts null pointers to null, not 0
+if (functionTypeRef === 0) {
+    throw new Error("Failed to create function type");
+}
+```
+
+### Correct return type handling:
+```typescript
+// Good - let Bun handle the conversion
+isVarArg(): boolean {
+    return ffi.symbols.LLVMIsFunctionVarArg(this.ref);
+}
+
+getNumParams(): number {
+    return ffi.symbols.LLVMCountParamTypes(this.ref);
+}
+```
+
+### Incorrect return type handling:
+```typescript
+// DON'T DO THIS - unnecessary casting
+isVarArg(): boolean {
+    return Boolean(ffi.symbols.LLVMIsFunctionVarArg(this.ref));
+}
+
+getNumParams(): number {
+    return Number(ffi.symbols.LLVMCountParamTypes(this.ref));
+}
+```
+
+### Incomplete function pattern:
+```typescript
+static isArrayType(_type: Type): boolean {
+    // TODO: Not implemented yet
+    throw new Error("isArrayType not yet implemented - requires LLVMGetTypeKind");
+}
+```

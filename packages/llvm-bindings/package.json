@@ -1,0 +1,17 @@
+{
+  "name": "lesma",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "bun test test/",
+    "test:watch": "bun test --watch test/",
+    "test:coverage": "bun test --coverage test/"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

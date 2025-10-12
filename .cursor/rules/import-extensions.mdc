@@ -1,0 +1,48 @@
+---
+description: Import styles
+globs: "*.ts, *.tsx, *.html, *.css, *.js, *.jsx, package.json"
+alwaysApply: false
+---
+
+# Import Extensions Rule
+
+## Bun Import Flexibility
+
+### Bun's Import Behavior
+- **Bun is flexible**: You can omit file extensions in imports
+- **Auto-resolution**: Bun automatically resolves `.ts`, `.js`, `.jsx`, `.tsx` files
+- **Cleaner code**: Omitting extensions makes imports more readable
+- **ES Module compatible**: Works with both CommonJS and ES modules
+
+### Correct Examples for Bun
+```typescript
+// ✅ Correct - no extensions (Bun style)
+import { Type } from "./Type";
+import { Module } from "./Module";
+import { Context } from "./Context";
+import llvm from "./src/index";
+
+// ✅ Also correct - with .js extensions (Node.js compatible)
+import { Type } from "./Type.js";
+import { Module } from "./Module.js";
+import { Context } from "./Context.js";
+import llvm from "./src/index.js";
+
+// ✅ Correct - relative imports without extensions
+import { cstring } from "./types";
+import { llvm } from "./llvm";
+```
+
+### When to Use Extensions
+- **Bun projects**: Extensions are optional, prefer without for cleaner code
+- **Node.js compatibility**: Use `.js` extensions if targeting Node.js
+- **Mixed environments**: Use `.js` extensions for maximum compatibility
+- **Explicit resolution**: Use extensions when you need to be explicit about file type
+
+### Exceptions
+- Node.js built-in modules: `import fs from "fs"`
+- npm packages: `import { FFIType } from "bun:ffi"`
+- Absolute URLs: `import { something } from "https://example.com/module.js"`
+
+### Rule Summary
+**In Bun projects, file extensions in imports are optional. Prefer omitting them for cleaner, more readable code.**
