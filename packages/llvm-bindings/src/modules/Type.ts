@@ -4,6 +4,7 @@ import { LLVMTypeKind } from "./Enum";
 import type { FunctionType } from "./FunctionType";
 import type { IntegerType } from "./IntegerType";
 import { LLVMContext } from "./LLVMContext";
+import type { PointerType } from "./PointerType";
 
 export class Type {
 	protected _ref: LLVMTypeRef;
@@ -282,8 +283,8 @@ export class Type {
 	/**
 	 * Get a pointer type pointing to this type
 	 */
-	getPointerTo(addressSpace: number = 0): Type {
-		return new Type(ffi.symbols.LLVMPointerType(this.ref, addressSpace));
+	getPointerTo(addressSpace: number = 0): PointerType {
+		return new Type(ffi.symbols.LLVMPointerType(this.ref, addressSpace)) as PointerType;
 	}
 
 	/**

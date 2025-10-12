@@ -161,7 +161,7 @@ export class Module {
 	/**
 	 * Dispose of the module and free its memory
 	 */
-	dispose(): void {
+	private dispose(): void {
 		ffi.symbols.LLVMDisposeModule(this._ref);
 		this._ref = null;
 	}

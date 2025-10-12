@@ -25,7 +25,7 @@ export class LLVMContext {
 	/**
 	 * Dispose of the context and free its memory
 	 */
-	dispose(): void {
+	private dispose(): void {
 		if (this._ref !== 0 && this._ref !== null) {
 			ffi.symbols.LLVMContextDispose(this._ref);
 			this._ref = null; // Set to null after disposal
