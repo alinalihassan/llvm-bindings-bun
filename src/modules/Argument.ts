@@ -33,7 +33,7 @@ export class Argument extends Value {
 	 * Get the parent function of this argument
 	 */
 	public getParent(): LLVMFunction {
-		const parentRef = ffi.symbols.LLVMGetParamParent(this._ref);
+		const parentRef = ffi.LLVMGetParamParent(this._ref);
 
 		assert(parentRef !== null, "Failed to get argument parent function");
 

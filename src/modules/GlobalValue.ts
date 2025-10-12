@@ -53,17 +53,17 @@ export class GlobalValue extends Constant {
 	 * @returns The Type of the value this global value points to
 	 */
 	public getValueType(): Type {
-		const typeRef = ffi.symbols.LLVMGlobalGetValueType(this.ref);
+		const typeRef = ffi.LLVMGlobalGetValueType(this.ref);
 		assert(typeRef !== null, "Failed to get global value type");
 
 		return new Type(typeRef);
 	}
 
 	public getAlignment(): number {
-		return ffi.symbols.LLVMGetAlignment(this.ref);
+		return ffi.LLVMGetAlignment(this.ref);
 	}
 
 	public setAlignment(alignment: number): void {
-		ffi.symbols.LLVMSetAlignment(this.ref, alignment);
+		ffi.LLVMSetAlignment(this.ref, alignment);
 	}
 }

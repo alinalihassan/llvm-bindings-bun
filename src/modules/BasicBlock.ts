@@ -31,17 +31,13 @@ export class BasicBlock extends Value {
 
 		if (parent && insertBefore) {
 			// Insert before a specific basic block
-			ref = ffi.symbols.LLVMInsertBasicBlockInContext(
-				context.ref,
-				insertBefore.ref,
-				cstring(name ?? ""),
-			);
+			ref = ffi.LLVMInsertBasicBlockInContext(context.ref, insertBefore.ref, cstring(name ?? ""));
 		} else if (parent) {
 			// Insert at the end of the function
-			ref = ffi.symbols.LLVMAppendBasicBlockInContext(context.ref, parent.ref, cstring(name ?? ""));
+			ref = ffi.LLVMAppendBasicBlockInContext(context.ref, parent.ref, cstring(name ?? ""));
 		} else {
 			// Create standalone basic block
-			ref = ffi.symbols.LLVMCreateBasicBlockInContext(context.ref, cstring(name ?? ""));
+			ref = ffi.LLVMCreateBasicBlockInContext(context.ref, cstring(name ?? ""));
 		}
 
 		assert(ref !== null, "Failed to create basic block");
@@ -54,7 +50,7 @@ export class BasicBlock extends Value {
 	 * @returns The parent function, or null if not in a function
 	 */
 	public getParent(): LLVMFunction | null {
-		const parentRef = ffi.symbols.LLVMGetBasicBlockParent(this.ref);
+		const parentRef = ffi.LLVMGetBasicBlockParent(this.ref);
 		assert(parentRef !== null, "Failed to get basic block parent");
 
 		return new LLVMFunction(parentRef);
@@ -65,7 +61,7 @@ export class BasicBlock extends Value {
 	 * @returns The terminator instruction, or null if no terminator
 	 */
 	public getTerminator(): Instruction | null {
-		const terminatorRef = ffi.symbols.LLVMGetBasicBlockTerminator(this.ref);
+		const terminatorRef = ffi.LLVMGetBasicBlockTerminator(this.ref);
 
 		return terminatorRef ? new Instruction(terminatorRef) : null;
 	}
@@ -88,10 +84,10 @@ export class BasicBlock extends Value {
 		assert(parent !== null, "Parent function cannot be null");
 		if (insertBefore) {
 			assert(insertBefore !== null, "Insert before basic block cannot be null");
-			ffi.symbols.LLVMMoveBasicBlockBefore(this.ref, insertBefore.ref);
+			ffi.LLVMMoveBasicBlockBefore(this.ref, insertBefore.ref);
 		} else {
 			// Insert at the end of the function
-			ffi.symbols.LLVMMoveBasicBlockAfter(this.ref, parent.ref);
+			ffi.LLVMMoveBasicBlockAfter(this.ref, parent.ref);
 		}
 	}
 
@@ -99,14 +95,14 @@ export class BasicBlock extends Value {
 	 * Unlink this basic block from its parent function, but do not delete it.
 	 */
 	public removeFromParent(): void {
-		ffi.symbols.LLVMRemoveBasicBlockFromParent(this.ref);
+		ffi.LLVMRemoveBasicBlockFromParent(this.ref);
 	}
 
 	/**
 	 * Erase this basic block from its parent function and delete it.
 	 */
 	public eraseFromParent(): void {
-		ffi.symbols.LLVMDeleteBasicBlock(this.ref);
+		ffi.LLVMDeleteBasicBlock(this.ref);
 	}
 
 	/**
@@ -122,7 +118,7 @@ export class BasicBlock extends Value {
 	 * @returns The first instruction, or null if empty
 	 */
 	public getFirstInstruction(): Instruction | null {
-		const firstRef = ffi.symbols.LLVMGetFirstInstruction(this.ref);
+		const firstRef = ffi.LLVMGetFirstInstruction(this.ref);
 
 		return firstRef ? new Instruction(firstRef) : null;
 	}
@@ -132,7 +128,7 @@ export class BasicBlock extends Value {
 	 * @returns The last instruction, or null if empty
 	 */
 	public getLastInstruction(): Instruction | null {
-		const lastRef = ffi.symbols.LLVMGetLastInstruction(this.ref);
+		const lastRef = ffi.LLVMGetLastInstruction(this.ref);
 
 		return lastRef ? new Instruction(lastRef) : null;
 	}
@@ -142,7 +138,7 @@ export class BasicBlock extends Value {
 	 * @returns The next basic block, or null if this is the last one
 	 */
 	public getNextBasicBlock(): BasicBlock | null {
-		const nextRef = ffi.symbols.LLVMGetNextBasicBlock(this.ref);
+		const nextRef = ffi.LLVMGetNextBasicBlock(this.ref);
 
 		return nextRef ? new BasicBlock(nextRef) : null;
 	}
@@ -152,7 +148,7 @@ export class BasicBlock extends Value {
 	 * @returns The previous basic block, or null if this is the first one
 	 */
 	public getPreviousBasicBlock(): BasicBlock | null {
-		const prevRef = ffi.symbols.LLVMGetPreviousBasicBlock(this.ref);
+		const prevRef = ffi.LLVMGetPreviousBasicBlock(this.ref);
 
 		return prevRef ? new BasicBlock(prevRef) : null;
 	}

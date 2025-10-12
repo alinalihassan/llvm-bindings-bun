@@ -37,20 +37,20 @@ export class GlobalVariable extends GlobalObject {
 		}
 
 		// Create the global variable
-		const globalVarRef = ffi.symbols.LLVMAddGlobal(module.ref, type.ref, cstring(name || ""));
+		const globalVarRef = ffi.LLVMAddGlobal(module.ref, type.ref, cstring(name || ""));
 		if (globalVarRef === null) {
 			throw new Error("Failed to create global variable");
 		}
 
 		// Set the constant flag
-		ffi.symbols.LLVMSetGlobalConstant(globalVarRef, isConstant);
+		ffi.LLVMSetGlobalConstant(globalVarRef, isConstant);
 
 		// Set the linkage
-		ffi.symbols.LLVMSetLinkage(globalVarRef, linkage);
+		ffi.LLVMSetLinkage(globalVarRef, linkage);
 
 		// Set the initializer if provided
 		if (initializer && initializer.ref !== null) {
-			ffi.symbols.LLVMSetInitializer(globalVarRef, initializer.ref);
+			ffi.LLVMSetInitializer(globalVarRef, initializer.ref);
 		}
 
 		return new GlobalVariable(globalVarRef);
@@ -66,7 +66,7 @@ export class GlobalVariable extends GlobalObject {
 			"Initializer constant and reference cannot be null",
 		);
 
-		ffi.symbols.LLVMSetInitializer(this.ref, initVal.ref);
+		ffi.LLVMSetInitializer(this.ref, initVal.ref);
 	}
 
 	/**
@@ -75,7 +75,7 @@ export class GlobalVariable extends GlobalObject {
 	 * TODO: We don't have an unlink method in the C API, so we need to use LLVMDeleteGlobal instead.
 	 */
 	public removeFromParent(): void {
-		ffi.symbols.LLVMDeleteGlobal(this.ref);
+		ffi.LLVMDeleteGlobal(this.ref);
 	}
 
 	/**
@@ -83,7 +83,7 @@ export class GlobalVariable extends GlobalObject {
 	 * This method unlinks 'this' from the containing module and deletes it.
 	 */
 	public eraseFromParent(): void {
-		ffi.symbols.LLVMDeleteGlobal(this.ref);
+		ffi.LLVMDeleteGlobal(this.ref);
 	}
 
 	/**
@@ -91,7 +91,7 @@ export class GlobalVariable extends GlobalObject {
 	 * @returns The initializer constant, or null if no initializer
 	 */
 	public getInitializer(): Constant | null {
-		const initRef = ffi.symbols.LLVMGetInitializer(this.ref);
+		const initRef = ffi.LLVMGetInitializer(this.ref);
 		assert(initRef !== null, "Failed to get initializer");
 
 		return new Constant(initRef);
@@ -102,7 +102,7 @@ export class GlobalVariable extends GlobalObject {
 	 * @returns True if this is a constant global variable
 	 */
 	public isConstant(): boolean {
-		return ffi.symbols.LLVMIsGlobalConstant(this.ref);
+		return ffi.LLVMIsGlobalConstant(this.ref);
 	}
 
 	/**
@@ -110,7 +110,7 @@ export class GlobalVariable extends GlobalObject {
 	 * @param isConstant Whether this should be a constant global variable
 	 */
 	public setConstant(isConstant: boolean): void {
-		ffi.symbols.LLVMSetGlobalConstant(this.ref, isConstant);
+		ffi.LLVMSetGlobalConstant(this.ref, isConstant);
 	}
 
 	/**
@@ -118,7 +118,7 @@ export class GlobalVariable extends GlobalObject {
 	 * @returns The linkage type
 	 */
 	public getLinkage(): number {
-		return ffi.symbols.LLVMGetLinkage(this.ref);
+		return ffi.LLVMGetLinkage(this.ref);
 	}
 
 	/**
@@ -126,7 +126,7 @@ export class GlobalVariable extends GlobalObject {
 	 * @param linkage The linkage type (from GlobalValue.LinkageTypes)
 	 */
 	public setLinkage(linkage: number): void {
-		ffi.symbols.LLVMSetLinkage(this.ref, linkage);
+		ffi.LLVMSetLinkage(this.ref, linkage);
 	}
 
 	/**
@@ -134,7 +134,7 @@ export class GlobalVariable extends GlobalObject {
 	 * @returns The visibility type
 	 */
 	public getVisibility(): number {
-		return ffi.symbols.LLVMGetVisibility(this.ref);
+		return ffi.LLVMGetVisibility(this.ref);
 	}
 
 	/**
@@ -142,6 +142,6 @@ export class GlobalVariable extends GlobalObject {
 	 * @param visibility The visibility type (from GlobalValue.VisibilityTypes)
 	 */
 	public setVisibility(visibility: number): void {
-		ffi.symbols.LLVMSetVisibility(this.ref, visibility);
+		ffi.LLVMSetVisibility(this.ref, visibility);
 	}
 }

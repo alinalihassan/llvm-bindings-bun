@@ -3,6 +3,7 @@ import { APIntSymbols } from "./symbols/APIntSymbols";
 import { ArgumentSymbols } from "./symbols/ArgumentSymbols";
 import { ArrayTypeSymbols } from "./symbols/ArrayTypeSymbols";
 import { BasicBlockSymbols } from "./symbols/BasicBlockSymbols";
+import { ClangSymbols } from "./symbols/ClangSymbols";
 import { ConstantIntSymbols } from "./symbols/ConstantIntSymbols";
 import { ConstantSymbols } from "./symbols/ConstantSymbols";
 import { FunctionSymbols } from "./symbols/FunctionSymbols";
@@ -24,7 +25,7 @@ import { TypeSymbols } from "./symbols/TypeSymbols";
 import { UserSymbols } from "./symbols/UserSymbols";
 import { ValueSymbols } from "./symbols/ValueSymbols";
 
-const ffi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libLLVM-C.dylib", {
+const llvmFfi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libLLVM-C.dylib", {
 	...LLVMContextSymbols,
 	...ModuleSymbols,
 	...TypeSymbols,
@@ -55,5 +56,15 @@ const ffi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libLLVM-C.dylib", {
 		returns: FFIType.void,
 	},
 });
+
+const clangFfi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libclang.dylib", {
+	...ClangSymbols,
+});
+
+// Combine both FFI objects
+const ffi = {
+	...llvmFfi.symbols,
+	...clangFfi.symbols,
+};
 
 export { ffi };

@@ -16,7 +16,7 @@ export class FunctionType extends Type {
 	 */
 	static get(returnType: Type, paramTypes: Type[] = [], isVarArg: boolean = false): FunctionType {
 		if (paramTypes.length === 0) {
-			const functionTypeRef = ffi.symbols.LLVMFunctionType(returnType.ref, null, 0, isVarArg);
+			const functionTypeRef = ffi.LLVMFunctionType(returnType.ref, null, 0, isVarArg);
 			assert(functionTypeRef !== null, "Failed to create function type");
 
 			return new FunctionType(functionTypeRef);
@@ -35,7 +35,7 @@ export class FunctionType extends Type {
 			paramTypesView[i] = BigInt(paramType.ref);
 		}
 
-		const functionTypeRef = ffi.symbols.LLVMFunctionType(
+		const functionTypeRef = ffi.LLVMFunctionType(
 			returnType.ref,
 			paramTypesView,
 			paramTypes.length,
@@ -55,7 +55,7 @@ export class FunctionType extends Type {
 	 * @returns True if the function takes variable arguments
 	 */
 	isVarArg(): boolean {
-		return ffi.symbols.LLVMIsFunctionVarArg(this.ref);
+		return ffi.LLVMIsFunctionVarArg(this.ref);
 	}
 
 	/**
@@ -64,7 +64,7 @@ export class FunctionType extends Type {
 	 * @returns The return type
 	 */
 	getReturnType(): Type {
-		return new Type(ffi.symbols.LLVMGetReturnType(this.ref));
+		return new Type(ffi.LLVMGetReturnType(this.ref));
 	}
 
 	/**
@@ -74,7 +74,7 @@ export class FunctionType extends Type {
 	 * @returns The number of parameters
 	 */
 	getNumParams(): number {
-		return ffi.symbols.LLVMCountParamTypes(this.ref);
+		return ffi.LLVMCountParamTypes(this.ref);
 	}
 
 	/**
@@ -92,7 +92,7 @@ export class FunctionType extends Type {
 		const paramTypesView = new BigUint64Array(paramTypesBuffer);
 
 		// Get all parameter types
-		ffi.symbols.LLVMGetParamTypes(this.ref, paramTypesView);
+		ffi.LLVMGetParamTypes(this.ref, paramTypesView);
 
 		// Get the specific parameter type at index i
 		const paramTypeRef = paramTypesView[i];

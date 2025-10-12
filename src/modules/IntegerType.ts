@@ -48,7 +48,7 @@ export class IntegerType extends Type {
 			case 64:
 				return new IntegerType(Type.getInt64Ty().ref);
 			default:
-				return new IntegerType(ffi.symbols.LLVMIntType(numBits));
+				return new IntegerType(ffi.LLVMIntType(numBits));
 		}
 	}
 
@@ -58,7 +58,7 @@ export class IntegerType extends Type {
 	 * @returns An IntegerType with twice the bit width
 	 */
 	getExtendedType(): IntegerType {
-		return new IntegerType(ffi.symbols.LLVMIntType(this.getBitWidth() * 2));
+		return new IntegerType(ffi.LLVMIntType(this.getBitWidth() * 2));
 	}
 
 	/**
@@ -67,7 +67,7 @@ export class IntegerType extends Type {
 	 * @returns The bit width of the integer type
 	 */
 	getBitWidth(): number {
-		return ffi.symbols.LLVMGetIntTypeWidth(this.ref);
+		return ffi.LLVMGetIntTypeWidth(this.ref);
 	}
 
 	/**

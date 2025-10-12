@@ -8,7 +8,7 @@ export class LLVMContext {
 		if (ref) {
 			this._ref = ref;
 		} else {
-			const result = ffi.symbols.LLVMContextCreate();
+			const result = ffi.LLVMContextCreate();
 			assert(result !== null, "Failed to create LLVM context");
 
 			this._ref = result;
@@ -27,7 +27,7 @@ export class LLVMContext {
 	 */
 	private dispose(): void {
 		if (this._ref !== 0 && this._ref !== null) {
-			ffi.symbols.LLVMContextDispose(this._ref);
+			ffi.LLVMContextDispose(this._ref);
 			this._ref = null; // Set to null after disposal
 		}
 	}

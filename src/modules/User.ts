@@ -14,7 +14,7 @@ export class User extends Value {
 	 * @returns The Value at the specified operand index
 	 */
 	public getOperand(i: number): Value {
-		const operandRef = ffi.symbols.LLVMGetOperand(this.ref, i);
+		const operandRef = ffi.LLVMGetOperand(this.ref, i);
 		assert(operandRef !== null, `Failed to get operand at index ${i}`);
 
 		return new Value(operandRef);
@@ -28,7 +28,7 @@ export class User extends Value {
 	public setOperand(i: number, value: Value): void {
 		assert(value.ref !== null, "Cannot set operand to null value");
 
-		ffi.symbols.LLVMSetOperand(this.ref, i, value.ref);
+		ffi.LLVMSetOperand(this.ref, i, value.ref);
 	}
 
 	/**
@@ -36,6 +36,6 @@ export class User extends Value {
 	 * @returns The number of operands
 	 */
 	public getNumOperands(): number {
-		return ffi.symbols.LLVMGetNumOperands(this.ref);
+		return ffi.LLVMGetNumOperands(this.ref);
 	}
 }

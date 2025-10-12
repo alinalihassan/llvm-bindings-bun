@@ -25,7 +25,7 @@ export class ConstantInt extends Constant {
 		assert(typeof value === "number" || value instanceof APInt, "Invalid value type");
 
 		if (typeof value === "number") {
-			return new ConstantInt(ffi.symbols.LLVMConstInt(context.ref, value, isSigned));
+			return new ConstantInt(ffi.LLVMConstInt(context.ref, value, isSigned));
 		} else if (value instanceof APInt) {
 			return new ConstantInt(value.toConstantInt(IntegerType.get(context, value.getNumBits())).ref);
 		} else {
@@ -56,7 +56,7 @@ export class ConstantInt extends Constant {
 	 * @returns The IntegerType of this constant
 	 */
 	public override getType(): IntegerType {
-		const typeRef = ffi.symbols.LLVMTypeOf(this.ref);
+		const typeRef = ffi.LLVMTypeOf(this.ref);
 		assert(typeRef !== null, "Failed to get constant integer type");
 
 		return new IntegerType(typeRef);

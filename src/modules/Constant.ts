@@ -16,7 +16,7 @@ export class Constant extends User {
 	 * @returns A null constant of the specified type
 	 */
 	public static getNullValue(type: Type): Constant {
-		const constantRef = ffi.symbols.LLVMConstNull(type.ref);
+		const constantRef = ffi.LLVMConstNull(type.ref);
 		assert(constantRef !== null, "Failed to create null constant");
 
 		return new Constant(constantRef);
@@ -28,7 +28,7 @@ export class Constant extends User {
 	 * @returns An all-ones constant of the specified type
 	 */
 	public static getAllOnesValue(type: Type): Constant {
-		const constantRef = ffi.symbols.LLVMConstAllOnes(type.ref);
+		const constantRef = ffi.LLVMConstAllOnes(type.ref);
 		assert(constantRef !== null, "Failed to create all-ones constant");
 
 		return new Constant(constantRef);
@@ -39,12 +39,12 @@ export class Constant extends User {
 	 * @returns True if this is a null constant
 	 */
 	public isNullValue(): boolean {
-		return ffi.symbols.LLVMIsNull(this.ref);
+		return ffi.LLVMIsNull(this.ref);
 	}
 
 	// TODO: Implement UndefValue
 	public getUndefValue(): Value {
-		const valueRef = ffi.symbols.LLVMGetUndef(this.ref);
+		const valueRef = ffi.LLVMGetUndef(this.ref);
 		assert(valueRef !== null, "Failed to get undef value");
 
 		return new Value(valueRef);
@@ -52,14 +52,14 @@ export class Constant extends User {
 
 	// TODO: Implement PoisonValue
 	public getPoisonValue(): Value {
-		const valueRef = ffi.symbols.LLVMGetPoison(this.ref);
+		const valueRef = ffi.LLVMGetPoison(this.ref);
 		assert(valueRef !== null, "Failed to get poison value");
 
 		return new Value(valueRef);
 	}
 
 	public getPointerNullValue(): Value {
-		const valueRef = ffi.symbols.LLVMConstPointerNull(this.ref);
+		const valueRef = ffi.LLVMConstPointerNull(this.ref);
 		assert(valueRef !== null, "Failed to get pointer null value");
 
 		return new Value(valueRef);

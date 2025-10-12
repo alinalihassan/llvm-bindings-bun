@@ -4,15 +4,22 @@ import { cstring } from "@/utils";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: This is a utility class with static methods
 export class Target {
+	private static _initialized = false;
 	/**
 	 * Initialize all available LLVM targets.
 	 * This calls all the individual target initialization functions.
 	 * This is equivalent to the static inline LLVMInitializeAllTargets() function.
 	 */
 	static initializeAllTargets(): void {
+		if (Target._initialized) {
+			return;
+		}
+
 		Target.initializeAArch64Target();
 		Target.initializeX86Target();
 		Target.initializeARMTarget();
+
+		Target._initialized = true;
 	}
 
 	/**
@@ -20,11 +27,11 @@ export class Target {
 	 * This is useful for ARM64/macOS targets.
 	 */
 	static initializeAArch64Target(): void {
-		ffi.symbols.LLVMInitializeAArch64TargetInfo();
-		ffi.symbols.LLVMInitializeAArch64Target();
-		ffi.symbols.LLVMInitializeAArch64TargetMC();
-		ffi.symbols.LLVMInitializeAArch64AsmParser();
-		ffi.symbols.LLVMInitializeAArch64AsmPrinter();
+		ffi.LLVMInitializeAArch64TargetInfo();
+		ffi.LLVMInitializeAArch64Target();
+		ffi.LLVMInitializeAArch64TargetMC();
+		ffi.LLVMInitializeAArch64AsmParser();
+		ffi.LLVMInitializeAArch64AsmPrinter();
 	}
 
 	/**
@@ -32,11 +39,11 @@ export class Target {
 	 * This is useful for x86/x86_64 targets.
 	 */
 	static initializeX86Target(): void {
-		ffi.symbols.LLVMInitializeX86TargetInfo();
-		ffi.symbols.LLVMInitializeX86Target();
-		ffi.symbols.LLVMInitializeX86TargetMC();
-		ffi.symbols.LLVMInitializeX86AsmParser();
-		ffi.symbols.LLVMInitializeX86AsmPrinter();
+		ffi.LLVMInitializeX86TargetInfo();
+		ffi.LLVMInitializeX86Target();
+		ffi.LLVMInitializeX86TargetMC();
+		ffi.LLVMInitializeX86AsmParser();
+		ffi.LLVMInitializeX86AsmPrinter();
 	}
 
 	/**
@@ -44,11 +51,11 @@ export class Target {
 	 * This might be needed for some ARM/AArch64 configurations.
 	 */
 	static initializeARMTarget(): void {
-		ffi.symbols.LLVMInitializeARMTargetInfo();
-		ffi.symbols.LLVMInitializeARMTarget();
-		ffi.symbols.LLVMInitializeARMTargetMC();
-		ffi.symbols.LLVMInitializeARMAsmParser();
-		ffi.symbols.LLVMInitializeARMAsmPrinter();
+		ffi.LLVMInitializeARMTargetInfo();
+		ffi.LLVMInitializeARMTarget();
+		ffi.LLVMInitializeARMTargetMC();
+		ffi.LLVMInitializeARMAsmParser();
+		ffi.LLVMInitializeARMAsmPrinter();
 	}
 
 	/**
@@ -56,7 +63,7 @@ export class Target {
 	 * @returns The target triple string
 	 */
 	static getDefaultTargetTriple(): string {
-		return ffi.symbols.LLVMGetDefaultTargetTriple().toString();
+		return ffi.LLVMGetDefaultTargetTriple().toString();
 	}
 
 	/**
@@ -68,7 +75,7 @@ export class Target {
 		const targetPtr = new Uint8Array(8);
 		const errorPtr = new Uint8Array(8);
 
-		const error = ffi.symbols.LLVMGetTargetFromTriple(cstring(triple), targetPtr, errorPtr);
+		const error = ffi.LLVMGetTargetFromTriple(cstring(triple), targetPtr, errorPtr);
 
 		// LLVMBool: 0 = success, 1 = error
 		if (error) {
@@ -88,7 +95,7 @@ export class Target {
 	 * @returns The target reference, or null if not found
 	 */
 	static getTargetFromName(name: string): LLVMTargetRef | null {
-		return ffi.symbols.LLVMGetTargetFromName(cstring(name));
+		return ffi.LLVMGetTargetFromName(cstring(name));
 	}
 
 	/**
@@ -97,7 +104,7 @@ export class Target {
 	 * @returns The target name
 	 */
 	static getTargetName(target: LLVMTargetRef): string {
-		return ffi.symbols.LLVMGetTargetName(target).toString();
+		return ffi.LLVMGetTargetName(target).toString();
 	}
 
 	/**
@@ -106,7 +113,7 @@ export class Target {
 	 * @returns The target description
 	 */
 	static getTargetDescription(target: LLVMTargetRef): string {
-		return ffi.symbols.LLVMGetTargetDescription(target).toString();
+		return ffi.LLVMGetTargetDescription(target).toString();
 	}
 
 	/**
@@ -115,7 +122,7 @@ export class Target {
 	 * @returns true if the target has a JIT
 	 */
 	static targetHasJIT(target: LLVMTargetRef): boolean {
-		return ffi.symbols.LLVMTargetHasJIT(target);
+		return ffi.LLVMTargetHasJIT(target);
 	}
 
 	/**
@@ -124,7 +131,7 @@ export class Target {
 	 * @returns true if the target has a TargetMachine
 	 */
 	static targetHasTargetMachine(target: LLVMTargetRef): boolean {
-		return ffi.symbols.LLVMTargetHasTargetMachine(target);
+		return ffi.LLVMTargetHasTargetMachine(target);
 	}
 
 	/**
@@ -133,6 +140,6 @@ export class Target {
 	 * @returns true if the target has an ASM backend
 	 */
 	static targetHasAsmBackend(target: LLVMTargetRef): boolean {
-		return ffi.symbols.LLVMTargetHasAsmBackend(target);
+		return ffi.LLVMTargetHasAsmBackend(target);
 	}
 }

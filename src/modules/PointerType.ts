@@ -18,7 +18,7 @@ export class PointerType extends Type {
 			throw new Error("Address space must be non-negative");
 		}
 
-		const pointerTypeRef = ffi.symbols.LLVMPointerType(elementType.ref, addressSpace);
+		const pointerTypeRef = ffi.LLVMPointerType(elementType.ref, addressSpace);
 		if (pointerTypeRef === null) {
 			throw new Error("Failed to create pointer type");
 		}
@@ -32,7 +32,7 @@ export class PointerType extends Type {
 	 * @returns The element type
 	 */
 	getElementType(): Type {
-		const elementTypeRef = ffi.symbols.LLVMGetElementType(this.ref);
+		const elementTypeRef = ffi.LLVMGetElementType(this.ref);
 		assert(elementTypeRef !== null, "Failed to get element type from pointer type");
 
 		return new Type(elementTypeRef);
@@ -44,7 +44,7 @@ export class PointerType extends Type {
 	 * @returns The address space
 	 */
 	getAddressSpace(): number {
-		return ffi.symbols.LLVMGetPointerAddressSpace(this.ref);
+		return ffi.LLVMGetPointerAddressSpace(this.ref);
 	}
 
 	/**

@@ -16,7 +16,7 @@ export class Instruction extends User {
 	 * @returns The parent basic block, or null if not in a basic block
 	 */
 	public getParent(): BasicBlock {
-		const parentRef = ffi.symbols.LLVMGetInstructionParent(this.ref);
+		const parentRef = ffi.LLVMGetInstructionParent(this.ref);
 		assert(parentRef !== null, "Failed to get instruction parent");
 
 		return new BasicBlock(parentRef);
@@ -45,7 +45,7 @@ export class Instruction extends User {
 	 * @returns The opcode
 	 */
 	public getOpcode(): number {
-		return ffi.symbols.LLVMGetInstructionOpcode(this.ref);
+		return ffi.LLVMGetInstructionOpcode(this.ref);
 	}
 
 	/**
@@ -53,7 +53,7 @@ export class Instruction extends User {
 	 * @returns The next instruction, or null if this is the last instruction
 	 */
 	public getNextInstruction(): Instruction | null {
-		const nextRef = ffi.symbols.LLVMGetNextInstruction(this.ref);
+		const nextRef = ffi.LLVMGetNextInstruction(this.ref);
 		if (nextRef === null) {
 			return null;
 		}
@@ -66,7 +66,7 @@ export class Instruction extends User {
 	 * @returns The previous instruction, or null if this is the first instruction
 	 */
 	public getPreviousInstruction(): Instruction | null {
-		const prevRef = ffi.symbols.LLVMGetPreviousInstruction(this.ref);
+		const prevRef = ffi.LLVMGetPreviousInstruction(this.ref);
 		if (prevRef === null) {
 			return null;
 		}
@@ -81,7 +81,7 @@ export class Instruction extends User {
 	 * block but is kept alive.
 	 */
 	public removeFromParent(): void {
-		ffi.symbols.LLVMInstructionRemoveFromParent(this.ref);
+		ffi.LLVMInstructionRemoveFromParent(this.ref);
 	}
 
 	/**
@@ -91,7 +91,7 @@ export class Instruction extends User {
 	 * block and then deleted.
 	 */
 	public eraseFromParent(): void {
-		ffi.symbols.LLVMInstructionEraseFromParent(this.ref);
+		ffi.LLVMInstructionEraseFromParent(this.ref);
 	}
 
 	/**
@@ -101,7 +101,7 @@ export class Instruction extends User {
 	 * removed from its containing building block.
 	 */
 	public deleteFromParent(): void {
-		ffi.symbols.LLVMDeleteInstruction(this.ref);
+		ffi.LLVMDeleteInstruction(this.ref);
 	}
 
 	/**
@@ -109,7 +109,7 @@ export class Instruction extends User {
 	 * @returns A clone of this instruction
 	 */
 	public clone(): Instruction {
-		const cloneRef = ffi.symbols.LLVMInstructionClone(this.ref);
+		const cloneRef = ffi.LLVMInstructionClone(this.ref);
 		assert(cloneRef !== null, "Failed to clone instruction");
 
 		return new Instruction(cloneRef);
@@ -120,7 +120,7 @@ export class Instruction extends User {
 	 * @returns The number of successors
 	 */
 	public getNumSuccessors(): number {
-		const numSuccessorsRef = ffi.symbols.LLVMGetNumSuccessors(this.ref);
+		const numSuccessorsRef = ffi.LLVMGetNumSuccessors(this.ref);
 		assert(numSuccessorsRef !== null, "Failed to get number of successors");
 
 		return numSuccessorsRef;
@@ -132,7 +132,7 @@ export class Instruction extends User {
 	 * @returns The successor basic block
 	 */
 	public getSuccessor(i: number): BasicBlock {
-		const successorRef = ffi.symbols.LLVMGetSuccessor(this.ref, i);
+		const successorRef = ffi.LLVMGetSuccessor(this.ref, i);
 		assert(successorRef !== null, `Failed to get successor at index ${i}`);
 
 		return new BasicBlock(successorRef);
@@ -144,7 +144,7 @@ export class Instruction extends User {
 	 * @param successor The successor basic block
 	 */
 	public setSuccessor(i: number, successor: BasicBlock): void {
-		ffi.symbols.LLVMSetSuccessor(this.ref, i, successor.ref);
+		ffi.LLVMSetSuccessor(this.ref, i, successor.ref);
 	}
 
 	/**
@@ -153,7 +153,7 @@ export class Instruction extends User {
 	 * underlying C++ type.
 	 */
 	public isTerminator(): boolean {
-		const terminatorRef = ffi.symbols.LLVMIsATerminatorInst(this.ref);
+		const terminatorRef = ffi.LLVMIsATerminatorInst(this.ref);
 		assert(terminatorRef !== null, "Failed to check if instruction is a terminator");
 
 		return terminatorRef;

@@ -18,11 +18,7 @@ export class APInt {
 	 * @param value The integer value
 	 * @param isSigned Whether the value should be treated as signed (default: false)
 	 */
-	public constructor(
-		numBits: number,
-		value: number,
-		isSigned: boolean = false,
-	) {
+	public constructor(numBits: number, value: number, isSigned: boolean = false) {
 		this._numBits = numBits;
 		this._value = value;
 		this._isSigned = isSigned;
@@ -57,15 +53,8 @@ export class APInt {
 	public toConstantInt(intType: IntegerType): ConstantInt {
 		// For now, we'll use the simple LLVMConstInt function
 		// In a full implementation, we might need to handle arbitrary precision
-		const constantRef = ffi.symbols.LLVMConstInt(
-			intType.ref,
-			BigInt(this._value),
-			this._isSigned,
-		);
-		assert(
-			constantRef !== null,
-			"Failed to create constant integer from APInt",
-		);
+		const constantRef = ffi.LLVMConstInt(intType.ref, BigInt(this._value), this._isSigned);
+		assert(constantRef !== null, "Failed to create constant integer from APInt");
 
 		return new ConstantInt(constantRef);
 	}

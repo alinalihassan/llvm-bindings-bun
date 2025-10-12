@@ -30,11 +30,8 @@ export class APFloat {
 	 * @returns A constant floating point value
 	 */
 	public toConstantFP(floatType: Type): LLVMValueRef {
-		const constantRef = ffi.symbols.LLVMConstReal(floatType.ref, this._value);
-		assert(
-			constantRef !== null,
-			"Failed to create constant floating point from APFloat",
-		);
+		const constantRef = ffi.LLVMConstReal(floatType.ref, this._value);
+		assert(constantRef !== null, "Failed to create constant floating point from APFloat");
 
 		// TODO: Need to implement ConstantFP
 		return constantRef;

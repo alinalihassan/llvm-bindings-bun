@@ -26,7 +26,7 @@ export class Value {
 	 * Get the type of this value
 	 */
 	public getType(): Type {
-		const typeRef = ffi.symbols.LLVMTypeOf(this._ref);
+		const typeRef = ffi.LLVMTypeOf(this._ref);
 		assert(typeRef !== null, "Failed to get value type");
 
 		return new Type(typeRef);
@@ -36,7 +36,7 @@ export class Value {
 	 * Check if this value has a name
 	 */
 	public hasName(): boolean {
-		const namePtr = ffi.symbols.LLVMGetValueName(this._ref);
+		const namePtr = ffi.LLVMGetValueName(this._ref);
 		return namePtr !== null;
 	}
 
@@ -45,7 +45,7 @@ export class Value {
 	 * Returns empty string if the value has no name
 	 */
 	public getName(): string {
-		const namePtr = ffi.symbols.LLVMGetValueName(this._ref);
+		const namePtr = ffi.LLVMGetValueName(this._ref);
 		assert(namePtr !== null, "Failed to get value name");
 
 		return namePtr.toString();
@@ -55,7 +55,7 @@ export class Value {
 	 * Set the name of this value
 	 */
 	public setName(name: string): void {
-		ffi.symbols.LLVMSetValueName(this._ref, cstring(name));
+		ffi.LLVMSetValueName(this._ref, cstring(name));
 	}
 
 	/**
@@ -63,7 +63,7 @@ export class Value {
 	 * Note: This should be called carefully as it can invalidate other references
 	 */
 	public deleteValue(): void {
-		ffi.symbols.LLVMDeleteInstruction(this._ref);
+		ffi.LLVMDeleteInstruction(this._ref);
 		this._ref = null;
 	}
 
@@ -73,6 +73,6 @@ export class Value {
 	public replaceAllUsesWith(newValue: Value): void {
 		assert(newValue._ref !== null, "Cannot replace uses with null value");
 
-		ffi.symbols.LLVMReplaceAllUsesWith(this._ref, newValue._ref);
+		ffi.LLVMReplaceAllUsesWith(this._ref, newValue._ref);
 	}
 }

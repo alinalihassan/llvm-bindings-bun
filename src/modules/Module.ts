@@ -15,9 +15,9 @@ export class Module {
 
 	constructor(moduleID: string, context?: LLVMContextRef) {
 		if (context) {
-			this._ref = ffi.symbols.LLVMModuleCreateWithNameInContext(cstring(moduleID), context);
+			this._ref = ffi.LLVMModuleCreateWithNameInContext(cstring(moduleID), context);
 		} else {
-			this._ref = ffi.symbols.LLVMModuleCreateWithName(cstring(moduleID));
+			this._ref = ffi.LLVMModuleCreateWithName(cstring(moduleID));
 		}
 	}
 
@@ -32,14 +32,14 @@ export class Module {
 	 * Get the module identifier which is, essentially, the name of the module.
 	 */
 	getModuleIdentifier(): string {
-		return ffi.symbols.LLVMGetModuleIdentifier(this._ref, new Uint8Array(0)).toString();
+		return ffi.LLVMGetModuleIdentifier(this._ref, new Uint8Array(0)).toString();
 	}
 
 	/**
 	 * Set the module identifier.
 	 */
 	setModuleIdentifier(moduleID: string): void {
-		ffi.symbols.LLVMSetModuleIdentifier(this._ref, cstring(moduleID), moduleID.length);
+		ffi.LLVMSetModuleIdentifier(this._ref, cstring(moduleID), moduleID.length);
 	}
 
 	/**
@@ -49,14 +49,14 @@ export class Module {
 	 * For other compiles it is the same as the ModuleID, which would contain the source file name.
 	 */
 	getSourceFileName(): string {
-		return ffi.symbols.LLVMGetSourceFileName(this._ref, new Uint8Array(0)).toString();
+		return ffi.LLVMGetSourceFileName(this._ref, new Uint8Array(0)).toString();
 	}
 
 	/**
 	 * Set the module's original source file name.
 	 */
 	setSourceFileName(sourceFileName: string): void {
-		ffi.symbols.LLVMSetSourceFileName(this._ref, cstring(sourceFileName), sourceFileName.length);
+		ffi.LLVMSetSourceFileName(this._ref, cstring(sourceFileName), sourceFileName.length);
 	}
 
 	/**
@@ -76,35 +76,35 @@ export class Module {
 	 * {@link getDataLayout} is deprecated, use {@link getDataLayoutStr} instead.
 	 */
 	getDataLayoutStr(): string {
-		return ffi.symbols.LLVMGetDataLayoutStr(this._ref).toString();
+		return ffi.LLVMGetDataLayoutStr(this._ref).toString();
 	}
 
 	/**
 	 * Set the data layout.
 	 */
 	setDataLayout(desc: string): void {
-		ffi.symbols.LLVMSetDataLayout(this._ref, cstring(desc));
+		ffi.LLVMSetDataLayout(this._ref, cstring(desc));
 	}
 
 	/**
 	 * Get the target triple
 	 */
 	getTargetTriple(): string {
-		return ffi.symbols.LLVMGetTarget(this._ref).toString();
+		return ffi.LLVMGetTarget(this._ref).toString();
 	}
 
 	/**
 	 * Set the target triple
 	 */
 	setTargetTriple(triple: string): void {
-		ffi.symbols.LLVMSetTarget(this._ref, cstring(triple));
+		ffi.LLVMSetTarget(this._ref, cstring(triple));
 	}
 
 	/**
 	 * Get a function by name
 	 */
 	getFunction(name: string): LLVMFunction | null {
-		const funcRef = ffi.symbols.LLVMGetNamedFunction(this._ref, cstring(name));
+		const funcRef = ffi.LLVMGetNamedFunction(this._ref, cstring(name));
 		return funcRef ? new LLVMFunction(funcRef) : null;
 	}
 
@@ -143,7 +143,7 @@ export class Module {
 	 * If it does not exist, return null. If AllowInternal is set to true, this function will return types that have InternalLinkage. By default, these types are not returned.
 	 */
 	getGlobalVariable(name: string): GlobalVariable | null {
-		const globalVarRef = ffi.symbols.LLVMGetNamedGlobal(this._ref, cstring(name));
+		const globalVarRef = ffi.LLVMGetNamedGlobal(this._ref, cstring(name));
 		return globalVarRef ? new GlobalVariable(globalVarRef) : null;
 	}
 
@@ -154,7 +154,7 @@ export class Module {
 	 * @returns true if an error occurred, false otherwise
 	 */
 	linkModule(sourceModule: Module): boolean {
-		const error = ffi.symbols.LLVMLinkModules2(this._ref, sourceModule._ref);
+		const error = ffi.LLVMLinkModules2(this._ref, sourceModule._ref);
 		// The source module is destroyed by LLVMLinkModules2, so we should mark it as disposed
 		// to prevent double disposal
 		sourceModule._ref = null;
@@ -165,15 +165,15 @@ export class Module {
 	 * Add a module flag
 	 */
 	addModuleFlag(behavior: number, key: string, value: LLVMValueRef): void {
-		ffi.symbols.LLVMAddModuleFlag(this._ref, behavior, cstring(key), key.length, value);
+		ffi.LLVMAddModuleFlag(this._ref, behavior, cstring(key), key.length, value);
 	}
 
 	/**
 	 * Check if the module is empty
 	 */
 	empty(): boolean {
-		const firstFunc = ffi.symbols.LLVMGetFirstFunction(this._ref);
-		const firstGlobal = ffi.symbols.LLVMGetFirstGlobal(this._ref);
+		const firstFunc = ffi.LLVMGetFirstFunction(this._ref);
+		const firstGlobal = ffi.LLVMGetFirstGlobal(this._ref);
 		return !firstFunc && !firstGlobal;
 	}
 
@@ -181,7 +181,7 @@ export class Module {
 	 * Print the module to a string
 	 */
 	print(): string {
-		return ffi.symbols.LLVMPrintModuleToString(this._ref).toString();
+		return ffi.LLVMPrintModuleToString(this._ref).toString();
 	}
 
 	/**
@@ -190,7 +190,7 @@ export class Module {
 	 * @returns 0 on success, non-zero on error
 	 */
 	writeToFile(path: string): number {
-		return ffi.symbols.LLVMWriteBitcodeToFile(this._ref, cstring(path));
+		return ffi.LLVMWriteBitcodeToFile(this._ref, cstring(path));
 	}
 
 	/**
@@ -205,7 +205,7 @@ export class Module {
 		shouldClose: boolean = false,
 		unbuffered: boolean = false,
 	): number {
-		return ffi.symbols.LLVMWriteBitcodeToFD(this._ref, fd, shouldClose ? 1 : 0, unbuffered ? 1 : 0);
+		return ffi.LLVMWriteBitcodeToFD(this._ref, fd, shouldClose ? 1 : 0, unbuffered ? 1 : 0);
 	}
 
 	/**
@@ -216,7 +216,7 @@ export class Module {
 
 	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: Might be useful in the future
 	private writeToMemoryBuffer(): LLVMMemoryBufferRef {
-		return ffi.symbols.LLVMWriteBitcodeToMemoryBuffer(this._ref);
+		return ffi.LLVMWriteBitcodeToMemoryBuffer(this._ref);
 	}
 
 	/**
@@ -242,27 +242,24 @@ export class Module {
 		features: string = "",
 	): boolean {
 		try {
+			Target.initializeAllTargets();
+
 			// Use provided triple or default
 			const triple = targetTriple || Target.getDefaultTargetTriple();
 
 			// Get target from triple
 			const target = Target.getTargetFromTriple(triple);
 			if (!target) {
-				return false;
+				return true; // Error
 			}
 
 			// Create target machine
 			const targetMachine = new TargetMachine(target, triple, cpu, features);
 
 			// Emit object file
-			const success = targetMachine.emitToFile(this._ref, outputPath, CodeGenFileType.ObjectFile);
-
-			// Clean up target machine
-			targetMachine.dispose();
-
-			return success;
+			return targetMachine.emitToFile(this._ref, outputPath, CodeGenFileType.ObjectFile);
 		} catch {
-			return false;
+			return true; // Error
 		}
 	}
 
@@ -272,7 +269,7 @@ export class Module {
 	 * @param targetTriple Optional target triple (defaults to host triple)
 	 * @param cpu Optional CPU target (defaults to "generic")
 	 * @param features Optional CPU features (defaults to "")
-	 * @returns true on success, false on error
+	 * @returns false on success (no error), true on error
 	 */
 	compileToAssembly(
 		outputPath: string,
@@ -281,27 +278,24 @@ export class Module {
 		features: string = "",
 	): boolean {
 		try {
+			Target.initializeAllTargets();
+
 			// Use provided triple or default
 			const triple = targetTriple || Target.getDefaultTargetTriple();
 
 			// Get target from triple
 			const target = Target.getTargetFromTriple(triple);
 			if (!target) {
-				return false;
+				return true; // Error
 			}
 
 			// Create target machine
 			const targetMachine = new TargetMachine(target, triple, cpu, features);
 
 			// Emit assembly file
-			const success = targetMachine.emitToFile(this._ref, outputPath, CodeGenFileType.AssemblyFile);
-
-			// Clean up target machine
-			targetMachine.dispose();
-
-			return success;
+			return targetMachine.emitToFile(this._ref, outputPath, CodeGenFileType.AssemblyFile);
 		} catch {
-			return false;
+			return true; // Error
 		}
 	}
 
@@ -318,6 +312,8 @@ export class Module {
 		features: string = "",
 	): LLVMMemoryBufferRef | null {
 		try {
+			Target.initializeAllTargets();
+
 			// Use provided triple or default
 			const triple = targetTriple || Target.getDefaultTargetTriple();
 
@@ -331,14 +327,58 @@ export class Module {
 			const targetMachine = new TargetMachine(target, triple, cpu, features);
 
 			// Emit to memory buffer
-			const buffer = targetMachine.emitToMemoryBuffer(this._ref, CodeGenFileType.ObjectFile);
-
-			// Clean up target machine
-			targetMachine.dispose();
-
-			return buffer;
+			return targetMachine.emitToMemoryBuffer(this._ref, CodeGenFileType.ObjectFile);
 		} catch {
 			return null;
+		}
+	}
+
+	/**
+	 * Compile the module to an executable file.
+	 * This method first compiles the module to an object file, then uses clang to link it into an executable.
+	 * @param outputPath The path where the executable should be written
+	 * @param targetTriple Optional target triple (defaults to host triple)
+	 * @param cpu Optional CPU target (defaults to "generic")
+	 * @param features Optional CPU features (defaults to "")
+	 * @param clangArgs Optional additional arguments to pass to clang during linking
+	 * @returns Promise<boolean> - true on success, false on error
+	 */
+	async compileToExecutable(
+		outputPath: string,
+		targetTriple?: string,
+		cpu: string = "generic",
+		features: string = "",
+		clangArgs: string[] = [],
+	): Promise<boolean> {
+		try {
+			Target.initializeAllTargets();
+
+			// Generate a temporary object file path
+			const objectPath = `${outputPath.replace(/\.[^/.]+$/, "")}.o`;
+
+			// Compile to object file
+			const objectCompileError = this.compileToObjectFile(objectPath, targetTriple, cpu, features);
+			if (objectCompileError) {
+				return false;
+			}
+
+			// Use clang to link the object file into an executable (force overwrite)
+			const linkCommand = ["clang", objectPath, "-o", outputPath, ...clangArgs];
+			const proc = Bun.spawnSync(linkCommand, {
+				stdout: "pipe",
+				stderr: "pipe",
+			});
+
+			// Clean up the temporary object file
+			try {
+				await Bun.write(objectPath, "");
+			} catch (e) {
+				// Ignore cleanup errors
+			}
+
+			return proc.success;
+		} catch {
+			return false;
 		}
 	}
 
@@ -346,7 +386,7 @@ export class Module {
 	 * Dispose of the module and free its memory
 	 */
 	private dispose(): void {
-		ffi.symbols.LLVMDisposeModule(this._ref);
+		ffi.LLVMDisposeModule(this._ref);
 		this._ref = null;
 	}
 

@@ -21,7 +21,7 @@ export class TargetMachine {
 		relocMode: RelocMode = RelocMode.Default,
 		codeModel: CodeModel = CodeModel.Default,
 	) {
-		this._ref = ffi.symbols.LLVMCreateTargetMachine(
+		this._ref = ffi.LLVMCreateTargetMachine(
 			target,
 			cstring(triple),
 			cstring(cpu),
@@ -48,7 +48,7 @@ export class TargetMachine {
 	 */
 	dispose(): void {
 		if (this._ref) {
-			ffi.symbols.LLVMDisposeTargetMachine(this._ref);
+			ffi.LLVMDisposeTargetMachine(this._ref);
 			this._ref = null;
 		}
 	}
@@ -62,7 +62,7 @@ export class TargetMachine {
 	 */
 	emitToFile(module: LLVMModuleRef, filename: string, fileType: CodeGenFileType): boolean {
 		const errorPtr = new Uint8Array(8);
-		const error = ffi.symbols.LLVMTargetMachineEmitToFile(
+		const error = ffi.LLVMTargetMachineEmitToFile(
 			this._ref,
 			module,
 			cstring(filename),
@@ -82,7 +82,7 @@ export class TargetMachine {
 	emitToMemoryBuffer(module: LLVMModuleRef, fileType: CodeGenFileType): LLVMMemoryBufferRef | null {
 		const errorPtr = new Uint8Array(8);
 		const bufferPtr = new Uint8Array(8);
-		const error = ffi.symbols.LLVMTargetMachineEmitToMemoryBuffer(
+		const error = ffi.LLVMTargetMachineEmitToMemoryBuffer(
 			this._ref,
 			module,
 			fileType,
@@ -104,7 +104,7 @@ export class TargetMachine {
 	 * @returns The data layout reference
 	 */
 	createDataLayout(): LLVMTargetDataRef | null {
-		return ffi.symbols.LLVMCreateTargetDataLayout(this._ref);
+		return ffi.LLVMCreateTargetDataLayout(this._ref);
 	}
 
 	/**

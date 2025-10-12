@@ -32,11 +32,11 @@ export class LLVMFunction extends GlobalObject {
 		assert(funcType.ref !== null, "FunctionType reference cannot be null");
 
 		// Create the function
-		const funcRef = ffi.symbols.LLVMAddFunction(module.ref, cstring(name), funcType.ref);
+		const funcRef = ffi.LLVMAddFunction(module.ref, cstring(name), funcType.ref);
 		assert(funcRef !== null, "Failed to create function");
 
 		// Set the linkage
-		ffi.symbols.LLVMSetLinkage(funcRef, linkage);
+		ffi.LLVMSetLinkage(funcRef, linkage);
 
 		return new LLVMFunction(funcRef);
 	}
@@ -46,7 +46,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @returns The number of arguments
 	 */
 	public getNumArgs(): number {
-		return ffi.symbols.LLVMCountParams(this.ref);
+		return ffi.LLVMCountParams(this.ref);
 	}
 
 	/**
@@ -55,7 +55,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @returns The argument at index i
 	 */
 	public getArg(i: number): Argument {
-		const argRef = ffi.symbols.LLVMGetParam(this.ref, i);
+		const argRef = ffi.LLVMGetParam(this.ref, i);
 		assert(argRef !== null, `Failed to get argument at index ${i}`);
 
 		return new Argument(argRef);
@@ -65,7 +65,7 @@ export class LLVMFunction extends GlobalObject {
 		const argsBuffer = new ArrayBuffer(this.getNumArgs() * 8); // 8 bytes per pointer
 		const argsView = new BigUint64Array(argsBuffer);
 
-		ffi.symbols.LLVMGetParams(this.ref, argsView);
+		ffi.LLVMGetParams(this.ref, argsView);
 
 		const args: Argument[] = [];
 		for (let i = 0; i < this.getNumArgs(); i++) {
@@ -83,7 +83,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @returns The return type
 	 */
 	public getReturnType(): Type {
-		return new Type(ffi.symbols.LLVMGetReturnType(this.getType().ref));
+		return new Type(ffi.LLVMGetReturnType(this.getType().ref));
 	}
 
 	/**
@@ -91,7 +91,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @returns True if this function has a personality function
 	 */
 	public hasPersonalityFn(): boolean {
-		return ffi.symbols.LLVMHasPersonalityFn(this.ref);
+		return ffi.LLVMHasPersonalityFn(this.ref);
 	}
 
 	/**
@@ -99,7 +99,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @returns The personality function
 	 */
 	public getPersonalityFn(): Constant {
-		return new Constant(ffi.symbols.LLVMGetPersonalityFn(this.ref));
+		return new Constant(ffi.LLVMGetPersonalityFn(this.ref));
 	}
 
 	/**
@@ -107,7 +107,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @param personalityFn The personality function constant
 	 */
 	public setPersonalityFn(personalityFn: Constant): void {
-		ffi.symbols.LLVMSetPersonalityFn(this.ref, personalityFn.ref);
+		ffi.LLVMSetPersonalityFn(this.ref, personalityFn.ref);
 	}
 
 	/**
@@ -115,7 +115,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @returns The calling convention
 	 */
 	public getCallingConv(): number {
-		return ffi.symbols.LLVMGetFunctionCallConv(this.ref);
+		return ffi.LLVMGetFunctionCallConv(this.ref);
 	}
 
 	/**
@@ -123,7 +123,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @param cc The calling convention
 	 */
 	public setCallingConv(cc: number): void {
-		ffi.symbols.LLVMSetFunctionCallConv(this.ref, cc);
+		ffi.LLVMSetFunctionCallConv(this.ref, cc);
 	}
 
 	/**
@@ -131,7 +131,7 @@ export class LLVMFunction extends GlobalObject {
 	 * @returns The garbage collector name
 	 */
 	public getGC(): string | null {
-		const gc = ffi.symbols.LLVMGetGC(this.ref);
+		const gc = ffi.LLVMGetGC(this.ref);
 		return gc ? gc.toString() : null;
 	}
 
@@ -140,10 +140,10 @@ export class LLVMFunction extends GlobalObject {
 	 * @param name The garbage collector name
 	 */
 	public setGC(name: string): void {
-		ffi.symbols.LLVMSetGC(this.ref, cstring(name));
+		ffi.LLVMSetGC(this.ref, cstring(name));
 	}
 
 	public delete(): void {
-		ffi.symbols.LLVMDeleteFunction(this.ref);
+		ffi.LLVMDeleteFunction(this.ref);
 	}
 }

@@ -3,6 +3,16 @@ import { APInt } from "./modules/APInt";
 import { Argument } from "./modules/Argument";
 import { ArrayType } from "./modules/ArrayType";
 import { BasicBlock } from "./modules/BasicBlock";
+import {
+	ClangDiagnostic,
+	ClangIndex,
+	ClangTranslationUnit,
+	CXDiagnostic_Error,
+	CXDiagnostic_Fatal,
+	CXTranslationUnit_None,
+	compileFile,
+	linkExecutable,
+} from "./modules/Clang";
 import { Constant } from "./modules/Constant";
 import { ConstantInt } from "./modules/ConstantInt";
 import { PassPipeline } from "./modules/Enum";
@@ -164,12 +174,27 @@ const llvm = {
 	createModule: (name: string, context?: LLVMContext) => new Module(name, context?.ref),
 } as const;
 
+// Create the clang object
+const clang = {
+	ClangIndex: ClangIndex,
+	ClangTranslationUnit: ClangTranslationUnit,
+	ClangDiagnostic: ClangDiagnostic,
+	compileFile: compileFile,
+	linkExecutable: linkExecutable,
+
+	// Constants
+	CXTranslationUnit_None: CXTranslationUnit_None,
+	CXDiagnostic_Error: CXDiagnostic_Error,
+	CXDiagnostic_Fatal: CXDiagnostic_Fatal,
+} as const;
+
 // Exports
 export * from "@/modules/APFloat";
 export * from "@/modules/APInt";
 export * from "@/modules/Argument";
 export * from "@/modules/ArrayType";
 export * from "@/modules/BasicBlock";
+export * from "@/modules/Clang";
 export * from "@/modules/Constant";
 export * from "@/modules/ConstantInt";
 export * from "@/modules/Enum";
@@ -195,4 +220,5 @@ export * from "@/modules/User";
 export * from "@/modules/Value";
 export * from "@/modules/VectorType";
 
+export { llvm, clang };
 export default llvm;

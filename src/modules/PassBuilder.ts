@@ -14,7 +14,7 @@ class PassBuilderOptions {
 	private _ref: LLVMPassBuilderOptionsRef | null;
 
 	constructor() {
-		this._ref = ffi.symbols.LLVMCreatePassBuilderOptions();
+		this._ref = ffi.LLVMCreatePassBuilderOptions();
 	}
 
 	/**
@@ -29,14 +29,14 @@ class PassBuilderOptions {
 	 * inside the module is valid.
 	 */
 	setVerifyEach(verifyEach: boolean): void {
-		ffi.symbols.LLVMPassBuilderOptionsSetVerifyEach(this._ref, verifyEach ? 1 : 0);
+		ffi.LLVMPassBuilderOptionsSetVerifyEach(this._ref, verifyEach ? 1 : 0);
 	}
 
 	/**
 	 * Toggle debug logging when running the PassBuilder
 	 */
 	setDebugLogging(debugLogging: boolean): void {
-		ffi.symbols.LLVMPassBuilderOptionsSetDebugLogging(this._ref, debugLogging ? 1 : 0);
+		ffi.LLVMPassBuilderOptionsSetDebugLogging(this._ref, debugLogging ? 1 : 0);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class PassBuilderOptions {
 	 */
 	private dispose(): void {
 		if (this._ref) {
-			ffi.symbols.LLVMDisposePassBuilderOptions(this._ref);
+			ffi.LLVMDisposePassBuilderOptions(this._ref);
 			this._ref = null;
 		}
 	}
@@ -138,7 +138,7 @@ export class PassBuilder {
 		// Create default options if none provided
 		const optionsToUse = options || new PassBuilderOptions();
 
-		const errorRef = ffi.symbols.LLVMRunPasses(
+		const errorRef = ffi.LLVMRunPasses(
 			module.ref,
 			cstring(passes),
 			targetMachine,
@@ -168,7 +168,7 @@ export class PassBuilder {
 		// Create default options if none provided
 		const optionsToUse = options || new PassBuilderOptions();
 
-		const errorRef = ffi.symbols.LLVMRunPassesOnFunction(
+		const errorRef = ffi.LLVMRunPassesOnFunction(
 			func.ref,
 			cstring(passes),
 			targetMachine,

@@ -20,7 +20,7 @@ export class ArrayType extends Type {
 	static get(elementType: Type, numElements: number): ArrayType {
 		assert(numElements >= 0, "Array length must be non-negative");
 
-		const arrayTypeRef = ffi.symbols.LLVMArrayType(elementType.ref, numElements);
+		const arrayTypeRef = ffi.LLVMArrayType(elementType.ref, numElements);
 
 		assert(arrayTypeRef !== null, "Failed to create array type");
 
@@ -33,7 +33,7 @@ export class ArrayType extends Type {
 	 * @returns The element type
 	 */
 	getElementType(): Type {
-		const elementTypeRef = ffi.symbols.LLVMGetElementType(this.ref);
+		const elementTypeRef = ffi.LLVMGetElementType(this.ref);
 		assert(elementTypeRef !== null, "Failed to get element type from array type");
 
 		return new Type(elementTypeRef);
@@ -45,7 +45,7 @@ export class ArrayType extends Type {
 	 * @returns The number of elements
 	 */
 	getNumElements(): bigint {
-		return ffi.symbols.LLVMGetArrayLength(this.ref);
+		return ffi.LLVMGetArrayLength(this.ref);
 	}
 
 	/**

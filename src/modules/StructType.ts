@@ -19,7 +19,7 @@ export class StructType extends Type {
 			const elementTypesBuffer = new ArrayBuffer(0);
 			const elementTypesView = new BigUint64Array(elementTypesBuffer);
 
-			const structTypeRef = ffi.symbols.LLVMStructType(elementTypesView, 0, isPacked);
+			const structTypeRef = ffi.LLVMStructType(elementTypesView, 0, isPacked);
 			assert(structTypeRef !== null, "Failed to create struct type");
 
 			return new StructType(structTypeRef);
@@ -39,11 +39,7 @@ export class StructType extends Type {
 			elementTypesView[i] = BigInt(elementType.ref);
 		}
 
-		const structTypeRef = ffi.symbols.LLVMStructType(
-			elementTypesView,
-			elementTypes.length,
-			isPacked,
-		);
+		const structTypeRef = ffi.LLVMStructType(elementTypesView, elementTypes.length, isPacked);
 
 		assert(structTypeRef !== null, "Failed to create struct type with elements");
 
@@ -56,7 +52,7 @@ export class StructType extends Type {
 	 * @returns The number of elements
 	 */
 	getNumElements(): number {
-		return ffi.symbols.LLVMCountStructElementTypes(this.ref);
+		return ffi.LLVMCountStructElementTypes(this.ref);
 	}
 
 	/**
@@ -69,7 +65,7 @@ export class StructType extends Type {
 		const numElements = this.getNumElements();
 		assert(i >= 0 && i < numElements, `Element index ${i} out of range (0-${numElements - 1})`);
 
-		const elementTypeRef = ffi.symbols.LLVMStructGetTypeAtIndex(this.ref, i);
+		const elementTypeRef = ffi.LLVMStructGetTypeAtIndex(this.ref, i);
 		assert(elementTypeRef !== null, `Failed to get element type at index ${i}`);
 
 		return new Type(elementTypeRef);
@@ -91,7 +87,7 @@ export class StructType extends Type {
 		const elementTypesView = new BigUint64Array(elementTypesBuffer);
 
 		// Get all element types
-		ffi.symbols.LLVMGetStructElementTypes(this.ref, elementTypesView);
+		ffi.LLVMGetStructElementTypes(this.ref, elementTypesView);
 
 		// Convert to Type array
 		const elementTypes: Type[] = [];
@@ -110,7 +106,7 @@ export class StructType extends Type {
 	 * @returns True if the struct is packed
 	 */
 	isPacked(): boolean {
-		return ffi.symbols.LLVMIsPackedStruct(this.ref);
+		return ffi.LLVMIsPackedStruct(this.ref);
 	}
 
 	/**
@@ -119,7 +115,7 @@ export class StructType extends Type {
 	 * @returns True if the struct is opaque
 	 */
 	isOpaque(): boolean {
-		return ffi.symbols.LLVMIsOpaqueStruct(this.ref);
+		return ffi.LLVMIsOpaqueStruct(this.ref);
 	}
 
 	/**

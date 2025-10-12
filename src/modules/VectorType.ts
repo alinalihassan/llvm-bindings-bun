@@ -18,19 +18,11 @@ export class VectorType extends Type {
 	 * @param scalable Whether the vector is scalable (SVE-style)
 	 * @returns A VectorType instance
 	 */
-	static get(
-		elementType: Type,
-		numElements: number,
-		scalable: boolean = false,
-	): VectorType {
+	static get(elementType: Type, numElements: number, scalable: boolean = false): VectorType {
 		if (scalable) {
-			return new VectorType(
-				ffi.symbols.LLVMScalableVectorType(elementType.ref, numElements),
-			);
+			return new VectorType(ffi.LLVMScalableVectorType(elementType.ref, numElements));
 		} else {
-			return new VectorType(
-				ffi.symbols.LLVMVectorType(elementType.ref, numElements, false),
-			);
+			return new VectorType(ffi.LLVMVectorType(elementType.ref, numElements, false));
 		}
 	}
 
@@ -41,15 +33,10 @@ export class VectorType extends Type {
 	 * @param other Another vector type to copy element type from
 	 * @returns A VectorType instance
 	 */
-	static getWithElementType(
-		_elementType: Type,
-		_other: VectorType,
-	): VectorType {
+	static getWithElementType(_elementType: Type, _other: VectorType): VectorType {
 		// This would need to get the element count from the other vector
 		// TODO: Not implemented yet
-		throw new Error(
-			"getWithElementType not yet implemented - requires element count extraction",
-		);
+		throw new Error("getWithElementType not yet implemented - requires element count extraction");
 	}
 
 	/**
@@ -60,9 +47,7 @@ export class VectorType extends Type {
 	 */
 	static isValidElementType(_elemTy: Type): boolean {
 		// TODO: Not implemented yet
-		throw new Error(
-			"isValidElementType not yet implemented - requires element type validation",
-		);
+		throw new Error("isValidElementType not yet implemented - requires element type validation");
 	}
 
 	/**
@@ -72,9 +57,7 @@ export class VectorType extends Type {
 	 */
 	getElementType(): Type {
 		// TODO: Not implemented yet
-		throw new Error(
-			"getElementType not yet implemented - requires LLVMGetElementType",
-		);
+		throw new Error("getElementType not yet implemented - requires LLVMGetElementType");
 	}
 
 	/**
@@ -84,9 +67,7 @@ export class VectorType extends Type {
 	 */
 	getElementCount(): number {
 		// TODO: Not implemented yet
-		throw new Error(
-			"getElementCount not yet implemented - requires LLVMGetVectorSize",
-		);
+		throw new Error("getElementCount not yet implemented - requires LLVMGetVectorSize");
 	}
 
 	/**
@@ -96,9 +77,7 @@ export class VectorType extends Type {
 	 */
 	isScalable(): boolean {
 		// TODO: Not implemented yet
-		throw new Error(
-			"isScalable not yet implemented - requires LLVMIsScalableVector",
-		);
+		throw new Error("isScalable not yet implemented - requires LLVMIsScalableVector");
 	}
 
 	/**
@@ -110,9 +89,7 @@ export class VectorType extends Type {
 	 */
 	static getInteger(_vTy: VectorType): VectorType {
 		// TODO: Not implemented yet
-		throw new Error(
-			"getInteger not yet implemented - requires element type extraction",
-		);
+		throw new Error("getInteger not yet implemented - requires element type extraction");
 	}
 
 	/**

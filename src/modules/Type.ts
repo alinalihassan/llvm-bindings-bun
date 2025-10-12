@@ -24,83 +24,83 @@ export class Type {
 	 * Static method to get void type
 	 */
 	static getVoidTy(): Type {
-		return new Type(ffi.symbols.LLVMVoidType());
+		return new Type(ffi.LLVMVoidType());
 	}
 
 	/**
 	 * Static method to get int1 type
 	 */
 	static getInt1Ty(): IntegerType {
-		return new Type(ffi.symbols.LLVMInt1Type()) as IntegerType;
+		return new Type(ffi.LLVMInt1Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int8 type
 	 */
 	static getInt8Ty(): IntegerType {
-		return new Type(ffi.symbols.LLVMInt8Type()) as IntegerType;
+		return new Type(ffi.LLVMInt8Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int16 type
 	 */
 	static getInt16Ty(): IntegerType {
-		return new Type(ffi.symbols.LLVMInt16Type()) as IntegerType;
+		return new Type(ffi.LLVMInt16Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int32 type
 	 */
 	static getInt32Ty(): IntegerType {
-		return new Type(ffi.symbols.LLVMInt32Type()) as IntegerType;
+		return new Type(ffi.LLVMInt32Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int64 type
 	 */
 	static getInt64Ty(): IntegerType {
-		return new Type(ffi.symbols.LLVMInt64Type()) as IntegerType;
+		return new Type(ffi.LLVMInt64Type()) as IntegerType;
 	}
 
 	/**
 	 * Static method to get int128 type
 	 */
 	static getInt128Ty(): IntegerType {
-		return new Type(ffi.symbols.LLVMInt128Type()) as IntegerType;
+		return new Type(ffi.LLVMInt128Type()) as IntegerType;
 	}
 	/**
 	 * Static method to get intN type
 	 */
 	static getIntNTy(numBits: number): IntegerType {
-		return new Type(ffi.symbols.LLVMIntType(numBits)) as IntegerType;
+		return new Type(ffi.LLVMIntType(numBits)) as IntegerType;
 	}
 
 	/**
 	 * Static method to get half type
 	 */
 	static getHalfTy(): Type {
-		return new Type(ffi.symbols.LLVMHalfType());
+		return new Type(ffi.LLVMHalfType());
 	}
 
 	/**
 	 * Static method to get bfloat type
 	 */
 	static getBFloatTy(): Type {
-		return new Type(ffi.symbols.LLVMBFloatType());
+		return new Type(ffi.LLVMBFloatType());
 	}
 
 	/**
 	 * Static method to get float type
 	 */
 	static getFloatTy(): Type {
-		return new Type(ffi.symbols.LLVMFloatType());
+		return new Type(ffi.LLVMFloatType());
 	}
 
 	/**
 	 * Static method to get double type
 	 */
 	static getDoubleTy(): Type {
-		return new Type(ffi.symbols.LLVMDoubleType());
+		return new Type(ffi.LLVMDoubleType());
 	}
 
 	/**
@@ -112,7 +112,7 @@ export class Type {
 		isVarArg: boolean = false,
 	): FunctionType {
 		if (paramTypes.length === 0) {
-			const functionTypeRef = ffi.symbols.LLVMFunctionType(returnType.ref, null, 0, isVarArg);
+			const functionTypeRef = ffi.LLVMFunctionType(returnType.ref, null, 0, isVarArg);
 			assert(functionTypeRef !== null, "Failed to create function type");
 
 			return new Type(functionTypeRef) as FunctionType;
@@ -127,7 +127,7 @@ export class Type {
 			paramTypesView[i] = BigInt(paramTypes[i]!.ref as any);
 		}
 
-		const functionTypeRef = ffi.symbols.LLVMFunctionType(
+		const functionTypeRef = ffi.LLVMFunctionType(
 			returnType.ref,
 			paramTypesView,
 			paramTypes.length,
@@ -152,14 +152,14 @@ export class Type {
 			elementTypesView[i] = BigInt(elementTypes[i]!.ref as any);
 		}
 
-		return new Type(ffi.symbols.LLVMStructType(elementTypesView, elementTypes.length, isPacked));
+		return new Type(ffi.LLVMStructType(elementTypesView, elementTypes.length, isPacked));
 	}
 
 	/**
 	 * Static method to create an array type
 	 */
 	static getArrayType(elementType: Type, numElements: number): Type {
-		return new Type(ffi.symbols.LLVMArrayType(elementType.ref, numElements));
+		return new Type(ffi.LLVMArrayType(elementType.ref, numElements));
 	}
 
 	/**
@@ -167,9 +167,9 @@ export class Type {
 	 */
 	static getVectorType(elementType: Type, numElements: number, isScalable: boolean = false): Type {
 		if (isScalable) {
-			return new Type(ffi.symbols.LLVMScalableVectorType(elementType.ref, numElements));
+			return new Type(ffi.LLVMScalableVectorType(elementType.ref, numElements));
 		} else {
-			return new Type(ffi.symbols.LLVMVectorType(elementType.ref, numElements, false));
+			return new Type(ffi.LLVMVectorType(elementType.ref, numElements, false));
 		}
 	}
 
@@ -181,7 +181,7 @@ export class Type {
 	 * Get the type kind (TypeID) for this type
 	 */
 	getTypeKind(): number {
-		return ffi.symbols.LLVMGetTypeKind(this.ref);
+		return ffi.LLVMGetTypeKind(this.ref);
 	}
 
 	/**
@@ -190,28 +190,28 @@ export class Type {
 	 * Things that don't have a size are abstract types, labels, and void.a
 	 */
 	isSized(): boolean {
-		return ffi.symbols.LLVMTypeIsSized(this.ref);
+		return ffi.LLVMTypeIsSized(this.ref);
 	}
 
 	/**
 	 * Obtain the context to which this type instance is associated.
 	 */
 	getContext(): LLVMContext {
-		return new LLVMContext(ffi.symbols.LLVMGetTypeContext(this.ref));
+		return new LLVMContext(ffi.LLVMGetTypeContext(this.ref));
 	}
 
 	/**
 	 * Dump the type to the stderr
 	 */
 	dump(): void {
-		ffi.symbols.LLVMDumpType(this.ref);
+		ffi.LLVMDumpType(this.ref);
 	}
 
 	/**
 	 * Print the type to a string
 	 */
 	toString(): string {
-		return ffi.symbols.LLVMPrintTypeToString(this.ref).toString();
+		return ffi.LLVMPrintTypeToString(this.ref).toString();
 	}
 
 	/**
@@ -284,7 +284,7 @@ export class Type {
 	 * Get a pointer type pointing to this type
 	 */
 	getPointerTo(addressSpace: number = 0): PointerType {
-		return new Type(ffi.symbols.LLVMPointerType(this.ref, addressSpace)) as PointerType;
+		return new Type(ffi.LLVMPointerType(this.ref, addressSpace)) as PointerType;
 	}
 
 	/**

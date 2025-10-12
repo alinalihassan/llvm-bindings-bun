@@ -14,11 +14,11 @@ import { Value } from "./Value";
  */
 export class AllocaInst extends Instruction {
 	public getAlignment(): number {
-		return ffi.symbols.LLVMGetAlignment(this.ref);
+		return ffi.LLVMGetAlignment(this.ref);
 	}
 
 	public setAlignment(alignment: number): void {
-		ffi.symbols.LLVMSetAlignment(this.ref, alignment);
+		ffi.LLVMSetAlignment(this.ref, alignment);
 	}
 
 	public getAllocatedType(): Type {
@@ -38,11 +38,11 @@ export class AllocaInst extends Instruction {
  */
 export class LoadInst extends Instruction {
 	public getAlignment(): number {
-		return ffi.symbols.LLVMGetAlignment(this.ref);
+		return ffi.LLVMGetAlignment(this.ref);
 	}
 
 	public setAlignment(alignment: number): void {
-		ffi.symbols.LLVMSetAlignment(this.ref, alignment);
+		ffi.LLVMSetAlignment(this.ref, alignment);
 	}
 }
 
@@ -52,11 +52,11 @@ export class LoadInst extends Instruction {
  */
 export class StoreInst extends Instruction {
 	public getAlignment(): number {
-		return ffi.symbols.LLVMGetAlignment(this.ref);
+		return ffi.LLVMGetAlignment(this.ref);
 	}
 
 	public setAlignment(alignment: number): void {
-		ffi.symbols.LLVMSetAlignment(this.ref, alignment);
+		ffi.LLVMSetAlignment(this.ref, alignment);
 	}
 
 	public getValueOperand(): Value {
@@ -87,11 +87,11 @@ export class FenceInst extends Instruction {}
  */
 export class AtomicCmpXchgInst extends Instruction {
 	public getAlignment(): number {
-		return ffi.symbols.LLVMGetAlignment(this.ref);
+		return ffi.LLVMGetAlignment(this.ref);
 	}
 
 	public setAlignment(alignment: number): void {
-		ffi.symbols.LLVMSetAlignment(this.ref, alignment);
+		ffi.LLVMSetAlignment(this.ref, alignment);
 	}
 }
 
@@ -101,11 +101,11 @@ export class AtomicCmpXchgInst extends Instruction {
  */
 export class AtomicRMWInst extends Instruction {
 	public getAlignment(): number {
-		return ffi.symbols.LLVMGetAlignment(this.ref);
+		return ffi.LLVMGetAlignment(this.ref);
 	}
 
 	public setAlignment(alignment: number): void {
-		ffi.symbols.LLVMSetAlignment(this.ref, alignment);
+		ffi.LLVMSetAlignment(this.ref, alignment);
 	}
 }
 
@@ -154,7 +154,7 @@ export class CmpInst extends Instruction {
 	 * @returns The integer comparison predicate
 	 */
 	public getICmpPredicate(): LLVMCmpInstPredicate {
-		const predicateRef = ffi.symbols.LLVMGetICmpPredicate(this.ref);
+		const predicateRef = ffi.LLVMGetICmpPredicate(this.ref);
 		assert(predicateRef !== null, "Failed to get integer comparison predicate");
 		return predicateRef as LLVMCmpInstPredicate;
 	}
@@ -165,7 +165,7 @@ export class CmpInst extends Instruction {
 	 * @returns The floating-point comparison predicate
 	 */
 	public getFCmpPredicate(): LLVMCmpInstPredicate {
-		const predicateRef = ffi.symbols.LLVMGetFCmpPredicate(this.ref);
+		const predicateRef = ffi.LLVMGetFCmpPredicate(this.ref);
 		assert(predicateRef !== null, "Failed to get floating-point comparison predicate");
 		return predicateRef as LLVMCmpInstPredicate;
 	}
@@ -384,7 +384,7 @@ export class ICmpInst extends CmpInst {
 		if (this.predicate !== undefined) {
 			return this.predicate;
 		}
-		const predicateRef = ffi.symbols.LLVMGetICmpPredicate(this.ref);
+		const predicateRef = ffi.LLVMGetICmpPredicate(this.ref);
 		assert(predicateRef !== null, "Failed to get integer comparison predicate");
 
 		return predicateRef as LLVMCmpInstPredicate;
@@ -397,7 +397,7 @@ export class ICmpInst extends CmpInst {
 	 * @returns True if the integer comparison instruction has the same sign
 	 */
 	public getICmpSameSign(): boolean {
-		const sameSignRef = ffi.symbols.LLVMGetICmpSameSign(this.ref);
+		const sameSignRef = ffi.LLVMGetICmpSameSign(this.ref);
 		assert(sameSignRef !== null, "Failed to get integer comparison same sign");
 
 		return sameSignRef;
@@ -409,7 +409,7 @@ export class ICmpInst extends CmpInst {
 	 * This is only valid for instructions that correspond to llvm::ICmpInst.
 	 */
 	public setICmpSameSign(sameSign: boolean): void {
-		ffi.symbols.LLVMSetICmpSameSign(this.ref, sameSign);
+		ffi.LLVMSetICmpSameSign(this.ref, sameSign);
 	}
 
 	/**
@@ -451,7 +451,7 @@ export class FCmpInst extends CmpInst {
 		if (this.predicate !== undefined) {
 			return this.predicate;
 		}
-		const predicateRef = ffi.symbols.LLVMGetFCmpPredicate(this.ref);
+		const predicateRef = ffi.LLVMGetFCmpPredicate(this.ref);
 		assert(predicateRef !== null, "Failed to get floating-point comparison predicate");
 
 		return predicateRef as LLVMCmpInstPredicate;
@@ -609,14 +609,14 @@ export class BranchInst extends Instruction {
 	}
 
 	public isConditional(): boolean {
-		const conditionalRef = ffi.symbols.LLVMIsConditional(this.ref);
+		const conditionalRef = ffi.LLVMIsConditional(this.ref);
 		assert(conditionalRef !== null, "Failed to check if branch instruction is conditional");
 
 		return conditionalRef;
 	}
 
 	public getCondition(): Value {
-		const conditionRef = ffi.symbols.LLVMGetCondition(this.ref);
+		const conditionRef = ffi.LLVMGetCondition(this.ref);
 		assert(conditionRef !== null, "Failed to get branch instruction condition");
 
 		return new Value(conditionRef);
