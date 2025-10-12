@@ -30,41 +30,4 @@ export const ClangSymbols = {
 		args: [FFIType.ptr],
 		returns: FFIType.void,
 	},
-
-	// Diagnostic functions
-	clang_getNumDiagnostics: {
-		args: [FFIType.ptr],
-		returns: FFIType.i32,
-	},
-
-	clang_getDiagnostic: {
-		args: [FFIType.ptr, FFIType.i32],
-		returns: FFIType.ptr,
-	},
-
-	clang_getDiagnosticSeverity: {
-		args: [FFIType.ptr],
-		returns: FFIType.i32,
-	},
-
-	clang_getDiagnosticSpelling: {
-		args: [FFIType.ptr],
-		returns: FFIType.ptr,
-	},
-
-	clang_disposeDiagnostic: {
-		args: [FFIType.ptr],
-		returns: FFIType.void,
-	},
-
-	// String functions
-	clang_getCString: {
-		args: [FFIType.ptr],
-		returns: FFIType.ptr,
-	},
-
-	clang_disposeString: {
-		args: [FFIType.ptr],
-		returns: FFIType.void,
-	},
 } as const;
