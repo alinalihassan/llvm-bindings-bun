@@ -109,11 +109,7 @@ export class Module {
 	/**
 	 * Get or insert a function by name
 	 */
-	getOrInsertFunction(
-		name: string,
-		funcType: FunctionType,
-		args: Value[] = [] /*TODO: Add args*/,
-	): FunctionCallee {
+	getOrInsertFunction(name: string, funcType: FunctionType, args: Value[] = []): FunctionCallee {
 		let func = this.getFunction(name);
 
 		if (func !== null) {
@@ -121,6 +117,20 @@ export class Module {
 		}
 
 		func = LLVMFunction.Create(funcType, GlobalValueLinkageTypes.ExternalLinkage, name, this);
+
+		// Set argument names if provided
+		if (args.length > 0) {
+			const numArgs = func.getNumArgs();
+			const numNamesToSet = Math.min(args.length, numArgs);
+
+			for (let i = 0; i < numNamesToSet; i++) {
+				const arg = func.getArg(i);
+				const argName = arg.getName();
+				if (argName) {
+					arg.setName(argName);
+				}
+			}
+		}
 
 		return new FunctionCallee(funcType, func);
 	}

@@ -10,9 +10,6 @@ import type { LLVMContext } from "./LLVMContext";
  * Based on LLVM's ConstantInt class from Constants.h
  */
 export class ConstantInt extends Constant {
-	// Method overloads
-	public static get(context: LLVMContext, value: number | APInt, isSigned?: boolean): ConstantInt;
-
 	/**
 	 * Create a ConstantInt or Constant with the specified parameters.
 	 * @param contextOrType The LLVM context or type
