@@ -359,11 +359,18 @@ export class Module {
 			// Compile to object file
 			const objectCompileError = this.compileToObjectFile(objectPath, targetTriple, cpu, features);
 			if (objectCompileError) {
-				return false;
+				return false; // objectCompileError is true when there's an error
 			}
 
 			// Use clang to link the object file into an executable (force overwrite)
 			const linkCommand = ["clang", objectPath, "-o", outputPath, ...clangArgs];
+
+			// Add macOS-specific linking flags
+			if (process.platform === "darwin") {
+				linkCommand.push("-L", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib");
+				linkCommand.push("-lSystem");
+			}
+
 			const proc = Bun.spawnSync(linkCommand, {
 				stdout: "pipe",
 				stderr: "pipe",
