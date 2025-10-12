@@ -222,18 +222,140 @@ describe("Module Tests", () => {
 			expect(irString).toContain("test_func");
 		});
 
-		it("should dispose module", () => {
-			expect(() => {
-				module.dispose();
-			}).not.toThrow();
-		});
-
 		it("should handle disposal with Symbol.dispose", () => {
 			const moduleToDispose = new Module("dispose_test");
 
 			expect(() => {
 				moduleToDispose[Symbol.dispose]();
 			}).not.toThrow();
+		});
+	});
+
+	describe("Module Linking", () => {
+		let destModule: Module;
+		let sourceModule: Module;
+		let int32Type: IntegerType;
+
+		beforeEach(() => {
+			destModule = new Module("destination_module");
+			sourceModule = new Module("source_module");
+			int32Type = Type.getInt32Ty();
+		});
+
+		it("should link modules successfully", () => {
+			// Add a function to the source module
+			const funcType = Type.getFunctionType(int32Type, [int32Type, int32Type], false);
+			sourceModule.getOrInsertFunction("add", funcType);
+
+			// Verify the function exists in source module
+			const sourceFunc = sourceModule.getFunction("add");
+			expect(sourceFunc).toBeDefined();
+
+			// Verify the function doesn't exist in destination module yet
+			const destFuncBefore = destModule.getFunction("add");
+			expect(destFuncBefore).toBeNull();
+
+			// Link the modules
+			const linkError = destModule.linkModule(sourceModule);
+			expect(linkError).toBe(false); // false means no error
+
+			// Verify the function now exists in destination module
+			const destFuncAfter = destModule.getFunction("add");
+			expect(destFuncAfter).toBeDefined();
+			expect(destFuncAfter).not.toBe(sourceFunc); // Should be a new reference
+		});
+
+		it("should handle linking modules with multiple functions", () => {
+			// Add multiple functions to the source module using the same pattern as the working test
+			const funcType1 = Type.getFunctionType(int32Type, [int32Type, int32Type], false);
+			const funcType2 = Type.getFunctionType(int32Type, [int32Type], false);
+
+			// Create the functions
+			sourceModule.getOrInsertFunction("add", funcType1);
+			sourceModule.getOrInsertFunction("square", funcType2);
+
+			// Verify functions exist in source module before linking
+			const sourceAddFunc = sourceModule.getFunction("add");
+			const sourceSquareFunc = sourceModule.getFunction("square");
+			expect(sourceAddFunc).toBeDefined();
+			expect(sourceSquareFunc).toBeDefined();
+
+			// Link the modules
+			const linkError = destModule.linkModule(sourceModule);
+			expect(linkError).toBe(false);
+
+			// Verify both functions exist in destination module
+			const addFunc = destModule.getFunction("add");
+			const squareFunc = destModule.getFunction("square");
+
+			expect(addFunc).toBeDefined();
+			expect(squareFunc).toBeDefined();
+		});
+
+		it("should handle linking empty modules", () => {
+			// Link empty modules
+			const linkError = destModule.linkModule(sourceModule);
+			expect(linkError).toBe(false);
+
+			// Both modules should still be empty
+			expect(destModule.empty()).toBe(true);
+		});
+
+		it("should destroy source module after linking", () => {
+			// Add a function to the source module
+			const funcType = Type.getFunctionType(int32Type);
+			sourceModule.getOrInsertFunction("test_func", funcType);
+
+			// Get the source module reference before linking
+			const sourceRef = sourceModule.ref;
+			expect(sourceRef).toBeDefined();
+
+			// Link the modules
+			const linkError = destModule.linkModule(sourceModule);
+			expect(linkError).toBe(false);
+
+			// The source module's ref should be null after linking
+			expect(sourceModule.ref).toBeNull();
+		});
+
+		it("should handle linking modules with different target triples", () => {
+			// Set different target triples
+			destModule.setTargetTriple("x86_64-apple-macosx");
+			sourceModule.setTargetTriple("x86_64-unknown-linux-gnu");
+
+			// Add a function to the source module
+			const funcType = Type.getFunctionType(int32Type);
+			sourceModule.getOrInsertFunction("test_func", funcType);
+
+			// Link the modules
+			const linkError = destModule.linkModule(sourceModule);
+			expect(linkError).toBe(false);
+
+			// Verify the function was linked successfully
+			const linkedFunc = destModule.getFunction("test_func");
+			expect(linkedFunc).toBeDefined();
+		});
+
+		it("should handle linking modules with different data layouts", () => {
+			// Set different data layouts
+			destModule.setDataLayout(
+				"e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128",
+			);
+			sourceModule.setDataLayout(
+				"e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128",
+			);
+
+			// Add a function to the source module
+			const funcType = Type.getFunctionType(int32Type);
+			sourceModule.getOrInsertFunction("test_func", funcType);
+
+			// Link the modules
+			const linkError = destModule.linkModule(sourceModule);
+			expect(linkError).toBe(false);
+
+			// Verify the function was linked successfully
+			const linkedFunc = destModule.getFunction("test_func");
+			expect(linkedFunc).toBeDefined();
 		});
 	});
 

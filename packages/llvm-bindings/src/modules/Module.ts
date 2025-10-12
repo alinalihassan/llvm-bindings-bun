@@ -146,6 +146,20 @@ export class Module {
 	}
 
 	/**
+	 * Links the source module into this module. The source module is destroyed.
+	 *
+	 * @param sourceModule The module to link into this module
+	 * @returns true if an error occurred, false otherwise
+	 */
+	linkModule(sourceModule: Module): boolean {
+		const error = ffi.symbols.LLVMLinkModules2(this._ref, sourceModule._ref);
+		// The source module is destroyed by LLVMLinkModules2, so we should mark it as disposed
+		// to prevent double disposal
+		sourceModule._ref = null;
+		return error;
+	}
+
+	/**
 	 * Add a module flag
 	 */
 	addModuleFlag(behavior: number, key: string, value: LLVMValueRef): void {

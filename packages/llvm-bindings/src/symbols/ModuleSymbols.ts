@@ -6,10 +6,7 @@ const ModuleSymbols = {
 		returns: /* LLVMModuleRef */ FFIType.ptr,
 	},
 	LLVMModuleCreateWithNameInContext: {
-		args: [
-			/* ModuleID: const char * */ FFIType.cstring,
-			/* C: LLVMContextRef */ FFIType.ptr,
-		],
+		args: [/* ModuleID: const char * */ FFIType.cstring, /* C: LLVMContextRef */ FFIType.ptr],
 		returns: /* LLVMModuleRef */ FFIType.ptr,
 	},
 	LLVMDisposeModule: {
@@ -49,10 +46,7 @@ const ModuleSymbols = {
 		returns: /* const char * */ FFIType.cstring,
 	},
 	LLVMSetDataLayout: {
-		args: [
-			/* M: LLVMModuleRef */ FFIType.ptr,
-			/* Triple: const char * */ FFIType.cstring,
-		],
+		args: [/* M: LLVMModuleRef */ FFIType.ptr, /* Triple: const char * */ FFIType.cstring],
 		returns: /* void */ FFIType.void,
 	},
 	LLVMGetTarget: {
@@ -60,17 +54,11 @@ const ModuleSymbols = {
 		returns: /* const char * */ FFIType.cstring,
 	},
 	LLVMSetTarget: {
-		args: [
-			/* M: LLVMModuleRef */ FFIType.ptr,
-			/* Triple: const char * */ FFIType.cstring,
-		],
+		args: [/* M: LLVMModuleRef */ FFIType.ptr, /* Triple: const char * */ FFIType.cstring],
 		returns: /* void */ FFIType.void,
 	},
 	LLVMGetNamedFunction: {
-		args: [
-			/* M: LLVMModuleRef */ FFIType.ptr,
-			/* Name: const char * */ FFIType.cstring,
-		],
+		args: [/* M: LLVMModuleRef */ FFIType.ptr, /* Name: const char * */ FFIType.cstring],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
 	LLVMGetFirstFunction: {
@@ -78,10 +66,7 @@ const ModuleSymbols = {
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
 	LLVMGetNamedGlobal: {
-		args: [
-			/* M: LLVMModuleRef */ FFIType.ptr,
-			/* Name: const char * */ FFIType.cstring,
-		],
+		args: [/* M: LLVMModuleRef */ FFIType.ptr, /* Name: const char * */ FFIType.cstring],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
 	LLVMGetFirstGlobal: {
@@ -97,6 +82,10 @@ const ModuleSymbols = {
 			/* Val: LLVMMetadataRef */ FFIType.ptr,
 		],
 		returns: /* void */ FFIType.void,
+	},
+	LLVMLinkModules2: {
+		args: [/* Dest: LLVMModuleRef */ FFIType.ptr, /* Src: LLVMModuleRef */ FFIType.ptr],
+		returns: /* LLVMBool */ FFIType.bool,
 	},
 } as const;
 
