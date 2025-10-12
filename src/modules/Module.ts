@@ -1,5 +1,5 @@
 import { ffi } from "@/ffi";
-import type { LLVMContextRef, LLVMModuleRef, LLVMValueRef } from "@/utils";
+import type { LLVMContextRef, LLVMMemoryBufferRef, LLVMModuleRef, LLVMValueRef } from "@/utils";
 import { cstring } from "@/utils";
 import { GlobalValueLinkageTypes } from "./Enum";
 import { LLVMFunction } from "./Function";
@@ -180,6 +180,39 @@ export class Module {
 	 */
 	print(): string {
 		return ffi.symbols.LLVMPrintModuleToString(this._ref).toString();
+	}
+
+	/**
+	 * Writes the module to the specified file path as bitcode.
+	 * @param path The file path to write to
+	 * @returns 0 on success, non-zero on error
+	 */
+	writeToFile(path: string): number {
+		return ffi.symbols.LLVMWriteBitcodeToFile(this._ref, cstring(path));
+	}
+
+	/**
+	 * Writes the module to an open file descriptor as bitcode.
+	 * @param fd The file descriptor to write to
+	 * @param shouldClose Whether to close the file descriptor after writing
+	 * @param unbuffered Whether to use unbuffered I/O
+	 * @returns 0 on success, non-zero on error
+	 */
+	writeToFileDescriptor(
+		fd: number,
+		shouldClose: boolean = false,
+		unbuffered: boolean = false,
+	): number {
+		return ffi.symbols.LLVMWriteBitcodeToFD(this._ref, fd, shouldClose ? 1 : 0, unbuffered ? 1 : 0);
+	}
+
+	/**
+	 * Writes the module to a memory buffer as bitcode.
+	 * This method is for internal use only.
+	 * @returns A memory buffer containing the bitcode, or null on error
+	 */
+	private writeToMemoryBuffer(): LLVMMemoryBufferRef {
+		return ffi.symbols.LLVMWriteBitcodeToMemoryBuffer(this._ref);
 	}
 
 	/**

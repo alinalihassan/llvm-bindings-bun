@@ -87,6 +87,23 @@ const ModuleSymbols = {
 		args: [/* Dest: LLVMModuleRef */ FFIType.ptr, /* Src: LLVMModuleRef */ FFIType.ptr],
 		returns: /* LLVMBool */ FFIType.bool,
 	},
+	LLVMWriteBitcodeToFile: {
+		args: [/* M: LLVMModuleRef */ FFIType.ptr, /* Path: const char * */ FFIType.cstring],
+		returns: /* int */ FFIType.i32,
+	},
+	LLVMWriteBitcodeToFD: {
+		args: [
+			/* M: LLVMModuleRef */ FFIType.ptr,
+			/* FD: int */ FFIType.i32,
+			/* ShouldClose: int */ FFIType.i32,
+			/* Unbuffered: int */ FFIType.i32,
+		],
+		returns: /* int */ FFIType.i32,
+	},
+	LLVMWriteBitcodeToMemoryBuffer: {
+		args: [/* M: LLVMModuleRef */ FFIType.ptr],
+		returns: /* LLVMMemoryBufferRef */ FFIType.ptr,
+	},
 } as const;
 
 export { ModuleSymbols };

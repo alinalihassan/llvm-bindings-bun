@@ -1,4 +1,7 @@
 import { beforeEach, describe, expect, it } from "bun:test";
+import { existsSync, openSync, unlinkSync } from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
 import type { FunctionType, IntegerType } from "@/index.js";
 import { LLVMContext } from "../src/modules/LLVMContext.js";
 import { Module } from "../src/modules/Module.js";
@@ -433,6 +436,98 @@ describe("Module Tests", () => {
 			// Verify function exists
 			const func = module.getFunction("test_func");
 			expect(func).toBeDefined();
+		});
+	});
+
+	describe("Module Write Methods", () => {
+		let module: Module;
+		let int32Type: IntegerType;
+
+		beforeEach(() => {
+			module = new Module("write_test_module");
+			int32Type = Type.getInt32Ty();
+		});
+
+		it("should write module to file", () => {
+			// Add some content to the module
+			const funcType = Type.getFunctionType(int32Type);
+			module.getOrInsertFunction("test_func", funcType);
+
+			// Create a temporary file path
+			const tempFile = join(tmpdir(), `test_module_${Date.now()}.bc`);
+
+			try {
+				// Write module to file
+				const result = module.writeToFile(tempFile);
+				expect(result).toBe(0); // 0 indicates success
+
+				// Verify file was created and has content
+				expect(existsSync(tempFile)).toBe(true);
+				const stats = Bun.file(tempFile).size;
+				expect(stats).toBeGreaterThan(0);
+			} finally {
+				// Clean up
+				if (existsSync(tempFile)) {
+					unlinkSync(tempFile);
+				}
+			}
+		});
+
+		it("should write module to file descriptor", () => {
+			// Add some content to the module
+			const funcType = Type.getFunctionType(int32Type);
+			module.getOrInsertFunction("test_func", funcType);
+
+			// Create a temporary file
+			const tempFile = join(tmpdir(), `test_module_fd_${Date.now()}.bc`);
+
+			try {
+				// Open file for writing
+				const fd = openSync(tempFile, "w");
+
+				// Write module to file descriptor
+				const result = module.writeToFileDescriptor(fd, true, false);
+				expect(result).toBe(0); // 0 indicates success
+
+				// Verify file has content
+				const stats = Bun.file(tempFile).size;
+				expect(stats).toBeGreaterThan(0);
+			} finally {
+				// Clean up
+				if (existsSync(tempFile)) {
+					unlinkSync(tempFile);
+				}
+			}
+		});
+
+		it("should handle file descriptor options correctly", () => {
+			// Add some content to the module
+			const funcType = Type.getFunctionType(int32Type);
+			module.getOrInsertFunction("test_func", funcType);
+
+			const tempFile = join(tmpdir(), `test_module_options_${Date.now()}.bc`);
+
+			try {
+				// Test with shouldClose = true
+				const fd1 = openSync(tempFile, "w");
+				const result1 = module.writeToFileDescriptor(fd1, true, false);
+				expect(result1).toBe(0);
+
+				// Test with unbuffered = true
+				const fd2 = openSync(tempFile, "w");
+				const result2 = module.writeToFileDescriptor(fd2, true, true);
+				expect(result2).toBe(0);
+
+				// Test with both options
+				const fd3 = openSync(tempFile, "w");
+				const result3 = module.writeToFileDescriptor(fd3, true, true);
+				expect(result3).toBe(0);
+			} finally {
+				// Clean up
+				if (existsSync(tempFile)) {
+					unlinkSync(tempFile);
+				}
+			}
 		});
 	});
 });
