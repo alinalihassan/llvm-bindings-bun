@@ -51,6 +51,13 @@ const TargetSymbols = {
 	LLVMInitializeX86TargetMC: { args: [], returns: FFIType.void },
 	LLVMInitializeX86AsmParser: { args: [], returns: FFIType.void },
 	LLVMInitializeX86AsmPrinter: { args: [], returns: FFIType.void },
+
+	// ARM target initialization functions (might be needed for AArch64)
+	LLVMInitializeARMTargetInfo: { args: [], returns: FFIType.void },
+	LLVMInitializeARMTarget: { args: [], returns: FFIType.void },
+	LLVMInitializeARMTargetMC: { args: [], returns: FFIType.void },
+	LLVMInitializeARMAsmParser: { args: [], returns: FFIType.void },
+	LLVMInitializeARMAsmPrinter: { args: [], returns: FFIType.void },
 } as const;
 
 export { TargetSymbols };
