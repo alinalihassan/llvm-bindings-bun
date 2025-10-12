@@ -1,5 +1,4 @@
-import { ffi } from "@/ffi";
-import { assert, type LLVMValueRef } from "@/utils";
+import { ConstantFP } from "./ConstantFP";
 import type { Type } from "./Type";
 
 /**
@@ -29,11 +28,7 @@ export class APFloat {
 	 * @param floatType The floating point type to use
 	 * @returns A constant floating point value
 	 */
-	public toConstantFP(floatType: Type): LLVMValueRef {
-		const constantRef = ffi.LLVMConstReal(floatType.ref, this._value);
-		assert(constantRef !== null, "Failed to create constant floating point from APFloat");
-
-		// TODO: Need to implement ConstantFP
-		return constantRef;
+	public toConstantFP(floatType: Type): ConstantFP {
+		return ConstantFP.getWithAPFloat(floatType, this);
 	}
 }

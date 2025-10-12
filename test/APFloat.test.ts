@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { APFloat } from "@/modules/APFloat";
+import { ConstantFP } from "@/modules/ConstantFP";
 import { Type } from "@/modules/Type";
 
 describe("APFloat Tests", () => {
@@ -55,10 +56,11 @@ describe("APFloat Tests", () => {
 			const apFloat = new APFloat(value);
 			const floatType = Type.getFloatTy();
 
-			const constantRef = apFloat.toConstantFP(floatType);
+			const constant = apFloat.toConstantFP(floatType);
 
-			expect(constantRef).toBeDefined();
-			expect(constantRef).not.toBe(0);
+			expect(constant).toBeDefined();
+			expect(constant).toBeInstanceOf(ConstantFP);
+			expect(constant.ref).not.toBe(0);
 		});
 
 		it("should create constant double from APFloat", () => {
@@ -66,30 +68,33 @@ describe("APFloat Tests", () => {
 			const apFloat = new APFloat(value);
 			const doubleType = Type.getDoubleTy();
 
-			const constantRef = apFloat.toConstantFP(doubleType);
+			const constant = apFloat.toConstantFP(doubleType);
 
-			expect(constantRef).toBeDefined();
-			expect(constantRef).not.toBe(0);
+			expect(constant).toBeDefined();
+			expect(constant).toBeInstanceOf(ConstantFP);
+			expect(constant.ref).not.toBe(0);
 		});
 
 		it("should handle zero value conversion", () => {
 			const apFloat = new APFloat(0.0);
 			const floatType = Type.getFloatTy();
 
-			const constantRef = apFloat.toConstantFP(floatType);
+			const constant = apFloat.toConstantFP(floatType);
 
-			expect(constantRef).toBeDefined();
-			expect(constantRef).not.toBe(0);
+			expect(constant).toBeDefined();
+			expect(constant).toBeInstanceOf(ConstantFP);
+			expect(constant.ref).not.toBe(0);
 		});
 
 		it("should handle negative value conversion", () => {
 			const apFloat = new APFloat(-1.5);
 			const floatType = Type.getFloatTy();
 
-			const constantRef = apFloat.toConstantFP(floatType);
+			const constant = apFloat.toConstantFP(floatType);
 
-			expect(constantRef).toBeDefined();
-			expect(constantRef).not.toBe(0);
+			expect(constant).toBeDefined();
+			expect(constant).toBeInstanceOf(ConstantFP);
+			expect(constant.ref).not.toBe(0);
 		});
 	});
 

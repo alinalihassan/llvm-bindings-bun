@@ -1,5 +1,6 @@
 import type { Pointer } from "bun:ffi";
 import { ffi } from "@/ffi";
+import { cstring } from "@/utils";
 
 // Clang constants
 export const CXTranslationUnit_None = 0x0;
@@ -50,17 +51,17 @@ export class ClangTranslationUnit {
 
 	constructor(
 		index: ClangIndex,
-		_sourceFilename: string,
-		_commandLineArgs: string[] = [],
+		sourceFilename: string,
+		commandLineArgs: string[] = [],
 		_unsavedFiles: Array<{ filename: string; contents: string }> = [],
 		options: number = CXTranslationUnit_None,
 	) {
-		// For now, use a simpler approach that doesn't crash
-		// We'll pass null pointers and let Clang handle the file discovery
+		// For now, use a simpler approach that works with the existing FFI setup
+		// Pass null for command line args to avoid the complex string array handling
 		const result = ffi.clang_parseTranslationUnit(
 			index.getPtr(),
-			null, // source filename (null - let Clang discover)
-			null, // command line args (null for now)
+			cstring(sourceFilename),
+			null, // command line args (simplified for now)
 			0, // num command line args
 			null, // unsaved files
 			0, // num unsaved files
@@ -75,6 +76,20 @@ export class ClangTranslationUnit {
 
 	getPtr(): Pointer {
 		return this._ref;
+	}
+
+	getDiagnostics(): ClangDiagnostic[] {
+		const numDiagnostics = ffi.clang_getNumDiagnostics(this._ref);
+		const diagnostics: ClangDiagnostic[] = [];
+
+		for (let i = 0; i < numDiagnostics; i++) {
+			const diagnosticRef = ffi.clang_getDiagnostic(this._ref, i);
+			if (diagnosticRef) {
+				diagnostics.push(new ClangDiagnostic(diagnosticRef));
+			}
+		}
+
+		return diagnostics;
 	}
 
 	private dispose(): void {
@@ -109,13 +124,49 @@ export class ClangDiagnostic {
 	getSpelling(): string {
 		const stringRef = ffi.clang_getDiagnosticSpelling(this._ref);
 		const cString = ffi.clang_getCString(stringRef);
-		const result = cString
-			? new TextDecoder().decode(
-					new Uint8Array(new DataView(cString as unknown as ArrayBuffer, 0, 256).buffer),
-				)
-			: "";
+
+		// Convert C string to JavaScript string
+		let result = "";
+		if (cString) {
+			// Use Bun's built-in string conversion for C strings
+			try {
+				// Try to convert the pointer to a string directly
+				result = new TextDecoder().decode(
+					new Uint8Array(cString as unknown as ArrayBuffer, 0, 1024),
+				);
+				// Remove null terminator and any trailing garbage
+				const nullIndex = result.indexOf("\0");
+				if (nullIndex !== -1) {
+					result = result.substring(0, nullIndex);
+				}
+			} catch (e) {
+				// Fallback: return a generic message
+				result = "Compilation diagnostic";
+			}
+		}
+
 		ffi.clang_disposeString(stringRef);
 		return result;
+	}
+
+	getSeverityString(): string {
+		const severity = this.getSeverity();
+
+		// Map severity numbers to strings based on Clang's CXDiagnosticSeverity enum
+		switch (severity) {
+			case 0:
+				return "Ignored";
+			case 1:
+				return "Note";
+			case 2:
+				return "Warning";
+			case 3:
+				return "Error";
+			case 4:
+				return "Fatal";
+			default:
+				return "Unknown";
+		}
 	}
 
 	private dispose(): void {
@@ -139,33 +190,28 @@ export class ClangDiagnostic {
 export function compileFile(
 	sourceFile: string,
 	_outputFile: string,
-	_args: string[] = [],
-): boolean {
+	args: string[] = [],
+): { success: boolean; diagnostics: ClangDiagnostic[] } {
 	try {
 		const index = new ClangIndex();
-		const tu = new ClangTranslationUnit(index, sourceFile, []);
+		const tu = new ClangTranslationUnit(index, sourceFile, args);
 
 		// Get diagnostics
-		const numDiagnostics = ffi.clang_getNumDiagnostics(tu.getPtr());
+		const diagnostics = tu.getDiagnostics();
 		let hasErrors = false;
 
-		for (let i = 0; i < numDiagnostics; i++) {
-			const diagnosticRef = ffi.clang_getDiagnostic(tu.getPtr(), i);
-			if (diagnosticRef) {
-				const diagnostic = new ClangDiagnostic(diagnosticRef);
-
-				const severity = diagnostic.getSeverity();
-				if (severity === CXDiagnostic_Error || severity === CXDiagnostic_Fatal) {
-					hasErrors = true;
-					console.error(`Error: ${diagnostic.getSpelling()}`);
-				}
+		for (const diagnostic of diagnostics) {
+			const severity = diagnostic.getSeverity();
+			if (severity === CXDiagnostic_Error || severity === CXDiagnostic_Fatal) {
+				hasErrors = true;
+				console.error(`Error: ${diagnostic.getSpelling()}`);
 			}
 		}
 
-		return !hasErrors;
+		return { success: !hasErrors, diagnostics };
 	} catch (error) {
 		console.error("Compilation failed:", error);
-		return false;
+		return { success: false, diagnostics: [] };
 	}
 }
 

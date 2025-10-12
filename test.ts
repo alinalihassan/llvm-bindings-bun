@@ -77,23 +77,3 @@ builder.CreateRet(callResult);
 
 console.log("Generated LLVM IR:");
 console.log(module.print());
-
-// Compile to executable
-const success = await module.compileToExecutable("test_executable", undefined, "generic", "", [
-	"-std=c99",
-	"-Wall",
-]);
-
-if (success) {
-	console.log("✅ Compilation successful!");
-
-	// Run the executable
-	const proc = Bun.spawnSync(["./test_executable"], {
-		stdout: "pipe",
-		stderr: "pipe",
-	});
-
-	console.log(`🎯 The add(5, 3) function returned: ${proc.exitCode}`);
-} else {
-	console.log("❌ Compilation failed!");
-}

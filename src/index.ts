@@ -14,6 +14,7 @@ import {
 	linkExecutable,
 } from "./modules/Clang";
 import { Constant } from "./modules/Constant";
+import { ConstantFP } from "./modules/ConstantFP";
 import { ConstantInt } from "./modules/ConstantInt";
 import { PassPipeline } from "./modules/Enum";
 import { LLVMFunction } from "./modules/Function";
@@ -99,6 +100,7 @@ const llvm = {
 	User: User,
 	Instruction: Instruction,
 	Constant: Constant,
+	ConstantFP: ConstantFP,
 	ConstantInt: ConstantInt,
 	GlobalValue: GlobalValue,
 	GlobalObject: GlobalObject,
@@ -196,6 +198,7 @@ export * from "@/modules/ArrayType";
 export * from "@/modules/BasicBlock";
 export * from "@/modules/Clang";
 export * from "@/modules/Constant";
+export * from "@/modules/ConstantFP";
 export * from "@/modules/ConstantInt";
 export * from "@/modules/Enum";
 export * from "@/modules/Function";

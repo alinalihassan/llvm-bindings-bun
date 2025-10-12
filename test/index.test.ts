@@ -2,3 +2,4 @@
 import "./Type.test.js";
 import "./Module.test.js";
 import "./Enum.test.js";
+import "./ConstantFP.test.js";

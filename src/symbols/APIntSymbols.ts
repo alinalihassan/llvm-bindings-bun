@@ -17,10 +17,6 @@ const APIntSymbols = {
 		],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
-	LLVMConstReal: {
-		args: [/* RealTy: LLVMTypeRef */ FFIType.ptr, /* N: double */ FFIType.f64],
-		returns: /* LLVMValueRef */ FFIType.ptr,
-	},
 } as const;
 
 export { APIntSymbols };

@@ -4,6 +4,7 @@ import { ArgumentSymbols } from "./symbols/ArgumentSymbols";
 import { ArrayTypeSymbols } from "./symbols/ArrayTypeSymbols";
 import { BasicBlockSymbols } from "./symbols/BasicBlockSymbols";
 import { ClangSymbols } from "./symbols/ClangSymbols";
+import { ConstantFPSymbols } from "./symbols/ConstantFPSymbols";
 import { ConstantIntSymbols } from "./symbols/ConstantIntSymbols";
 import { ConstantSymbols } from "./symbols/ConstantSymbols";
 import { FunctionSymbols } from "./symbols/FunctionSymbols";
@@ -43,6 +44,7 @@ const llvmFfi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libLLVM-C.dylib", {
 	...BasicBlockSymbols,
 	...IRBuilderSymbols,
 	...ConstantSymbols,
+	...ConstantFPSymbols,
 	...ConstantIntSymbols,
 	...GlobalValueSymbols,
 	...GlobalVariableSymbols,
