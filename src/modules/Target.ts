@@ -71,7 +71,15 @@ export class Target {
 		const error = ffi.symbols.LLVMGetTargetFromTriple(cstring(triple), targetPtr, errorPtr);
 
 		// LLVMBool: 0 = success, 1 = error
-		return error ? null : (targetPtr as unknown as LLVMTargetRef);
+		if (error) {
+			return null;
+		}
+
+		// Extract the pointer value from the buffer
+		// The pointer is stored as a 64-bit value in little-endian format
+		const pointerValue = new DataView(targetPtr.buffer).getBigUint64(0, true);
+		// Convert BigInt to number for pointer conversion
+		return pointerValue ? (Number(pointerValue) as unknown as LLVMTargetRef) : null;
 	}
 
 	/**
@@ -89,8 +97,7 @@ export class Target {
 	 * @returns The target name
 	 */
 	static getTargetName(target: LLVMTargetRef): string {
-		// For now, return hardcoded "generic" to test target machine creation
-		return "generic";
+		return ffi.symbols.LLVMGetTargetName(target).toString();
 	}
 
 	/**
@@ -99,8 +106,7 @@ export class Target {
 	 * @returns The target description
 	 */
 	static getTargetDescription(target: LLVMTargetRef): string {
-		// For now, return hardcoded description to test target machine creation
-		return "Generic target for testing";
+		return ffi.symbols.LLVMGetTargetDescription(target).toString();
 	}
 
 	/**
@@ -109,8 +115,7 @@ export class Target {
 	 * @returns true if the target has a JIT
 	 */
 	static targetHasJIT(target: LLVMTargetRef): boolean {
-		// For now, return true to test target machine creation
-		return true;
+		return ffi.symbols.LLVMTargetHasJIT(target);
 	}
 
 	/**
@@ -119,8 +124,7 @@ export class Target {
 	 * @returns true if the target has a TargetMachine
 	 */
 	static targetHasTargetMachine(target: LLVMTargetRef): boolean {
-		// For now, return true to test target machine creation
-		return true;
+		return ffi.symbols.LLVMTargetHasTargetMachine(target);
 	}
 
 	/**
@@ -129,7 +133,6 @@ export class Target {
 	 * @returns true if the target has an ASM backend
 	 */
 	static targetHasAsmBackend(target: LLVMTargetRef): boolean {
-		// For now, return true to test target machine creation
-		return true;
+		return ffi.symbols.LLVMTargetHasAsmBackend(target);
 	}
 }

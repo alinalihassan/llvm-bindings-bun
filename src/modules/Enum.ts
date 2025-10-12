@@ -839,3 +839,51 @@ export enum PassPipeline {
 	NoOpModule = "no-op-module", // Does nothing (module-level placeholder)
 	NoOpFunction = "no-op-function", // Does nothing (function-level placeholder)
 }
+
+/**
+ * LLVM Code Generation Optimization Level enumeration
+ * Represents the different optimization levels for code generation
+ */
+export enum CodeGenOptLevel {
+	None = 0,
+	Less = 1,
+	Default = 2,
+	Aggressive = 3,
+}
+
+/**
+ * LLVM Relocation Mode enumeration
+ * Represents the different relocation modes for code generation
+ */
+export enum RelocMode {
+	Default = 0,
+	Static = 1,
+	PIC = 2,
+	DynamicNoPic = 3,
+	ROPI = 4,
+	RWPI = 5,
+	ROPI_RWPI = 6,
+}
+
+/**
+ * LLVM Code Model enumeration
+ * Represents the different code models for code generation
+ */
+export enum CodeModel {
+	Default = 0,
+	JITDefault = 1,
+	Tiny = 2,
+	Small = 3,
+	Kernel = 4,
+	Medium = 5,
+	Large = 6,
+}
+
+/**
+ * LLVM Code Generation File Type enumeration
+ * Represents the different types of files that can be generated
+ */
+export enum CodeGenFileType {
+	AssemblyFile = 0,
+	ObjectFile = 1,
+}

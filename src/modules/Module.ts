@@ -1,13 +1,13 @@
 import { ffi } from "@/ffi";
 import type { LLVMContextRef, LLVMMemoryBufferRef, LLVMModuleRef, LLVMValueRef } from "@/utils";
 import { cstring } from "@/utils";
-import { GlobalValueLinkageTypes } from "./Enum";
+import { CodeGenFileType, GlobalValueLinkageTypes } from "./Enum";
 import { LLVMFunction } from "./Function";
 import { FunctionCallee } from "./FunctionCallee";
 import type { FunctionType } from "./FunctionType";
 import { GlobalVariable } from "./GlobalVariable";
 import { Target } from "./Target";
-import { CodeGenFileType, TargetMachine } from "./TargetMachine";
+import { TargetMachine } from "./TargetMachine";
 import type { Value } from "./Value";
 
 export class Module {
@@ -213,6 +213,8 @@ export class Module {
 	 * This method is for internal use only.
 	 * @returns A memory buffer containing the bitcode, or null on error
 	 */
+
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: Might be useful in the future
 	private writeToMemoryBuffer(): LLVMMemoryBufferRef {
 		return ffi.symbols.LLVMWriteBitcodeToMemoryBuffer(this._ref);
 	}

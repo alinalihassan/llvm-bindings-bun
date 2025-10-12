@@ -7,38 +7,7 @@ import type {
 	LLVMTargetRef,
 } from "@/utils";
 import { cstring } from "@/utils";
-
-export enum CodeGenOptLevel {
-	None = 0,
-	Less = 1,
-	Default = 2,
-	Aggressive = 3,
-}
-
-export enum RelocMode {
-	Default = 0,
-	Static = 1,
-	PIC = 2,
-	DynamicNoPic = 3,
-	ROPI = 4,
-	RWPI = 5,
-	ROPI_RWPI = 6,
-}
-
-export enum CodeModel {
-	Default = 0,
-	JITDefault = 1,
-	Tiny = 2,
-	Small = 3,
-	Kernel = 4,
-	Medium = 5,
-	Large = 6,
-}
-
-export enum CodeGenFileType {
-	AssemblyFile = 0,
-	ObjectFile = 1,
-}
+import { type CodeGenFileType, CodeGenOptLevel, CodeModel, RelocMode } from "./Enum";
 
 export class TargetMachine {
 	private _ref: LLVMTargetMachineRef;
@@ -89,18 +58,19 @@ export class TargetMachine {
 	 * @param module The module to compile
 	 * @param filename The output filename
 	 * @param fileType The type of file to emit (assembly or object)
-	 * @returns true on success, false on error
+	 * @returns false on success, true on error
 	 */
 	emitToFile(module: LLVMModuleRef, filename: string, fileType: CodeGenFileType): boolean {
 		const errorPtr = new Uint8Array(8);
-		const success = ffi.symbols.LLVMTargetMachineEmitToFile(
+		const error = ffi.symbols.LLVMTargetMachineEmitToFile(
 			this._ref,
 			module,
 			cstring(filename),
 			fileType,
 			errorPtr,
 		);
-		return success;
+
+		return error;
 	}
 
 	/**
@@ -112,14 +82,21 @@ export class TargetMachine {
 	emitToMemoryBuffer(module: LLVMModuleRef, fileType: CodeGenFileType): LLVMMemoryBufferRef | null {
 		const errorPtr = new Uint8Array(8);
 		const bufferPtr = new Uint8Array(8);
-		const success = ffi.symbols.LLVMTargetMachineEmitToMemoryBuffer(
+		const error = ffi.symbols.LLVMTargetMachineEmitToMemoryBuffer(
 			this._ref,
 			module,
 			fileType,
 			errorPtr,
 			bufferPtr,
 		);
-		return success ? (bufferPtr as unknown as LLVMMemoryBufferRef) : null;
+
+		if (!error) {
+			// Extract the pointer value from the buffer
+			const pointerValue = new DataView(bufferPtr.buffer).getBigUint64(0, true);
+			return pointerValue ? (Number(pointerValue) as unknown as LLVMMemoryBufferRef) : null;
+		}
+
+		return null;
 	}
 
 	/**
