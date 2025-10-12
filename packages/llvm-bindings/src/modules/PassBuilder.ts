@@ -135,11 +135,14 @@ export class PassBuilder {
 		targetMachine: LLVMTargetMachineRef | null = null,
 		options: PassBuilderOptions | null = null,
 	): void {
+		// Create default options if none provided
+		const optionsToUse = options || new PassBuilderOptions();
+
 		const errorRef = ffi.symbols.LLVMRunPasses(
 			module.ref,
 			cstring(passes),
 			targetMachine,
-			options?.ref || null,
+			optionsToUse.ref,
 		);
 
 		assert(errorRef === null, "Failed to run passes");
@@ -162,11 +165,14 @@ export class PassBuilder {
 		targetMachine: LLVMTargetMachineRef | null = null,
 		options: PassBuilderOptions | null = null,
 	): void {
+		// Create default options if none provided
+		const optionsToUse = options || new PassBuilderOptions();
+
 		const errorRef = ffi.symbols.LLVMRunPassesOnFunction(
 			func.ref,
 			cstring(passes),
 			targetMachine,
-			options?.ref || null,
+			optionsToUse.ref,
 		);
 
 		assert(errorRef === null, "Failed to run passes on function");
