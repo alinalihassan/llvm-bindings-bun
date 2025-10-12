@@ -815,3 +815,27 @@ export enum GlobalValueDLLStorageClassTypes {
 	DLLImportStorageClass = 1 /**< Function to be imported from DLL */,
 	DLLExportStorageClass = 2 /**< Function to be accessible from DLL. */,
 }
+
+/**
+ * LLVM Pass Pipeline enumeration
+ * Represents the different optimization pipelines available in LLVM
+ */
+export enum PassPipeline {
+	// Optimization levels
+	NoOptimization = "default<O0>", // No optimizations (just canonicalization)
+	BasicOptimization = "default<O1>", // Basic optimizations
+	StandardOptimization = "default<O2>", // Standard optimizations
+	AggressiveOptimization = "default<O3>", // Aggressive optimizations
+	OptimizeForSize = "default<Os>", // Optimize for size
+	OptimizeForMinSize = "default<Oz>", // Optimize for minimum size
+
+	// LTO pipelines
+	LTOPreLinkO2 = "lto-pre-link<O2>", // Pre-link time LTO pipeline (used by clang -flto)
+	LTOO2 = "lto<O2>", // Full link-time optimization pipeline
+	ThinLTOPreLinkO2 = "thinlto-pre-link<O2>", // Pre-link ThinLTO
+	ThinLTOO2 = "thinlto<O2>", // Full ThinLTO
+
+	// No-op pipelines
+	NoOpModule = "no-op-module", // Does nothing (module-level placeholder)
+	NoOpFunction = "no-op-function", // Does nothing (function-level placeholder)
+}

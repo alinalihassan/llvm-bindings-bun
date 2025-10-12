@@ -14,6 +14,9 @@ export type LLVMFunctionRef = Pointer | null;
 export type LLVMGlobalVariableRef = Pointer | null;
 export type LLVMConstantRef = Pointer | null;
 export type LLVMInstructionRef = Pointer | null;
+export type LLVMPassBuilderOptionsRef = Pointer | null;
+export type LLVMTargetMachineRef = Pointer | null;
+export type LLVMErrorRef = Pointer | null;
 
 // Helper function to convert string to C string
 export function cstring(str: string): Buffer {

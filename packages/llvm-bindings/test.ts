@@ -1,4 +1,4 @@
-import { FunctionCallee } from "./src";
+import { FunctionCallee, PassBuilder } from "./src";
 import { BasicBlock } from "./src/modules/BasicBlock";
 import { GlobalValueLinkageTypes } from "./src/modules/Enum";
 import { LLVMFunction } from "./src/modules/Function";
@@ -72,6 +72,8 @@ const callResult = builder.CreateCall(functionCallee, [arg1, arg2], "call_result
 // Return the result
 builder.CreateRet(callResult);
 
-// Print the module to see the generated IR
+// Run the passes using the new enum-only API
+// PassBuilder.runMaxOptimization(module);
+
 console.log("Generated LLVM IR:");
 console.log(module.print());

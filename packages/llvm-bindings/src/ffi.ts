@@ -15,6 +15,7 @@ import { IntegerTypeSymbols } from "./symbols/IntegerTypeSymbols";
 import { IRBuilderSymbols } from "./symbols/IRBuilderSymbols";
 import { LLVMContextSymbols } from "./symbols/LLVMContextSymbols";
 import { ModuleSymbols } from "./symbols/ModuleSymbols";
+import { PassBuilderSymbols } from "./symbols/PassBuilderSymbols";
 import { PointerTypeSymbols } from "./symbols/PointerTypeSymbols";
 import { StructTypeSymbols } from "./symbols/StructTypeSymbols";
 import { TypeSymbols } from "./symbols/TypeSymbols";
@@ -43,6 +44,7 @@ const ffi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libLLVM-C.dylib", {
 	...GlobalValueSymbols,
 	...GlobalVariableSymbols,
 	...APIntSymbols,
+	...PassBuilderSymbols,
 
 	LLVMGetModuleInlineAsm: {
 		args: [FFIType.ptr, FFIType.ptr, FFIType.ptr],

@@ -5,6 +5,7 @@ import { ArrayType } from "./modules/ArrayType";
 import { BasicBlock } from "./modules/BasicBlock";
 import { Constant } from "./modules/Constant";
 import { ConstantInt } from "./modules/ConstantInt";
+import { PassPipeline } from "./modules/Enum";
 import { LLVMFunction } from "./modules/Function";
 import { FunctionCallee } from "./modules/FunctionCallee";
 import { FunctionType } from "./modules/FunctionType";
@@ -64,6 +65,7 @@ import { IntegerType } from "./modules/IntegerType";
 import { IRBuilder } from "./modules/IRBuilder";
 import { LLVMContext } from "./modules/LLVMContext";
 import { Module } from "./modules/Module";
+import { PassBuilder } from "./modules/PassBuilder";
 import { PointerType } from "./modules/PointerType";
 import { StructType } from "./modules/StructType";
 import { Type } from "./modules/Type";
@@ -76,6 +78,8 @@ const llvm = {
 	// Core classes
 	LLVMContext: LLVMContext,
 	Module: Module,
+	PassBuilder: PassBuilder,
+	PassPipeline: PassPipeline,
 	Type: Type,
 	Value: Value,
 	User: User,
@@ -153,8 +157,7 @@ const llvm = {
 
 	// Convenience methods for creating instances
 	createContext: () => new LLVMContext(),
-	createModule: (name: string, context?: LLVMContext) =>
-		new Module(name, context?.ref),
+	createModule: (name: string, context?: LLVMContext) => new Module(name, context?.ref),
 } as const;
 
 // Exports
@@ -178,6 +181,7 @@ export * from "@/modules/IntegerType";
 export * from "@/modules/IRBuilder";
 export * from "@/modules/LLVMContext";
 export * from "@/modules/Module";
+export * from "@/modules/PassBuilder";
 export * from "@/modules/PointerType";
 export * from "@/modules/StructType";
 export * from "@/modules/Type";
