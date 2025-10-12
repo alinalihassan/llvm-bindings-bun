@@ -1,3 +1,4 @@
+import { FunctionCallee } from "./src";
 import { BasicBlock } from "./src/modules/BasicBlock";
 import { GlobalValueLinkageTypes } from "./src/modules/Enum";
 import { LLVMFunction } from "./src/modules/Function";
@@ -43,6 +44,33 @@ const result = builder.CreateAdd(a, b, "result");
 
 // Create return instruction
 builder.CreateRet(result);
+
+// Create a main function that calls the add function
+const mainFunctionType = FunctionType.get(IntegerType.get(context, 32), [], false);
+const mainFunction = LLVMFunction.Create(
+	mainFunctionType,
+	GlobalValueLinkageTypes.ExternalLinkage,
+	"main",
+	module,
+);
+
+// Create a basic block for the main function
+const mainEntryBlock = BasicBlock.Create(context, "entry", mainFunction);
+
+// Set the insertion point to the main function's entry block
+builder.SetInsertPoint(mainEntryBlock);
+
+// Create constants for the function call arguments
+const arg1 = builder.getInt32(5);
+const arg2 = builder.getInt32(3);
+
+const functionCallee = new FunctionCallee(functionType, addFunction);
+
+// Call the add function
+const callResult = builder.CreateCall(functionCallee, [arg1, arg2], "call_result");
+
+// Return the result
+builder.CreateRet(callResult);
 
 // Print the module to see the generated IR
 console.log("Generated LLVM IR:");
