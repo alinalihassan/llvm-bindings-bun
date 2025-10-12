@@ -1,18 +1,18 @@
 {
-  "name": "test-cli-workspace",
-  "private": true,
+  "name": "llvm-bindings-bun",
+  "module": "index.ts",
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
+  "private": true,
   "scripts": {
-    "build": "bun run --filter='*' build",
-    "dev": "bun run --filter='*' dev",
-    "test": "bun run --filter='*' test",
-    "clean": "bun run --filter='*' clean"
+    "test": "bun test test/",
+    "test:watch": "bun test --watch test/",
+    "test:coverage": "bun test --coverage test/"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
     "typescript": "^5"
   }
 }
