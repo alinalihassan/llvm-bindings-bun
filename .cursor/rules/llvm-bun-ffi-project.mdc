@@ -42,6 +42,14 @@
   - For numbers: use `ffi.symbols.LLVMCountParamTypes(this.ref)` instead of `Number(ffi.symbols.LLVMCountParamTypes(this.ref))`
   - Only cast when absolutely necessary for type safety
 
+## Import Style
+- **IMPORTANT**: Never specify file extensions in imports (no `.js`, `.ts`, etc.)
+- **IMPORTANT**: Use `@/` prefix for internal imports instead of relative paths
+- **Correct**: `import { Type } from "@/modules/Type"`
+- **Incorrect**: `import { Type } from "../src/modules/Type.js"`
+- **Incorrect**: `import { Type } from "../src/modules/Type.ts"`
+- **Incorrect**: `import { Type } from "../src/modules/Type"`
+
 ## Examples
 
 ### Correct null checking:
