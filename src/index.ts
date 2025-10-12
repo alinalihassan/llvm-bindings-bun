@@ -68,6 +68,8 @@ import { Module } from "./modules/Module";
 import { PassBuilder } from "./modules/PassBuilder";
 import { PointerType } from "./modules/PointerType";
 import { StructType } from "./modules/StructType";
+import { Target } from "./modules/Target";
+import { TargetMachine } from "./modules/TargetMachine";
 import { Type } from "./modules/Type";
 import { User } from "./modules/User";
 import { Value } from "./modules/Value";
@@ -80,6 +82,8 @@ const llvm = {
 	Module: Module,
 	PassBuilder: PassBuilder,
 	PassPipeline: PassPipeline,
+	Target: Target,
+	TargetMachine: TargetMachine,
 	Type: Type,
 	Value: Value,
 	User: User,
@@ -184,6 +188,8 @@ export * from "@/modules/Module";
 export * from "@/modules/PassBuilder";
 export * from "@/modules/PointerType";
 export * from "@/modules/StructType";
+export * from "@/modules/Target";
+export * from "@/modules/TargetMachine";
 export * from "@/modules/Type";
 export * from "@/modules/User";
 export * from "@/modules/Value";

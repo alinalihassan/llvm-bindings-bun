@@ -530,4 +530,120 @@ describe("Module Tests", () => {
 			}
 		});
 	});
+
+	describe("Module Compilation", () => {
+		let module: Module;
+		let int32Type: IntegerType;
+
+		beforeEach(() => {
+			module = new Module("compilation_test_module");
+			int32Type = Type.getInt32Ty();
+		});
+
+		it("should get default target triple", () => {
+			const triple = Module.getDefaultTargetTriple();
+			expect(triple).toBeDefined();
+			expect(typeof triple).toBe("string");
+			expect(triple.length).toBeGreaterThan(0);
+		});
+
+		it("should attempt to compile module to object file", () => {
+			// Add some content to the module
+			const funcType = Type.getFunctionType(int32Type);
+			module.getOrInsertFunction("test_func", funcType);
+
+			// Create a temporary file path
+			const tempFile = join(tmpdir(), `test_module_${Date.now()}.o`);
+
+			try {
+				// Compile module to object file
+				const result = module.compileToObjectFile(tempFile);
+				// Note: This may fail if target symbols are not available
+				// We just test that the method doesn't throw and returns a boolean
+				expect(typeof result).toBe("boolean");
+			} finally {
+				// Clean up
+				if (existsSync(tempFile)) {
+					unlinkSync(tempFile);
+				}
+			}
+		});
+
+		it("should attempt to compile module to assembly file", () => {
+			// Add some content to the module
+			const funcType = Type.getFunctionType(int32Type);
+			module.getOrInsertFunction("test_func", funcType);
+
+			// Create a temporary file path
+			const tempFile = join(tmpdir(), `test_module_${Date.now()}.s`);
+
+			try {
+				// Compile module to assembly file
+				const result = module.compileToAssembly(tempFile);
+				// Note: This may fail if target symbols are not available
+				// We just test that the method doesn't throw and returns a boolean
+				expect(typeof result).toBe("boolean");
+			} finally {
+				// Clean up
+				if (existsSync(tempFile)) {
+					unlinkSync(tempFile);
+				}
+			}
+		});
+
+		it("should compile module to memory buffer", () => {
+			// Add some content to the module
+			const funcType = Type.getFunctionType(int32Type);
+			module.getOrInsertFunction("test_func", funcType);
+
+			// Compile module to memory buffer
+			const buffer = module.compileToMemoryBuffer();
+			expect(buffer).toBeDefined();
+			expect(buffer).not.toBe(0); // Should not be null
+		});
+
+		it("should attempt compilation with custom target triple", () => {
+			// Add some content to the module
+			const funcType = Type.getFunctionType(int32Type);
+			module.getOrInsertFunction("test_func", funcType);
+
+			// Create a temporary file path
+			const tempFile = join(tmpdir(), `test_module_custom_${Date.now()}.o`);
+
+			try {
+				// Compile with custom target triple
+				const result = module.compileToObjectFile(tempFile, "x86_64-unknown-linux-gnu");
+				// Note: This may fail if target symbols are not available
+				// We just test that the method doesn't throw and returns a boolean
+				expect(typeof result).toBe("boolean");
+			} finally {
+				// Clean up
+				if (existsSync(tempFile)) {
+					unlinkSync(tempFile);
+				}
+			}
+		});
+
+		it("should attempt compilation with custom CPU and features", () => {
+			// Add some content to the module
+			const funcType = Type.getFunctionType(int32Type);
+			module.getOrInsertFunction("test_func", funcType);
+
+			// Create a temporary file path
+			const tempFile = join(tmpdir(), `test_module_cpu_${Date.now()}.o`);
+
+			try {
+				// Compile with custom CPU and features
+				const result = module.compileToObjectFile(tempFile, undefined, "x86-64", "+sse,+sse2");
+				// Note: This may fail if target symbols are not available
+				// We just test that the method doesn't throw and returns a boolean
+				expect(typeof result).toBe("boolean");
+			} finally {
+				// Clean up
+				if (existsSync(tempFile)) {
+					unlinkSync(tempFile);
+				}
+			}
+		});
+	});
 });

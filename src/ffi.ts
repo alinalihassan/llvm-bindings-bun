@@ -18,6 +18,8 @@ import { ModuleSymbols } from "./symbols/ModuleSymbols";
 import { PassBuilderSymbols } from "./symbols/PassBuilderSymbols";
 import { PointerTypeSymbols } from "./symbols/PointerTypeSymbols";
 import { StructTypeSymbols } from "./symbols/StructTypeSymbols";
+import { TargetMachineSymbols } from "./symbols/TargetMachineSymbols";
+import { TargetSymbols } from "./symbols/TargetSymbols";
 import { TypeSymbols } from "./symbols/TypeSymbols";
 import { UserSymbols } from "./symbols/UserSymbols";
 import { ValueSymbols } from "./symbols/ValueSymbols";
@@ -45,6 +47,8 @@ const ffi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libLLVM-C.dylib", {
 	...GlobalVariableSymbols,
 	...APIntSymbols,
 	...PassBuilderSymbols,
+	...TargetSymbols,
+	...TargetMachineSymbols,
 
 	LLVMGetModuleInlineAsm: {
 		args: [FFIType.ptr, FFIType.ptr, FFIType.ptr],

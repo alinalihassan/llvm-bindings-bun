@@ -6,6 +6,8 @@ import { LLVMFunction } from "./Function";
 import { FunctionCallee } from "./FunctionCallee";
 import type { FunctionType } from "./FunctionType";
 import { GlobalVariable } from "./GlobalVariable";
+import { Target } from "./Target";
+import { CodeGenFileType, TargetMachine } from "./TargetMachine";
 import type { Value } from "./Value";
 
 export class Module {
@@ -213,6 +215,129 @@ export class Module {
 	 */
 	private writeToMemoryBuffer(): LLVMMemoryBufferRef {
 		return ffi.symbols.LLVMWriteBitcodeToMemoryBuffer(this._ref);
+	}
+
+	/**
+	 * Get the default target triple for the host machine.
+	 * @returns The target triple string
+	 */
+	static getDefaultTargetTriple(): string {
+		return Target.getDefaultTargetTriple();
+	}
+
+	/**
+	 * Compile the module to an object file.
+	 * @param outputPath The path where the object file should be written
+	 * @param targetTriple Optional target triple (defaults to host triple)
+	 * @param cpu Optional CPU target (defaults to "generic")
+	 * @param features Optional CPU features (defaults to "")
+	 * @returns true on success, false on error
+	 */
+	compileToObjectFile(
+		outputPath: string,
+		targetTriple?: string,
+		cpu: string = "generic",
+		features: string = "",
+	): boolean {
+		try {
+			// Use provided triple or default
+			const triple = targetTriple || Target.getDefaultTargetTriple();
+
+			// Get target from triple
+			const target = Target.getTargetFromTriple(triple);
+			if (!target) {
+				return false;
+			}
+
+			// Create target machine
+			const targetMachine = new TargetMachine(target, triple, cpu, features);
+
+			// Emit object file
+			const success = targetMachine.emitToFile(this._ref, outputPath, CodeGenFileType.ObjectFile);
+
+			// Clean up target machine
+			targetMachine.dispose();
+
+			return success;
+		} catch {
+			return false;
+		}
+	}
+
+	/**
+	 * Compile the module to assembly code.
+	 * @param outputPath The path where the assembly file should be written
+	 * @param targetTriple Optional target triple (defaults to host triple)
+	 * @param cpu Optional CPU target (defaults to "generic")
+	 * @param features Optional CPU features (defaults to "")
+	 * @returns true on success, false on error
+	 */
+	compileToAssembly(
+		outputPath: string,
+		targetTriple?: string,
+		cpu: string = "generic",
+		features: string = "",
+	): boolean {
+		try {
+			// Use provided triple or default
+			const triple = targetTriple || Target.getDefaultTargetTriple();
+
+			// Get target from triple
+			const target = Target.getTargetFromTriple(triple);
+			if (!target) {
+				return false;
+			}
+
+			// Create target machine
+			const targetMachine = new TargetMachine(target, triple, cpu, features);
+
+			// Emit assembly file
+			const success = targetMachine.emitToFile(this._ref, outputPath, CodeGenFileType.AssemblyFile);
+
+			// Clean up target machine
+			targetMachine.dispose();
+
+			return success;
+		} catch {
+			return false;
+		}
+	}
+
+	/**
+	 * Compile the module to a memory buffer containing object code.
+	 * @param targetTriple Optional target triple (defaults to host triple)
+	 * @param cpu Optional CPU target (defaults to "generic")
+	 * @param features Optional CPU features (defaults to "")
+	 * @returns Memory buffer containing object code, or null on error
+	 */
+	compileToMemoryBuffer(
+		targetTriple?: string,
+		cpu: string = "generic",
+		features: string = "",
+	): LLVMMemoryBufferRef | null {
+		try {
+			// Use provided triple or default
+			const triple = targetTriple || Target.getDefaultTargetTriple();
+
+			// Get target from triple
+			const target = Target.getTargetFromTriple(triple);
+			if (!target) {
+				return null;
+			}
+
+			// Create target machine
+			const targetMachine = new TargetMachine(target, triple, cpu, features);
+
+			// Emit to memory buffer
+			const buffer = targetMachine.emitToMemoryBuffer(this._ref, CodeGenFileType.ObjectFile);
+
+			// Clean up target machine
+			targetMachine.dispose();
+
+			return buffer;
+		} catch {
+			return null;
+		}
 	}
 
 	/**

@@ -1,3 +1,4 @@
+import { existsSync } from "fs";
 import { FunctionCallee } from "./src";
 import { BasicBlock } from "./src/modules/BasicBlock";
 import { GlobalValueLinkageTypes } from "./src/modules/Enum";
@@ -7,6 +8,8 @@ import { IntegerType } from "./src/modules/IntegerType";
 import { IRBuilder } from "./src/modules/IRBuilder";
 import { LLVMContext } from "./src/modules/LLVMContext";
 import { Module } from "./src/modules/Module";
+import { Target } from "./src/modules/Target";
+import { CodeGenFileType, TargetMachine } from "./src/modules/TargetMachine";
 
 // Create LLVM context
 const context = new LLVMContext();
@@ -77,3 +80,105 @@ builder.CreateRet(callResult);
 
 console.log("Generated LLVM IR:");
 console.log(module.print());
+
+// Test LLVMTargetMachineEmitToFile for object file compilation
+console.log("\n=== Testing LLVMTargetMachineEmitToFile ===");
+
+// Initialize LLVM targets before using them
+console.log("Initializing LLVM targets...");
+try {
+	Target.initializeAllTargets();
+	console.log("✅ All targets initialized successfully");
+} catch (initError) {
+	console.log(`❌ Failed to initialize all targets: ${initError}`);
+	console.log("Trying individual target initialization...");
+	try {
+		Target.initializeAArch64Target();
+		console.log("✅ AArch64 target initialized successfully");
+	} catch (aarch64Error) {
+		console.log(`❌ Failed to initialize AArch64 target: ${aarch64Error}`);
+		try {
+			Target.initializeX86Target();
+			console.log("✅ X86 target initialized successfully");
+		} catch (x86Error) {
+			console.log(`❌ Failed to initialize X86 target: ${x86Error}`);
+		}
+	}
+}
+
+try {
+	// Get default target triple
+	const defaultTriple = Target.getDefaultTargetTriple();
+	console.log(`Default target triple: ${defaultTriple}`);
+
+	// Try to get target from triple
+	const target = Target.getTargetFromTriple(defaultTriple);
+	if (!target) {
+		console.log("❌ Failed to get target from triple");
+	} else {
+		console.log(`✅ Target found: ${Target.getTargetName(target)}`);
+		console.log(`Target description: ${Target.getTargetDescription(target)}`);
+		console.log(`Has JIT: ${Target.targetHasJIT(target)}`);
+		console.log(`Has TargetMachine: ${Target.targetHasTargetMachine(target)}`);
+		console.log(`Has ASM backend: ${Target.targetHasAsmBackend(target)}`);
+
+		// Try to create target machine
+		try {
+			const targetMachine = new TargetMachine(target, defaultTriple, "generic", "");
+			console.log("✅ TargetMachine created successfully");
+
+			// Test LLVMTargetMachineEmitToFile for object file
+			console.log("\n--- Testing LLVMTargetMachineEmitToFile for Object File ---");
+			const objectFileSuccess = targetMachine.emitToFile(
+				module.ref,
+				"test_object.o",
+				CodeGenFileType.ObjectFile,
+			);
+			console.log(
+				`LLVMTargetMachineEmitToFile (Object): ${objectFileSuccess ? "✅ SUCCESS" : "❌ FAILED"}`,
+			);
+
+			// Test LLVMTargetMachineEmitToFile for assembly file
+			console.log("\n--- Testing LLVMTargetMachineEmitToFile for Assembly File ---");
+			const assemblyFileSuccess = targetMachine.emitToFile(
+				module.ref,
+				"test_assembly.s",
+				CodeGenFileType.AssemblyFile,
+			);
+			console.log(
+				`LLVMTargetMachineEmitToFile (Assembly): ${assemblyFileSuccess ? "✅ SUCCESS" : "❌ FAILED"}`,
+			);
+
+			// Test LLVMTargetMachineEmitToMemoryBuffer
+			console.log("\n--- Testing LLVMTargetMachineEmitToMemoryBuffer ---");
+			const memoryBuffer = targetMachine.emitToMemoryBuffer(module.ref, CodeGenFileType.ObjectFile);
+			console.log(
+				`LLVMTargetMachineEmitToMemoryBuffer: ${memoryBuffer ? "✅ SUCCESS" : "❌ FAILED"}`,
+			);
+
+			// Clean up
+			targetMachine.dispose();
+			console.log("✅ TargetMachine disposed successfully");
+		} catch (targetMachineError) {
+			console.log(`❌ Failed to create TargetMachine: ${targetMachineError}`);
+		}
+	}
+} catch (error) {
+	console.log(`❌ Error in target testing: ${error}`);
+}
+
+console.log("\n=== File Check ===");
+console.log(`test_object.o exists: ${existsSync("test_object.o") ? "✅ YES" : "❌ NO"}`);
+console.log(`test_assembly.s exists: ${existsSync("test_assembly.s") ? "✅ YES" : "❌ NO"}`);
+
+if (existsSync("test_object.o")) {
+	const fs = require("fs");
+	const stats = fs.statSync("test_object.o");
+	console.log(`test_object.o size: ${stats.size} bytes`);
+}
+
+if (existsSync("test_assembly.s")) {
+	const fs = require("fs");
+	const stats = fs.statSync("test_assembly.s");
+	console.log(`test_assembly.s size: ${stats.size} bytes`);
+}
