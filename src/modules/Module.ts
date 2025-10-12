@@ -390,6 +390,37 @@ export class Module {
 	}
 
 	/**
+	 * Run the module - the most barebones way to execute any app.
+	 * Compiles to a temporary executable and runs it, returning the result.
+	 * @param functionName The name of the function to execute (defaults to "main")
+	 * @returns Promise<number | null> - The result of the function, or null if execution failed
+	 */
+	async run(_: string = "main"): Promise<number | null> {
+		// TODO: Run an actual JIT here instead of compiling to an executable
+		try {
+			// Create a temporary executable
+			const tempExecutable = `/tmp/llvm_run_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+			// Compile the module to an executable
+			const success = await this.compileToExecutable(tempExecutable);
+			if (!success) {
+				return null;
+			}
+
+			// Run the executable and get the result
+			const proc = Bun.spawnSync([tempExecutable], {
+				stdout: "pipe",
+				stderr: "pipe",
+			});
+
+			// The result is the exit code
+			return proc.exitCode;
+		} catch {
+			return null;
+		}
+	}
+
+	/**
 	 * Dispose of the module and free its memory
 	 */
 	private dispose(): void {
