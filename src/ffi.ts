@@ -51,7 +51,8 @@ const getLibPath = (libName: string): string => {
 	}
 };
 
-const llvmFfi = dlopen(getLibPath("libLLVM-C"), {
+// TODO: Change to libLLVM-C, but some platforms/intstallers (e.g. Linux) don't have it.
+const llvmFfi = dlopen(getLibPath("libLLVM"), {
 	...LLVMContextSymbols,
 	...ModuleSymbols,
 	...TypeSymbols,
