@@ -1,4 +1,4 @@
-import { dlopen, FFIType } from "bun:ffi";
+import { dlopen } from "bun:ffi";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { APIntSymbols } from "./symbols/APIntSymbols";
@@ -77,11 +77,6 @@ const llvmFfi = dlopen(getLibPath("libLLVM-C"), {
 	...PassBuilderSymbols,
 	...TargetSymbols,
 	...TargetMachineSymbols,
-
-	LLVMGetModuleInlineAsm: {
-		args: [FFIType.ptr, FFIType.ptr, FFIType.ptr],
-		returns: FFIType.void,
-	},
 });
 
 const clangFfi = dlopen(getLibPath("libclang"), {
