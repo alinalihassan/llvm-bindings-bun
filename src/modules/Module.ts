@@ -379,7 +379,7 @@ export class Module {
 			// Clean up the temporary object file
 			try {
 				await Bun.write(objectPath, "");
-			} catch (e) {
+			} catch {
 				// Ignore cleanup errors
 			}
 
