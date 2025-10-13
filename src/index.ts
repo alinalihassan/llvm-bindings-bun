@@ -4,11 +4,8 @@ import { Argument } from "./modules/Argument";
 import { ArrayType } from "./modules/ArrayType";
 import { BasicBlock } from "./modules/BasicBlock";
 import {
-	ClangDiagnostic,
 	ClangIndex,
 	ClangTranslationUnit,
-	CXDiagnostic_Error,
-	CXDiagnostic_Fatal,
 	CXTranslationUnit_None,
 	compileFile,
 	linkExecutable,
@@ -180,14 +177,11 @@ const llvm = {
 const clang = {
 	ClangIndex: ClangIndex,
 	ClangTranslationUnit: ClangTranslationUnit,
-	ClangDiagnostic: ClangDiagnostic,
 	compileFile: compileFile,
 	linkExecutable: linkExecutable,
 
 	// Constants
 	CXTranslationUnit_None: CXTranslationUnit_None,
-	CXDiagnostic_Error: CXDiagnostic_Error,
-	CXDiagnostic_Fatal: CXDiagnostic_Fatal,
 } as const;
 
 // Exports
