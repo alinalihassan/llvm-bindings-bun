@@ -23,8 +23,13 @@ jobs:
     - name: Install LLVM (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
       run: |
-        sudo apt update
-        sudo apt install -y llvm-21 llvm-21-dev libllvm21
+        # Install LLVM 21 using official LLVM installation script
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh 21
+        # Alternative apt installation (commented out as LLVM 21 not available in standard repos)
+        # sudo apt update
+        # sudo apt install -y llvm-21 llvm-21-dev libllvm21
 
     - name: Install LLVM (macOS)
       if: matrix.os == 'macos-latest'
