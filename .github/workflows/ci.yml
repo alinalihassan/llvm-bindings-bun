@@ -20,20 +20,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Cache LLVM and Clang
-      id: cache-llvm
-      uses: actions/cache@v4
-      with:
-        path: |
-          C:/Program Files/LLVM
-          ./llvm
-        key: llvm-21-${{ matrix.os }}
-
     - name: Install LLVM
       uses: KyleMayes/install-llvm-action@v2.0.8
       with:
         version: ${{ matrix.llvm-version }}
-        cached: ${{ steps.cache-llvm.outputs.cache-hit }}
+        directory: ${{ runner.temp }}/llvm
+
+    - name: Set LLVM environment variables
+      run: |
+        echo "LLVM_LIB_DIR=${{ runner.temp }}/llvm/lib" >> $GITHUB_ENV
 
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
