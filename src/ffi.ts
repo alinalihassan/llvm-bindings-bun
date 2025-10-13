@@ -1,6 +1,4 @@
 import { dlopen } from "bun:ffi";
-import { existsSync } from "node:fs";
-import { join } from "node:path";
 import { APIntSymbols } from "./symbols/APIntSymbols";
 import { ArgumentSymbols } from "./symbols/ArgumentSymbols";
 import { ArrayTypeSymbols } from "./symbols/ArrayTypeSymbols";
@@ -27,29 +25,7 @@ import { TargetSymbols } from "./symbols/TargetSymbols";
 import { TypeSymbols } from "./symbols/TypeSymbols";
 import { UserSymbols } from "./symbols/UserSymbols";
 import { ValueSymbols } from "./symbols/ValueSymbols";
-import { assert } from "./utils";
-
-const getLibPath = (libName: string): string => {
-	const extension = process.platform === "darwin" ? "dylib" : "so";
-
-	if (process.env.LLVM_LIB_DIR) {
-		return join(process.env.LLVM_LIB_DIR, `${libName}.${extension}`);
-	}
-
-	try {
-		const result = Bun.spawnSync(["llvm-config", "--libdir"]);
-		if (result.exitCode !== 0) throw new Error("llvm-config failed");
-
-		const libDir = result.stdout.toString().trim();
-		const filePath = join(libDir, `${libName}.${extension}`);
-
-		assert(existsSync(filePath), `Library ${libName} not found at ${filePath}`);
-
-		return filePath;
-	} catch (err) {
-		throw new Error(`Could not determine LLVM library path: ${err}`);
-	}
-};
+import { getLibPath } from "./utils";
 
 // TODO: Change to libLLVM-C, but some platforms/intstallers (e.g. Linux) don't have it.
 const llvmFfi = dlopen(getLibPath("libLLVM"), {
