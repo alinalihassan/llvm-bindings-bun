@@ -1,4 +1,6 @@
 import { dlopen, FFIType } from "bun:ffi";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { APIntSymbols } from "./symbols/APIntSymbols";
 import { ArgumentSymbols } from "./symbols/ArgumentSymbols";
 import { ArrayTypeSymbols } from "./symbols/ArrayTypeSymbols";
@@ -25,8 +27,26 @@ import { TargetSymbols } from "./symbols/TargetSymbols";
 import { TypeSymbols } from "./symbols/TypeSymbols";
 import { UserSymbols } from "./symbols/UserSymbols";
 import { ValueSymbols } from "./symbols/ValueSymbols";
+import { assert } from "./utils";
 
-const llvmFfi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libLLVM-C.dylib", {
+const getLibPath = (libName: string): string => {
+	try {
+		const result = Bun.spawnSync(["llvm-config", "--libdir"]);
+		if (result.exitCode !== 0) throw new Error("llvm-config failed");
+
+		const libDir = result.stdout.toString().trim();
+		const extension = process.platform === "darwin" ? "dylib" : "so";
+		const filePath = join(libDir, `${libName}.${extension}`);
+
+		assert(existsSync(filePath), `Library ${libName} not found at ${filePath}`);
+
+		return filePath;
+	} catch (err) {
+		throw new Error(`Could not determine LLVM library path: ${err}`);
+	}
+};
+
+const llvmFfi = dlopen(getLibPath("libLLVM-C"), {
 	...LLVMContextSymbols,
 	...ModuleSymbols,
 	...TypeSymbols,
@@ -59,7 +79,7 @@ const llvmFfi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libLLVM-C.dylib", {
 	},
 });
 
-const clangFfi = dlopen("/opt/homebrew/Cellar/llvm/21.1.2/lib/libclang.dylib", {
+const clangFfi = dlopen(getLibPath("libclang"), {
 	...ClangSymbols,
 });
 
