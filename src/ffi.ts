@@ -30,12 +30,17 @@ import { ValueSymbols } from "./symbols/ValueSymbols";
 import { assert } from "./utils";
 
 const getLibPath = (libName: string): string => {
+	const extension = process.platform === "darwin" ? "dylib" : "so";
+
+	if (process.env.LLVM_LIB_DIR) {
+		return join(process.env.LLVM_LIB_DIR, `${libName}.${extension}`);
+	}
+
 	try {
 		const result = Bun.spawnSync(["llvm-config", "--libdir"]);
 		if (result.exitCode !== 0) throw new Error("llvm-config failed");
 
 		const libDir = result.stdout.toString().trim();
-		const extension = process.platform === "darwin" ? "dylib" : "so";
 		const filePath = join(libDir, `${libName}.${extension}`);
 
 		assert(existsSync(filePath), `Library ${libName} not found at ${filePath}`);
