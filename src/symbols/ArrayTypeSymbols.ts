@@ -2,10 +2,7 @@ import { FFIType } from "bun:ffi";
 
 const ArrayTypeSymbols = {
 	LLVMArrayType: {
-		args: [
-			/* ElementType: LLVMTypeRef */ FFIType.ptr,
-			/* ElementCount: unsigned */ FFIType.u32,
-		],
+		args: [/* ElementType: LLVMTypeRef */ FFIType.ptr, /* ElementCount: unsigned */ FFIType.u32],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
 	LLVMGetElementType: {

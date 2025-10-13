@@ -27,7 +27,7 @@ jobs:
       run: bun install
 
     - name: Run Biome check (linting, formatting, and type checking)
-      run: bunx biome check .
+      run: bunx biome ci
 
     - name: Run TypeScript type check
       run: bunx tsc --noEmit

@@ -2,10 +2,7 @@ import { FFIType } from "bun:ffi";
 
 const PointerTypeSymbols = {
 	LLVMPointerType: {
-		args: [
-			/* ElementType: LLVMTypeRef */ FFIType.ptr,
-			/* AddressSpace: unsigned */ FFIType.u32,
-		],
+		args: [/* ElementType: LLVMTypeRef */ FFIType.ptr, /* AddressSpace: unsigned */ FFIType.u32],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
 	LLVMGetElementType: {

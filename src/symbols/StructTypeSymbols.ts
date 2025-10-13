@@ -10,10 +10,7 @@ const StructTypeSymbols = {
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
 	LLVMStructGetTypeAtIndex: {
-		args: [
-			/* StructTy: LLVMTypeRef */ FFIType.ptr,
-			/* i: unsigned */ FFIType.u32,
-		],
+		args: [/* StructTy: LLVMTypeRef */ FFIType.ptr, /* i: unsigned */ FFIType.u32],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
 	LLVMCountStructElementTypes: {
@@ -21,10 +18,7 @@ const StructTypeSymbols = {
 		returns: /* unsigned */ FFIType.u32,
 	},
 	LLVMGetStructElementTypes: {
-		args: [
-			/* StructTy: LLVMTypeRef */ FFIType.ptr,
-			/* Dest: LLVMTypeRef * */ FFIType.ptr,
-		],
+		args: [/* StructTy: LLVMTypeRef */ FFIType.ptr, /* Dest: LLVMTypeRef * */ FFIType.ptr],
 		returns: /* void */ FFIType.void,
 	},
 	LLVMIsPackedStruct: {

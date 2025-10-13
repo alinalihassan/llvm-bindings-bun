@@ -2,10 +2,7 @@ import { FFIType } from "bun:ffi";
 
 const UserSymbols = {
 	LLVMGetOperand: {
-		args: [
-			/* Val: LLVMValueRef */ FFIType.ptr,
-			/* Index: unsigned */ FFIType.u32,
-		],
+		args: [/* Val: LLVMValueRef */ FFIType.ptr, /* Index: unsigned */ FFIType.u32],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
 	LLVMSetOperand: {

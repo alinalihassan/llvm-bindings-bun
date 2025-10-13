@@ -23,10 +23,7 @@ const FunctionTypeSymbols = {
 		returns: /* unsigned */ FFIType.u32,
 	},
 	LLVMGetParamTypes: {
-		args: [
-			/* FunctionTy: LLVMTypeRef */ FFIType.ptr,
-			/* Dest: LLVMTypeRef * */ FFIType.ptr,
-		],
+		args: [/* FunctionTy: LLVMTypeRef */ FFIType.ptr, /* Dest: LLVMTypeRef * */ FFIType.ptr],
 		returns: /* void */ FFIType.void,
 	},
 } as const;
