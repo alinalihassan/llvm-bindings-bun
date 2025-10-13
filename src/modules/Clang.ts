@@ -101,7 +101,9 @@ export function compileFile(
 ): { success: boolean } {
 	try {
 		const index = new ClangIndex();
-		new ClangTranslationUnit(index, sourceFile, args);
+		// Normalize the source file path for cross-platform compatibility
+		const normalizedSourceFile = sourceFile.replace(/\\/g, "/");
+		new ClangTranslationUnit(index, normalizedSourceFile, args);
 
 		// If we get here without throwing, parsing was successful
 		return { success: true };

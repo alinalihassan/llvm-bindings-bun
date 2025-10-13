@@ -1,3 +1,6 @@
+import { unlinkSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { ffi } from "@/ffi";
 import type { LLVMContextRef, LLVMMemoryBufferRef, LLVMModuleRef, LLVMValueRef } from "@/utils";
 import { cstring } from "@/utils";
@@ -365,10 +368,13 @@ export class Module {
 			// Use clang to link the object file into an executable (force overwrite)
 			const linkCommand = ["clang", objectPath, "-o", outputPath, ...clangArgs];
 
-			// Add macOS-specific linking flags
+			// Add platform-specific linking flags
 			if (process.platform === "darwin") {
 				linkCommand.push("-L", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib");
 				linkCommand.push("-lSystem");
+			} else if (process.platform === "win32") {
+				// Windows-specific linking flags
+				linkCommand.push("-lkernel32", "-luser32", "-lmsvcrt");
 			}
 
 			const proc = Bun.spawnSync(linkCommand, {
@@ -378,7 +384,7 @@ export class Module {
 
 			// Clean up the temporary object file
 			try {
-				await Bun.write(objectPath, "");
+				unlinkSync(objectPath);
 			} catch {
 				// Ignore cleanup errors
 			}
@@ -398,8 +404,11 @@ export class Module {
 	async run(_: string = "main"): Promise<number | null> {
 		// TODO: Run an actual JIT here instead of compiling to an executable
 		try {
-			// Create a temporary executable
-			const tempExecutable = `/tmp/llvm_run_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+			// Create a temporary executable with cross-platform temp directory
+			const tempExecutable = join(
+				tmpdir(),
+				`llvm_run_${Date.now()}_${Math.random().toString(36).substr(2, 9)}${process.platform === "win32" ? ".exe" : ""}`,
+			);
 
 			// Compile the module to an executable
 			const success = await this.compileToExecutable(tempExecutable);
@@ -412,6 +421,13 @@ export class Module {
 				stdout: "pipe",
 				stderr: "pipe",
 			});
+
+			// Clean up the temporary executable
+			try {
+				unlinkSync(tempExecutable);
+			} catch {
+				// Ignore cleanup errors
+			}
 
 			// The result is the exit code
 			return proc.exitCode;
