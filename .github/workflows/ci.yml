@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        llvm-version: ['21.0.0']
+        llvm-version: ['20']
 
     steps:
     - name: Checkout code
