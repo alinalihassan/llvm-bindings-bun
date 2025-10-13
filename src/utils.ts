@@ -35,7 +35,7 @@ export function assert(condition: boolean, message: string): asserts condition {
 }
 
 /**
- * Dynamically finds the correct library name by scanning the library directory.
+ * Dynamically finds the correct library filename by scanning the library directory.
  * This handles different naming conventions across platforms and package managers:
  * - Ubuntu with wget: libclang-21.so.1, libLLVM-21.so.1
  * - Ubuntu with apt: libclang-21.so.1 or libclang.so.1
@@ -59,14 +59,14 @@ export const findLibraryName = (libDir: string, baseName: string): string => {
 		for (const pattern of patterns) {
 			const match = files.find((file) => pattern.test(file));
 			if (match) {
-				return match.replace(/\.(so|dylib).*$/, ""); // Remove extension and version suffix
+				return match; // Return the actual filename that exists
 			}
 		}
 
 		// Fallback: try the simple name
 		const simpleName = `${baseName}.${extension}`;
 		if (files.includes(simpleName)) {
-			return baseName;
+			return simpleName;
 		}
 
 		throw new Error(
@@ -78,13 +78,10 @@ export const findLibraryName = (libDir: string, baseName: string): string => {
 };
 
 export const getLibPath = (libName: string): string => {
-	const extension = process.platform === "darwin" ? "dylib" : "so";
 	let libDir: string;
 
 	if (process.env.LLVM_LIB_DIR) {
 		libDir = process.env.LLVM_LIB_DIR;
-		const actualLibName = findLibraryName(libDir, libName);
-		return join(libDir, `${actualLibName}.${extension}`);
 	} else {
 		// Fallback: use llvm-config to determine the library path
 		try {
@@ -98,8 +95,9 @@ export const getLibPath = (libName: string): string => {
 	}
 
 	const actualLibName = findLibraryName(libDir, libName);
-	const filePath = join(libDir, `${actualLibName}.${extension}`);
+	const filePath = join(libDir, actualLibName);
+
 	assert(existsSync(filePath), `Library ${actualLibName} not found at ${filePath}`);
-	console.log(`Using library ${actualLibName} from ${filePath}`);
+
 	return filePath;
 };
