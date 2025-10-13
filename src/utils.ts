@@ -86,6 +86,7 @@ export const getLibPath = (libName: string): string => {
 		const actualLibName = findLibraryName(libDir, libName);
 		return join(libDir, `${actualLibName}.${extension}`);
 	} else {
+		// Fallback: use llvm-config to determine the library path
 		try {
 			const result = Bun.spawnSync(["llvm-config", "--libdir"]);
 			if (result.exitCode !== 0) throw new Error("llvm-config failed");
@@ -99,5 +100,6 @@ export const getLibPath = (libName: string): string => {
 	const actualLibName = findLibraryName(libDir, libName);
 	const filePath = join(libDir, `${actualLibName}.${extension}`);
 	assert(existsSync(filePath), `Library ${actualLibName} not found at ${filePath}`);
+	console.log(`Using library ${actualLibName} from ${filePath}`);
 	return filePath;
 };
