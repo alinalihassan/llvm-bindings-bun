@@ -6,17 +6,32 @@ on:
 
 jobs:
   validate:
-    name: Validate PR
-    runs-on: ubuntu-latest
+    name: Validate on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        llvm-version: ['21']
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Cache LLVM and Clang
+      id: cache-llvm
+      uses: actions/cache@v4
+      with:
+        path: |
+          C:/Program Files/LLVM
+          ./llvm
+        key: llvm-21-${{ matrix.os }}
+
     - name: Install LLVM
       uses: KyleMayes/install-llvm-action@v2.0.8
       with:
-        version: '21'
+        version: ${{ matrix.llvm-version }}
+        cached: ${{ steps.cache-llvm.outputs.cache-hit }}
 
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
