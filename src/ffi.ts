@@ -27,8 +27,9 @@ import { UserSymbols } from "./symbols/UserSymbols";
 import { ValueSymbols } from "./symbols/ValueSymbols";
 import { getLibPath } from "./utils";
 
-// TODO: Change to libLLVM-C, but some platforms/intstallers (e.g. Linux) don't have it.
-const llvmFfi = dlopen(getLibPath("libLLVM"), {
+// Use LLVM-C on Windows, libLLVM on Unix-like systems
+const llvmLibName = process.platform === "win32" ? "LLVM-C" : "libLLVM";
+const llvmFfi = dlopen(getLibPath(llvmLibName), {
 	...LLVMContextSymbols,
 	...ModuleSymbols,
 	...TypeSymbols,
