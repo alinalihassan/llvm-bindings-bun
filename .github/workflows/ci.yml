@@ -30,6 +30,17 @@ jobs:
       run: |
         echo "LLVM_LIB_DIR=${{ runner.temp }}/llvm/lib" >> $GITHUB_ENV
 
+    - name: Debug - Show LLVM directory structure
+      run: |
+        echo "=== Files under LLVM directory ==="
+        ls -la ${{ runner.temp }}/llvm/
+        echo ""
+        echo "=== Files under LLVM lib directory ==="
+        ls -la ${{ runner.temp }}/llvm/lib/
+        echo ""
+        echo "=== LLVM_LIB_DIR environment variable ==="
+        echo "LLVM_LIB_DIR=$LLVM_LIB_DIR"
+
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
       with:
