@@ -197,21 +197,6 @@ export class Module {
 	}
 
 	/**
-	 * Writes the module to an open file descriptor as bitcode.
-	 * @param fd The file descriptor to write to
-	 * @param shouldClose Whether to close the file descriptor after writing
-	 * @param unbuffered Whether to use unbuffered I/O
-	 * @returns 0 on success, non-zero on error
-	 */
-	writeToFileDescriptor(
-		fd: number,
-		shouldClose: boolean = false,
-		unbuffered: boolean = false,
-	): number {
-		return ffi.LLVMWriteBitcodeToFD(this._ref, fd, shouldClose ? 1 : 0, unbuffered ? 1 : 0);
-	}
-
-	/**
 	 * Writes the module to a memory buffer as bitcode.
 	 * This method is for internal use only.
 	 * @returns A memory buffer containing the bitcode, or null on error
