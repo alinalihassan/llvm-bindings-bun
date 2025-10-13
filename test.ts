@@ -12,7 +12,7 @@ import { Module } from "./src/modules/Module";
 const context = new LLVMContext();
 
 // Create a module
-const module = new Module("test_module", context.ref);
+const module = new Module("test_module", context);
 
 // Create IR builder
 const builder = new IRBuilder(context);

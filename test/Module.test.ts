@@ -6,15 +6,12 @@ import type { FunctionType, IntegerType } from "@/index.js";
 import { LLVMContext } from "../src/modules/LLVMContext.js";
 import { Module } from "../src/modules/Module.js";
 import { Type } from "../src/modules/Type.js";
-import type { LLVMContextRef } from "../src/utils.js";
 
 describe("Module Tests", () => {
 	let context: LLVMContext;
-	let contextRef: LLVMContextRef;
 
 	beforeEach(() => {
 		context = new LLVMContext();
-		contextRef = context.ref;
 	});
 
 	describe("Module Creation", () => {
@@ -27,7 +24,7 @@ describe("Module Tests", () => {
 		});
 
 		it("should create module with name and context", () => {
-			const module = new Module("test_module", contextRef);
+			const module = new Module("test_module", context);
 
 			expect(module).toBeDefined();
 			expect(module.ref).toBeDefined();

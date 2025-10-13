@@ -2,13 +2,14 @@ import { unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { ffi } from "@/ffi";
-import type { LLVMContextRef, LLVMMemoryBufferRef, LLVMModuleRef, LLVMValueRef } from "@/utils";
+import type { LLVMMemoryBufferRef, LLVMModuleRef, LLVMValueRef } from "@/utils";
 import { cstring } from "@/utils";
 import { CodeGenFileType, GlobalValueLinkageTypes } from "./Enum";
 import { LLVMFunction } from "./Function";
 import { FunctionCallee } from "./FunctionCallee";
 import type { FunctionType } from "./FunctionType";
 import { GlobalVariable } from "./GlobalVariable";
+import type { LLVMContext } from "./LLVMContext";
 import { Target } from "./Target";
 import { TargetMachine } from "./TargetMachine";
 import type { Value } from "./Value";
@@ -16,9 +17,9 @@ import type { Value } from "./Value";
 export class Module {
 	private _ref: LLVMModuleRef;
 
-	constructor(moduleID: string, context?: LLVMContextRef) {
+	constructor(moduleID: string, context?: LLVMContext) {
 		if (context) {
-			this._ref = ffi.LLVMModuleCreateWithNameInContext(cstring(moduleID), context);
+			this._ref = ffi.LLVMModuleCreateWithNameInContext(cstring(moduleID), context.ref);
 		} else {
 			this._ref = ffi.LLVMModuleCreateWithName(cstring(moduleID));
 		}

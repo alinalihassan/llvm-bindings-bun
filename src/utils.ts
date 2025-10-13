@@ -115,7 +115,7 @@ export const getLibPath = (libName: string): string => {
 		if (!libDir) {
 			throw new Error(
 				`Could not find LLVM bin directory. Tried: ${possiblePaths.join(", ")}. ` +
-				`Please set LLVM_LIB_DIR environment variable to the directory containing ${libName}.dll`
+					`Please set LLVM_LIB_DIR environment variable to the directory containing ${libName}.dll`,
 			);
 		}
 	} else {

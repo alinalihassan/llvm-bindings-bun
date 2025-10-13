@@ -59,14 +59,12 @@ import {
   FunctionCallee
 } from "./src";
 
-// Create LLVM context and module
-const context = new LLVMContext();
-const module = new Module("example", context.ref);
+// Module creates a context by default
+const module = new Module("example");
 const builder = new IRBuilder(context);
 
 // Create function type: int add(int a, int b)
-const int32Type = IntegerType.get(context, 32);
-const functionType = FunctionType.get(int32Type, [int32Type, int32Type], false);
+const functionType = FunctionType.get(Type.getInt32Ty(), [Type.getInt32Ty(), Type.getInt32Ty()], false);
 
 // Create the add function
 const addFunction = LLVMFunction.Create(
@@ -97,12 +95,6 @@ Run the test suite:
 ```bash
 # Run all tests
 bun test
-
-# Run tests in watch mode
-bun test --watch
-
-# Run tests with coverage
-bun test --coverage
 ```
 
 ## Building and Compilation
@@ -120,7 +112,7 @@ const success = module.compileToAssembly("output.s");
 const buffer = module.compileToMemoryBuffer();
 
 // Compile to an executable binary
-const success = module.compileToExecutable("filepath")
+const success = module.compileToExecutable("binary")
 
 // Run Module in JIT
 module.run()

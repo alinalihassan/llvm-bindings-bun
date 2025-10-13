@@ -65,7 +65,7 @@ describe("Argument Tests", () => {
 
 		beforeEach(() => {
 			context = new LLVMContext();
-			module = new Module("test_module", context.ref);
+			module = new Module("test_module", context);
 			int32Type = Type.getInt32Ty();
 			funcType = FunctionType.get(int32Type, [int32Type, int32Type]);
 		});
@@ -118,7 +118,7 @@ describe("Argument Tests", () => {
 
 		beforeEach(() => {
 			context = new LLVMContext();
-			module = new Module("test_module", context.ref);
+			module = new Module("test_module", context);
 			int32Type = Type.getInt32Ty();
 			funcType = FunctionType.get(int32Type, [int32Type, int32Type]);
 		});
@@ -155,7 +155,7 @@ describe("Argument Tests", () => {
 	describe("Argument Edge Cases", () => {
 		it("should handle function with no arguments", () => {
 			const context = new LLVMContext();
-			const module = new Module("test_module", context.ref);
+			const module = new Module("test_module", context);
 			const voidType = Type.getVoidTy();
 			const funcType = FunctionType.get(voidType);
 
@@ -170,7 +170,7 @@ describe("Argument Tests", () => {
 
 		it("should handle function with many arguments", () => {
 			const context = new LLVMContext();
-			const module = new Module("test_module", context.ref);
+			const module = new Module("test_module", context);
 			const int32Type = Type.getInt32Ty();
 			const funcType = FunctionType.get(int32Type, [
 				int32Type,
@@ -198,7 +198,7 @@ describe("Argument Tests", () => {
 
 		it("should handle different argument types", () => {
 			const context = new LLVMContext();
-			const module = new Module("test_module", context.ref);
+			const module = new Module("test_module", context);
 			const int32Type = Type.getInt32Ty();
 			const floatType = Type.getFloatTy();
 			const doubleType = Type.getDoubleTy();

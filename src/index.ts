@@ -170,7 +170,7 @@ const llvm = {
 
 	// Convenience methods for creating instances
 	createContext: () => new LLVMContext(),
-	createModule: (name: string, context?: LLVMContext) => new Module(name, context?.ref),
+	createModule: (name: string, context?: LLVMContext) => new Module(name, context),
 } as const;
 
 // Create the clang object
