@@ -20,26 +20,34 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install LLVM
-      uses: KyleMayes/install-llvm-action@v2.0.8
-      with:
-        version: ${{ matrix.llvm-version }}
-        directory: ${{ runner.temp }}/llvm
-
-    - name: Set LLVM environment variables
+    - name: Install LLVM (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        echo "LLVM_LIB_DIR=${{ runner.temp }}/llvm/lib" >> $GITHUB_ENV
+        sudo apt update
+        sudo apt install -y llvm-21 llvm-21-dev libllvm21
+
+    - name: Install LLVM (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install llvm@21
+
+    - name: Set LLVM environment variables (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        echo "LLVM_LIB_DIR=/usr/lib/llvm-21/lib" >> $GITHUB_ENV
+
+    - name: Set LLVM environment variables (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        echo "LLVM_LIB_DIR=$(brew --prefix llvm@21)/lib" >> $GITHUB_ENV
 
     - name: Debug - Show LLVM directory structure
       run: |
-        echo "=== Files under LLVM directory ==="
-        ls -la ${{ runner.temp }}/llvm/
-        echo ""
-        echo "=== Files under LLVM lib directory ==="
-        ls -la ${{ runner.temp }}/llvm/lib/
-        echo ""
         echo "=== LLVM_LIB_DIR environment variable ==="
         echo "LLVM_LIB_DIR=$LLVM_LIB_DIR"
+        echo ""
+        echo "=== Files under LLVM lib directory ==="
+        ls -la $LLVM_LIB_DIR/
 
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
