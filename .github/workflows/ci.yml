@@ -38,12 +38,9 @@ jobs:
 
     - name: Install LLVM (Windows)
       if: matrix.os == 'windows-latest'
-      run: |
-        # Download and install LLVM 21 for Windows
-        $url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.0.0/LLVM-21.0.0-win64.exe"
-        $installer = "$env:TEMP\LLVM-21.0.0-win64.exe"
-        Invoke-WebRequest -Uri $url -OutFile $installer
-        Start-Process -FilePath $installer -ArgumentList "/S" -Wait
+      uses: KyleMayes/install-llvm-action@v2
+      with:
+        version: "21"
 
     - name: Set LLVM environment variables (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
@@ -54,11 +51,6 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: |
         echo "LLVM_LIB_DIR=$(brew --prefix llvm@21)/lib" >> $GITHUB_ENV
-
-    - name: Set LLVM environment variables (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        echo "LLVM_LIB_DIR=C:\Program Files\LLVM\lib" >> $env:GITHUB_ENV
 
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
