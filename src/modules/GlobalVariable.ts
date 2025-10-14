@@ -95,7 +95,7 @@ export class GlobalVariable extends GlobalObject {
 	 * Check if this global variable is constant.
 	 * @returns True if this is a constant global variable
 	 */
-	public isConstant(): boolean {
+	public override isConstant(): boolean {
 		return ffi.LLVMIsGlobalConstant(this.ref);
 	}
 

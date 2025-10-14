@@ -1458,15 +1458,15 @@ declare namespace llvm {
 		public SetInsertPoint(basicBlock: BasicBlock): void;
 		public SetInsertPoint(inst: Instruction): void;
 
-		// public saveIP(): IRBuilder.InsertPoint;
+		public saveIP(): IRBuilder.InsertPoint;
 
-		// public saveAndClearIP(): IRBuilder.InsertPoint;
+		public saveAndClearIP(): IRBuilder.InsertPoint;
 
-		// public restoreIP(ip: IRBuilder.InsertPoint): void;
+		public restoreIP(ip: IRBuilder.InsertPoint): void;
 
-		// public SetCurrentDebugLocation(location: DebugLoc): void;
+		public SetCurrentDebugLocation(location: DebugLoc): void;
 		// extra
-		// public SetCurrentDebugLocation(location: DILocation): void;
+		public SetCurrentDebugLocation(location: DILocation): void;
 
 		//===--------------------------------------------------------------------===//
 		// Miscellaneous creation methods.

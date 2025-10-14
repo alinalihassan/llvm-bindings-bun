@@ -38,4 +38,44 @@ export class User extends Value {
 	public getNumOperands(): number {
 		return ffi.LLVMGetNumOperands(this.ref);
 	}
+
+	/**
+	 * Replace all uses of one value with another value
+	 * @param from The value to replace
+	 * @param to The value to replace with
+	 * @returns True if any replacements were made
+	 */
+	public replaceUsesOfWith(from: Value, to: Value): boolean {
+		assert(from.ref !== null, "Cannot replace with null 'from' value");
+		assert(to.ref !== null, "Cannot replace with null 'to' value");
+
+		if (from.ref === to.ref) {
+			return false; // No change needed
+		}
+
+		// Check if this is a constant - constants cannot have their uses replaced
+		// This is a safety check based on the LLVM implementation
+		assert(this.isConstant(), "Cannot call replaceUsesOfWith on a constant!");
+
+		let changed = false;
+		const numOperands = this.getNumOperands();
+
+		for (let i = 0; i < numOperands; i++) {
+			const operand = this.getOperand(i);
+			if (operand.ref === from.ref) {
+				this.setOperand(i, to);
+				changed = true;
+			}
+		}
+
+		return changed;
+	}
+
+	/**
+	 * Check if this User is a constant
+	 * @returns True if the User is a constant
+	 */
+	public isConstant(): boolean {
+		return ffi.LLVMIsConstant(this.ref) !== 0;
+	}
 }

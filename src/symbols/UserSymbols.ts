@@ -17,6 +17,10 @@ const UserSymbols = {
 		args: [/* Val: LLVMValueRef */ FFIType.ptr],
 		returns: /* unsigned */ FFIType.u32,
 	},
+	LLVMIsConstant: {
+		args: [/* Val: LLVMValueRef */ FFIType.ptr],
+		returns: /* LLVMBool */ FFIType.i32,
+	},
 } as const;
 
 export { UserSymbols };

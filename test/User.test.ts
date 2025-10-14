@@ -60,6 +60,18 @@ describe("User Tests", () => {
 			expect(User.prototype.getNumOperands).toBeDefined();
 			expect(typeof User.prototype.getNumOperands).toBe("function");
 		});
+
+		it("should have replaceUsesOfWith method", () => {
+			// Test that the replaceUsesOfWith method exists
+			expect(User.prototype.replaceUsesOfWith).toBeDefined();
+			expect(typeof User.prototype.replaceUsesOfWith).toBe("function");
+		});
+
+		it("should have isConstant method", () => {
+			// Test that the isConstant method exists
+			expect(User.prototype.isConstant).toBeDefined();
+			expect(typeof User.prototype.isConstant).toBe("function");
+		});
 	});
 
 	describe("User with Basic Setup", () => {
@@ -74,6 +86,8 @@ describe("User Tests", () => {
 			expect(User.prototype.getOperand).toBeDefined();
 			expect(User.prototype.setOperand).toBeDefined();
 			expect(User.prototype.getNumOperands).toBeDefined();
+			expect(User.prototype.replaceUsesOfWith).toBeDefined();
+			expect(User.prototype.isConstant).toBeDefined();
 		});
 
 		it("should extend Value properly", () => {
