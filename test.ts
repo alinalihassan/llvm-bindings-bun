@@ -1,4 +1,4 @@
-import { FunctionCallee } from "./src";
+import { FunctionCallee, PassBuilder } from "./src";
 import { BasicBlock } from "./src/modules/BasicBlock";
 import { GlobalValueLinkageTypes } from "./src/modules/Enum";
 import { LLVMFunction } from "./src/modules/Function";
@@ -77,3 +77,7 @@ builder.CreateRet(callResult);
 
 console.log("Generated LLVM IR:");
 console.log(module.print());
+
+PassBuilder.runMaxOptimization(module);
+
+module.compileToExecutable("test");
