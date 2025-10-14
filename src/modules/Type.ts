@@ -369,6 +369,22 @@ export class Type {
 	}
 
 	/**
+	 * Return the number of types in the derived type.
+	 * Returns 0 for types that don't contain other types (Integer, Double, Float, etc.)
+	 */
+	getNumContainedTypes(): number {
+		return ffi.LLVMGetNumContainedTypes(this.ref);
+	}
+
+	/**
+	 * If this is a vector type, return the getPrimitiveSizeInBits value for the
+	 * element type. Otherwise return the getPrimitiveSizeInBits value for this type.
+	 */
+	getScalarSizeInBits(): number {
+		return this.getScalarType().getPrimitiveSizeInBits().getFixedValue();
+	}
+
+	/**
 	 * Get a pointer type pointing to this type
 	 */
 	getPointerTo(addressSpace: number = 0): PointerType {
