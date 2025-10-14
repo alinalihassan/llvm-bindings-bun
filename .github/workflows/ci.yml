@@ -64,9 +64,6 @@ jobs:
     - name: Run tests
       run: bun test
 
-    - name: Run tests with coverage
-      run: bun test --coverage
-
   lint:
     name: Lint
     runs-on: ubuntu-latest
