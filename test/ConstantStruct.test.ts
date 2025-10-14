@@ -141,7 +141,7 @@ describe("ConstantStruct Tests", () => {
 			const structType = StructType.get([intType, doubleType, boolType]);
 			const values = [
 				ConstantInt.get(42, intType),
-				ConstantFP.get(doubleType, 3.14159),
+				ConstantFP.get(doubleType, Math.PI),
 				ConstantInt.getTrue(),
 			];
 
