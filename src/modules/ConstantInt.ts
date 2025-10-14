@@ -52,6 +52,16 @@ export class ConstantInt extends Constant {
 	}
 
 	/**
+	 * Create a boolean value as a constant integer.
+	 * @param context The LLVM context
+	 * @param value The boolean value
+	 * @returns A new ConstantInt instance representing the boolean value
+	 */
+	public static getBool(context: LLVMContext, value: boolean): ConstantInt {
+		return ConstantInt.get(context, value ? 1 : 0);
+	}
+
+	/**
 	 * Get the type of this constant integer.
 	 * @returns The IntegerType of this constant
 	 */
