@@ -13,6 +13,10 @@ const PointerTypeSymbols = {
 		args: [/* PointerTy: LLVMTypeRef */ FFIType.ptr],
 		returns: /* unsigned */ FFIType.u32,
 	},
+	LLVMPointerTypeIsOpaque: {
+		args: [/* PointerTy: LLVMTypeRef */ FFIType.ptr],
+		returns: /* LLVMBool */ FFIType.bool,
+	},
 } as const;
 
 export { PointerTypeSymbols };

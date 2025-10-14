@@ -25,6 +25,7 @@ import { TargetSymbols } from "./symbols/TargetSymbols";
 import { TypeSymbols } from "./symbols/TypeSymbols";
 import { UserSymbols } from "./symbols/UserSymbols";
 import { ValueSymbols } from "./symbols/ValueSymbols";
+import { VectorTypeSymbols } from "./symbols/VectorTypeSymbols";
 import { getLibPath } from "./utils";
 
 // Use LLVM-C on Windows, libLLVM on Unix-like systems
@@ -55,6 +56,7 @@ const llvmFfi = dlopen(getLibPath(llvmLibName), {
 	...PassBuilderSymbols,
 	...TargetSymbols,
 	...TargetMachineSymbols,
+	...VectorTypeSymbols,
 });
 
 const clangFfi = dlopen(getLibPath("libclang"), {

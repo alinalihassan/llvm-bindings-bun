@@ -47,14 +47,4 @@ export class ArrayType extends Type {
 	getNumElements(): bigint {
 		return ffi.LLVMGetArrayLength(this.ref);
 	}
-
-	/**
-	 * Methods for support type inquiry through isa, cast, and dyn_cast.
-	 *
-	 * @param type The type to check
-	 * @returns True if the type is an ArrayType
-	 */
-	static isArrayType(type: Type): boolean {
-		return type.isArrayTy();
-	}
 }

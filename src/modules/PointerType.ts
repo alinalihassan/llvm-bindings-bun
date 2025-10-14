@@ -48,12 +48,11 @@ export class PointerType extends Type {
 	}
 
 	/**
-	 * Methods for support type inquiry through isa, cast, and dyn_cast.
+	 * Check if this pointer type is opaque.
 	 *
-	 * @param type The type to check
-	 * @returns True if the type is a PointerType
+	 * @returns True if the pointer type is opaque
 	 */
-	static isPointerType(type: Type): boolean {
-		return type.isPointerTy();
+	isOpaque(): boolean {
+		return ffi.LLVMPointerTypeIsOpaque(this.ref);
 	}
 }
