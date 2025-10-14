@@ -42,6 +42,19 @@ sudo pacman -S llvm21
 bun install
 ```
 
+### Environment Variables
+
+If LLVM is not automatically detected on your system, you can specify the LLVM library directory:
+
+```bash
+export LLVM_LIB_DIR=/path/to/llvm/lib
+```
+
+This is particularly useful for:
+- Custom LLVM installations
+- Non-standard LLVM paths
+- Systems where LLVM is installed in a non-default location
+
 ## Quick Start
 
 Here's a simple example that creates an LLVM function to add two integers:
