@@ -1,15 +1,11 @@
 import { ffi } from "@/ffi";
 import { Type } from "@/modules/Type";
-import { assert, type LLVMTypeRef } from "@/utils";
+import { assert } from "@/utils";
 
 /**
  * Class to represent array types
  */
 export class ArrayType extends Type {
-	private constructor(ref: LLVMTypeRef) {
-		super(ref);
-	}
-
 	/**
 	 * This static method is the primary way of constructing an ArrayType.
 	 *
