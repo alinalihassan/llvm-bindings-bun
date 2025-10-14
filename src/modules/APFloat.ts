@@ -29,6 +29,6 @@ export class APFloat {
 	 * @returns A constant floating point value
 	 */
 	public toConstantFP(floatType: Type): ConstantFP {
-		return ConstantFP.getWithAPFloat(floatType, this);
+		return ConstantFP.get(floatType, this);
 	}
 }

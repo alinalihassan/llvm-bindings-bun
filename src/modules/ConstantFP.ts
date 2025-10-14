@@ -19,48 +19,31 @@ export class ConstantFP extends Constant {
 	/**
 	 * Create a ConstantFP with the specified value and type.
 	 * @param type The floating point type
-	 * @param value The floating point value
+	 * @param value The floating point value (number, APFloat, or string)
 	 * @returns A new ConstantFP instance
 	 */
-	public static get(type: Type, value: number): ConstantFP {
-		assert(typeof value === "number", "Value must be a number");
+	public static get(type: Type, value: number): ConstantFP;
+	public static get(type: Type, value: APFloat): ConstantFP;
+	public static get(type: Type, value: string): ConstantFP;
+	public static get(type: Type, value: number | APFloat | string): ConstantFP {
 		assert(type.isFloatingPointTy(), "Type must be a floating point type");
 
-		const constantRef = ffi.LLVMConstReal(type.ref, value);
-		assert(constantRef !== null, "Failed to create constant floating point");
+		if (typeof value === "number") {
+			const constantRef = ffi.LLVMConstReal(type.ref, value);
+			assert(constantRef !== null, "Failed to create constant floating point");
+			return new ConstantFP(constantRef, value);
+		} else if (value instanceof APFloat) {
+			return ConstantFP.get(type, value.getValue());
+		} else if (typeof value === "string") {
+			const constantRef = ffi.LLVMConstRealOfString(type.ref, cstring(value));
+			assert(constantRef !== null, "Failed to create constant floating point from string");
 
-		return new ConstantFP(constantRef, value);
-	}
-
-	/**
-	 * Create a ConstantFP with the specified APFloat value and type.
-	 * @param type The floating point type
-	 * @param value The APFloat value
-	 * @returns A new ConstantFP instance
-	 */
-	public static getWithAPFloat(type: Type, value: APFloat): ConstantFP {
-		assert(value instanceof APFloat, "Value must be an APFloat");
-		assert(type.isFloatingPointTy(), "Type must be a floating point type");
-
-		return ConstantFP.get(type, value.getValue());
-	}
-
-	/**
-	 * Create a ConstantFP from a string representation.
-	 * @param type The floating point type
-	 * @param str The string representation of the floating point value
-	 * @returns A new ConstantFP instance
-	 */
-	public static getFromString(type: Type, str: string): ConstantFP {
-		assert(typeof str === "string", "String must be a string");
-		assert(type.isFloatingPointTy(), "Type must be a floating point type");
-
-		const constantRef = ffi.LLVMConstRealOfString(type.ref, cstring(str));
-		assert(constantRef !== null, "Failed to create constant floating point from string");
-
-		// Parse the string to get the original value for special value detection
-		const originalValue = parseFloat(str);
-		return new ConstantFP(constantRef, originalValue);
+			// Parse the string to get the original value for special value detection
+			const originalValue = parseFloat(value);
+			return new ConstantFP(constantRef, originalValue);
+		} else {
+			throw new Error("Value must be a number, APFloat, or string");
+		}
 	}
 
 	/**
