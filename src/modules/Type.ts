@@ -316,6 +316,52 @@ export class Type {
 		return this.getTypeKind() === LLVMTypeKind.PPC_FP128Type;
 	}
 
+	isLabelTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.LabelType;
+	}
+
+	isMetadataTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.MetadataType;
+	}
+
+	isTokenTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.TokenType;
+	}
+
+	isX86_AMXTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.X86_AMXType;
+	}
+
+	isTargetExtTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.TargetExtType;
+	}
+
+	/**
+	 * Return true if this is a well-behaved IEEE-like type, which has a IEEE
+	 * compatible layout, and does not have non-IEEE values, such as x86_fp80's
+	 * unnormal values.
+	 */
+	isIEEELikeFPTy(): boolean {
+		const kind = this.getTypeKind();
+		return (
+			kind === LLVMTypeKind.DoubleType ||
+			kind === LLVMTypeKind.FloatType ||
+			kind === LLVMTypeKind.HalfType ||
+			kind === LLVMTypeKind.BFloatType ||
+			kind === LLVMTypeKind.FP128Type
+		);
+	}
+
+	/**
+	 * Returns true if this is a floating-point type that is an unevaluated sum
+	 * of multiple floating-point units.
+	 * An example of such a type is ppc_fp128, also known as double-double, which
+	 * consists of two IEEE 754 doubles.
+	 */
+	isMultiUnitFPType(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.PPC_FP128Type;
+	}
+
 	/**
 	 * Get a pointer type pointing to this type
 	 */
