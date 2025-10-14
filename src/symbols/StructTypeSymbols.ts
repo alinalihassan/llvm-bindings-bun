@@ -29,6 +29,14 @@ const StructTypeSymbols = {
 		args: [/* StructTy: LLVMTypeRef */ FFIType.ptr],
 		returns: /* LLVMBool */ FFIType.bool,
 	},
+	LLVMIsLiteralStruct: {
+		args: [/* StructTy: LLVMTypeRef */ FFIType.ptr],
+		returns: /* LLVMBool */ FFIType.bool,
+	},
+	LLVMGetStructName: {
+		args: [/* StructTy: LLVMTypeRef */ FFIType.ptr],
+		returns: /* const char * */ FFIType.cstring,
+	},
 } as const;
 
 export { StructTypeSymbols };

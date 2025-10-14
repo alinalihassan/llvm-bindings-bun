@@ -106,6 +106,10 @@ const TypeSymbols = {
 		args: [/* Ty: LLVMTypeRef */ FFIType.ptr],
 		returns: /* char * */ FFIType.cstring,
 	},
+	LLVMGetNumContainedTypes: {
+		args: [/* Ty: LLVMTypeRef */ FFIType.ptr],
+		returns: /* unsigned */ FFIType.u32,
+	},
 } as const;
 
 export { TypeSymbols };

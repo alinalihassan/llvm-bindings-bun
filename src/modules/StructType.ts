@@ -56,6 +56,18 @@ export class StructType extends Type {
 	}
 
 	/**
+	 * Get the name of this struct.
+	 *
+	 * @returns The name of the struct
+	 */
+	getName(): string {
+		const namePtr = ffi.LLVMGetStructName(this.ref);
+		assert(namePtr !== null, "Failed to get struct name");
+
+		return namePtr.toString();
+	}
+
+	/**
 	 * Get an element type by index.
 	 *
 	 * @param i The element index
@@ -116,6 +128,15 @@ export class StructType extends Type {
 	 */
 	isOpaque(): boolean {
 		return ffi.LLVMIsOpaqueStruct(this.ref);
+	}
+
+	/**
+	 * Check if this struct is literal.
+	 *
+	 * @returns True if the struct is literal
+	 */
+	isLiteral(): boolean {
+		return ffi.LLVMIsLiteralStruct(this.ref);
 	}
 
 	/**
