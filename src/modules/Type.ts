@@ -6,7 +6,6 @@ import type { IntegerType } from "./IntegerType";
 import { LLVMContext } from "./LLVMContext";
 import type { PointerType } from "./PointerType";
 import { TypeSize } from "./TypeSize";
-import type { VectorType } from "./VectorType";
 
 export class Type {
 	protected _ref: LLVMTypeRef;
@@ -33,48 +32,55 @@ export class Type {
 	 * Static method to get int1 type
 	 */
 	static getInt1Ty(): IntegerType {
-		return new Type(ffi.LLVMInt1Type()) as IntegerType;
+		const { IntegerType } = require("./IntegerType");
+		return new IntegerType(ffi.LLVMInt1Type());
 	}
 
 	/**
 	 * Static method to get int8 type
 	 */
 	static getInt8Ty(): IntegerType {
-		return new Type(ffi.LLVMInt8Type()) as IntegerType;
+		const { IntegerType } = require("./IntegerType");
+		return new IntegerType(ffi.LLVMInt8Type());
 	}
 
 	/**
 	 * Static method to get int16 type
 	 */
 	static getInt16Ty(): IntegerType {
-		return new Type(ffi.LLVMInt16Type()) as IntegerType;
+		const { IntegerType } = require("./IntegerType");
+		return new IntegerType(ffi.LLVMInt16Type());
 	}
 
 	/**
 	 * Static method to get int32 type
 	 */
 	static getInt32Ty(): IntegerType {
-		return new Type(ffi.LLVMInt32Type()) as IntegerType;
+		const { IntegerType } = require("./IntegerType");
+		return new IntegerType(ffi.LLVMInt32Type());
 	}
 
 	/**
 	 * Static method to get int64 type
 	 */
 	static getInt64Ty(): IntegerType {
-		return new Type(ffi.LLVMInt64Type()) as IntegerType;
+		const { IntegerType } = require("./IntegerType");
+		return new IntegerType(ffi.LLVMInt64Type());
 	}
 
 	/**
 	 * Static method to get int128 type
 	 */
 	static getInt128Ty(): IntegerType {
-		return new Type(ffi.LLVMInt128Type()) as IntegerType;
+		const { IntegerType } = require("./IntegerType");
+		return new IntegerType(ffi.LLVMInt128Type());
 	}
 	/**
 	 * Static method to get intN type
 	 */
 	static getIntNTy(numBits: number): IntegerType {
-		return new Type(ffi.LLVMIntType(numBits)) as IntegerType;
+		const { IntegerType } = require("./IntegerType");
+		return new IntegerType(ffi.LLVMIntType(numBits));
 	}
 
 	/**
@@ -371,7 +377,8 @@ export class Type {
 
 	getScalarType(): Type {
 		if (this.isVectorTy()) {
-			return (this as unknown as VectorType).getElementType();
+			const { VectorType } = require("./VectorType");
+			return new VectorType(this.ref).getElementType();
 		}
 		return this;
 	}
@@ -418,8 +425,10 @@ export class Type {
 				return TypeSize.getFixed(128);
 			case LLVMTypeKind.X86_AMXType:
 				return TypeSize.getFixed(8192);
-			case LLVMTypeKind.IntegerType:
-				return TypeSize.getFixed((this as unknown as IntegerType).getBitWidth());
+			case LLVMTypeKind.IntegerType: {
+				const { IntegerType } = require("./IntegerType");
+				return TypeSize.getFixed(new IntegerType(this.ref).getBitWidth());
+			}
 			case LLVMTypeKind.VectorType:
 			case LLVMTypeKind.ScalableVectorType: {
 				// const vectorType = this as unknown as VectorType;
