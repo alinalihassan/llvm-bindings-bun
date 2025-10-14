@@ -1028,7 +1028,18 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateZExtOrTrunc(value: Value, destType: Type, name?: string): Value {
-		return this.CreateCast(LLVMCastKind.ZExt, value, destType, name);
+		assert(
+			value.getType().isIntOrIntVectorTy() && destType.isIntOrIntVectorTy(),
+			"Can only zero extend/truncate integers!",
+		);
+
+		if (value.getType().getScalarSizeInBits() < destType.getScalarSizeInBits()) {
+			return this.CreateZExt(value, destType, name);
+		} else if (value.getType().getScalarSizeInBits() > destType.getScalarSizeInBits()) {
+			return this.CreateTrunc(value, destType, name);
+		} else {
+			return value;
+		}
 	}
 
 	/**
@@ -1039,8 +1050,18 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateSExtOrTrunc(value: Value, destType: Type, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreateSExtOrTrunc not implemented yet");
+		assert(
+			value.getType().isIntOrIntVectorTy() && destType.isIntOrIntVectorTy(),
+			"Can only sign extend/truncate integers!",
+		);
+
+		if (value.getType().getScalarSizeInBits() < destType.getScalarSizeInBits()) {
+			return this.CreateSExt(value, destType, name);
+		} else if (value.getType().getScalarSizeInBits() > destType.getScalarSizeInBits()) {
+			return this.CreateTrunc(value, destType, name);
+		} else {
+			return value;
+		}
 	}
 
 	/**
@@ -1161,8 +1182,12 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateZExtOrBitCast(value: Value, destType: Type, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreateZExtOrBitCast not implemented yet");
+		const castKind =
+			value.getType().getScalarSizeInBits() === destType.getScalarSizeInBits()
+				? LLVMCastKind.BitCast
+				: LLVMCastKind.ZExt;
+
+		return this.CreateCast(castKind, value, destType, name);
 	}
 
 	/**
@@ -1173,8 +1198,12 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateSExtOrBitCast(value: Value, destType: Type, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreateSExtOrBitCast not implemented yet");
+		const castKind =
+			value.getType().getScalarSizeInBits() === destType.getScalarSizeInBits()
+				? LLVMCastKind.BitCast
+				: LLVMCastKind.SExt;
+
+		return this.CreateCast(castKind, value, destType, name);
 	}
 
 	/**
@@ -1185,8 +1214,12 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateTruncOrBitCast(value: Value, destType: Type, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreateTruncOrBitCast not implemented yet");
+		const castKind =
+			value.getType().getScalarSizeInBits() === destType.getScalarSizeInBits()
+				? LLVMCastKind.BitCast
+				: LLVMCastKind.Trunc;
+
+		return this.CreateCast(castKind, value, destType, name);
 	}
 
 	/**
@@ -1197,8 +1230,44 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreatePointerCast(value: Value, destType: Type, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreatePointerCast not implemented yet");
+		// Assert that the source type is a pointer or pointer vector type
+		assert(
+			value.getType().isPtrOrPtrVectorTy(),
+			"Invalid cast: source must be pointer or pointer vector type",
+		);
+
+		// Assert that the destination type is an integer or pointer type (or their vector variants)
+		assert(
+			destType.isIntOrIntVectorTy() || destType.isPtrOrPtrVectorTy(),
+			"Invalid cast: destination must be integer or pointer type (or their vector variants)",
+		);
+
+		// Assert that vector types have matching vector-ness
+		assert(
+			destType.isVectorTy() === value.getType().isVectorTy(),
+			"Invalid cast: vector types must match",
+		);
+
+		// If both are vector types, assert that element counts match
+		if (destType.isVectorTy() && value.getType().isVectorTy()) {
+			const { VectorType } = require("./VectorType");
+			const destVectorType = new VectorType(destType.ref);
+			const srcVectorType = new VectorType(value.getType().ref);
+
+			// TODO: Should check ElementCount (including scalable element)
+			assert(
+				destVectorType.getNumElements() === srcVectorType.getNumElements(),
+				"Invalid cast: vector element counts must match",
+			);
+		}
+
+		// If destination is integer type, create PtrToInt cast
+		if (destType.isIntOrIntVectorTy()) {
+			return this.CreatePtrToInt(value, destType, name);
+		}
+
+		// Otherwise, create pointer bit cast or address space cast
+		return this.CreatePointerBitCastOrAddrSpaceCast(value, destType, name);
 	}
 
 	/**
@@ -1209,21 +1278,24 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreatePointerBitCastOrAddrSpaceCast(value: Value, destType: Type, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreatePointerBitCastOrAddrSpaceCast not implemented yet");
-	}
+		assert(
+			value.getType().isPtrOrPtrVectorTy(),
+			"Invalid cast: source must be pointer or pointer vector type",
+		);
+		assert(
+			destType.isPtrOrPtrVectorTy(),
+			"Invalid cast: destination must be pointer or pointer vector type",
+		);
 
-	/**
-	 * Create an integer cast instruction
-	 * @param value The value to cast
-	 * @param destType The destination type
-	 * @param isSigned Whether to use signed or unsigned cast
-	 * @param name Optional name
-	 * @returns The result value
-	 */
-	public CreateIntCast(value: Value, destType: Type, isSigned: boolean, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreateIntCast not implemented yet");
+		const { PointerType } = require("./PointerType");
+		const srcTypePtr = new PointerType(value.getType().ref);
+		const destTypePtr = new PointerType(destType.ref);
+
+		if (srcTypePtr.getAddressSpace() !== destTypePtr.getAddressSpace()) {
+			return this.CreateAddrSpaceCast(value, destType, name);
+		}
+
+		return this.CreateBitCast(value, destType, name);
 	}
 
 	/**
@@ -1234,8 +1306,40 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateBitOrPointerCast(value: Value, destType: Type, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreateBitOrPointerCast not implemented yet");
+		if (value.getType().isPointerTy() && destType.isIntegerTy())
+			return this.CreateCast(LLVMCastKind.PtrToInt, value, destType, name);
+		else if (value.getType().isIntegerTy() && destType.isPointerTy())
+			return this.CreateCast(LLVMCastKind.IntToPtr, value, destType, name);
+		else return this.CreateCast(LLVMCastKind.BitCast, value, destType, name);
+	}
+
+	/**
+	 * Create an integer cast instruction
+	 * @param value The value to cast
+	 * @param destType The destination type
+	 * @param isSigned Whether to use signed or unsigned cast
+	 * @param name Optional name
+	 * @returns The result value
+	 */
+	public CreateIntegerCast(value: Value, destType: Type, isSigned: boolean, name?: string): Value {
+		assert(
+			value.getType().isIntOrIntVectorTy() && destType.isIntOrIntVectorTy(),
+			"Can only cast integers!",
+		);
+
+		const srcBits = value.getType().getScalarSizeInBits();
+		const destBits = destType.getScalarSizeInBits();
+
+		const castKind =
+			srcBits === destBits
+				? LLVMCastKind.BitCast
+				: srcBits > destBits
+					? LLVMCastKind.Trunc
+					: isSigned
+						? LLVMCastKind.SExt
+						: LLVMCastKind.ZExt;
+
+		return this.CreateCast(castKind, value, destType, name);
 	}
 
 	/**
@@ -1246,8 +1350,29 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateFPCast(value: Value, destType: Type, name?: string): Value {
-		// TODO: Need to implement getScalarSizeInBits for Types
-		throw new Error("IRBuilder.CreateFPCast not implemented yet");
+		assert(
+			value.getType().isFloatOrFloatVectorTy() && destType.isFloatOrFloatVectorTy(),
+			"Can only cast floating-point types!",
+		);
+
+		const srcBits = value.getType().getScalarSizeInBits();
+		const destBits = destType.getScalarSizeInBits();
+
+		// Validate that this is a valid cast operation
+		assert(
+			value.getType().ref === destType.ref || srcBits !== destBits,
+			"Invalid cast: same type and same bit size",
+		);
+
+		// Determine the appropriate cast operation
+		const castKind =
+			srcBits === destBits
+				? LLVMCastKind.BitCast
+				: srcBits > destBits
+					? LLVMCastKind.FPTrunc
+					: LLVMCastKind.FPExt;
+
+		return this.CreateCast(castKind, value, destType, name);
 	}
 
 	//===--------------------------------------------------------------------===//
@@ -1718,5 +1843,19 @@ export class IRBuilder {
 		assert(valueRef !== null, "Failed to create pointer difference instruction");
 
 		return new Value(valueRef);
+	}
+
+	/**
+	 * Dispose of the IRBuilder and free its memory
+	 */
+	private dispose(): void {
+		ffi.LLVMDisposeBuilder(this.ref);
+	}
+
+	/**
+	 * Cleanup when the object is garbage collected
+	 */
+	[Symbol.dispose](): void {
+		this.dispose();
 	}
 }

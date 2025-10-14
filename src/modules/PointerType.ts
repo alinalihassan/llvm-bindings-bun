@@ -14,14 +14,11 @@ export class PointerType extends Type {
 	 * @returns A PointerType instance
 	 */
 	static get(elementType: Type, addressSpace: number = 0): PointerType {
-		if (addressSpace < 0) {
-			throw new Error("Address space must be non-negative");
-		}
+		assert(addressSpace >= 0, "Address space must be non-negative");
 
 		const pointerTypeRef = ffi.LLVMPointerType(elementType.ref, addressSpace);
-		if (pointerTypeRef === null) {
-			throw new Error("Failed to create pointer type");
-		}
+
+		assert(pointerTypeRef !== null, "Failed to create pointer type");
 
 		return new PointerType(pointerTypeRef);
 	}

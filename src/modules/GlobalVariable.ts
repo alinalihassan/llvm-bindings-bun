@@ -29,18 +29,12 @@ export class GlobalVariable extends GlobalObject {
 		initializer: Constant | null,
 		name?: string,
 	) {
-		if (module.ref === null) {
-			throw new Error("Module cannot be null for GlobalVariable constructor");
-		}
-		if (type.ref === null) {
-			throw new Error("Type cannot be null for GlobalVariable constructor");
-		}
+		assert(module.ref !== null, "Module cannot be null for GlobalVariable constructor");
+		assert(type.ref !== null, "Type cannot be null for GlobalVariable constructor");
 
 		// Create the global variable
 		const globalVarRef = ffi.LLVMAddGlobal(module.ref, type.ref, cstring(name || ""));
-		if (globalVarRef === null) {
-			throw new Error("Failed to create global variable");
-		}
+		assert(globalVarRef !== null, "Failed to create global variable");
 
 		// Set the constant flag
 		ffi.LLVMSetGlobalConstant(globalVarRef, isConstant);

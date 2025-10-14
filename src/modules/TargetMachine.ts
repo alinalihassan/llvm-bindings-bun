@@ -6,7 +6,7 @@ import type {
 	LLVMTargetMachineRef,
 	LLVMTargetRef,
 } from "@/utils";
-import { cstring } from "@/utils";
+import { assert, cstring } from "@/utils";
 import { type CodeGenFileType, CodeGenOptLevel, CodeModel, RelocMode } from "./Enum";
 
 export class TargetMachine {
@@ -31,9 +31,7 @@ export class TargetMachine {
 			codeModel,
 		);
 
-		if (!this._ref) {
-			throw new Error("Failed to create target machine");
-		}
+		assert(this._ref !== null, "Failed to create target machine");
 	}
 
 	/**

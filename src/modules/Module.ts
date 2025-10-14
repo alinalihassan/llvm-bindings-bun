@@ -427,7 +427,6 @@ export class Module {
 	 */
 	private dispose(): void {
 		ffi.LLVMDisposeModule(this._ref);
-		this._ref = null;
 	}
 
 	/**

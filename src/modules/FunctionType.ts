@@ -29,9 +29,10 @@ export class FunctionType extends Type {
 		// Fill the buffer with parameter type references
 		for (let i = 0; i < paramTypes.length; i++) {
 			const paramType = paramTypes[i];
-			if (!paramType || paramType.ref === null) {
-				throw new Error(`Parameter type at index ${i} is null or undefined`);
-			}
+
+			assert(paramType !== undefined, `Parameter type at index ${i} is undefined`);
+			assert(paramType.ref !== null, `Parameter type at index ${i} is null`);
+
 			paramTypesView[i] = BigInt(paramType.ref);
 		}
 
@@ -42,9 +43,7 @@ export class FunctionType extends Type {
 			isVarArg,
 		);
 
-		if (functionTypeRef === null) {
-			throw new Error("Failed to create function type with parameters");
-		}
+		assert(functionTypeRef !== null, "Failed to create function type with parameters");
 
 		return new FunctionType(functionTypeRef);
 	}

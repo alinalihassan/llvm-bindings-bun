@@ -391,6 +391,10 @@ export class Type {
 		return new Type(ffi.LLVMPointerType(this.ref, addressSpace)) as PointerType;
 	}
 
+	/**
+	 * Get the scalar type of this type
+	 * @returns The scalar type or this type if it is not a vector type
+	 */
 	getScalarType(): Type {
 		if (this.isVectorTy()) {
 			const { VectorType } = require("./VectorType");
@@ -421,6 +425,24 @@ export class Type {
 	 */
 	isAggregateType(): boolean {
 		return this.isStructTy() || this.isArrayTy();
+	}
+
+	/**
+	 * Return true if the type is an integer or an integer vector type
+	 */
+	isIntOrIntVectorTy(): boolean {
+		return this.getScalarType().isIntegerTy();
+	}
+
+	isFloatOrFloatVectorTy(): boolean {
+		return this.getScalarType().isFloatingPointTy();
+	}
+
+	/**
+	 * Return true if the type is a pointer or a pointer vector type
+	 */
+	isPtrOrPtrVectorTy(): boolean {
+		return this.getScalarType().isPointerTy();
 	}
 
 	getPrimitiveSizeInBits(): TypeSize {
