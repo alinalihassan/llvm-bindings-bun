@@ -11,24 +11,38 @@ import type { FunctionType } from "./FunctionType";
 import { GlobalVariable } from "./GlobalVariable";
 import type { Instruction } from "./Instruction";
 import {
+	AddrSpaceCastInst,
 	AllocaInst,
+	BitCastInst,
 	BranchInst,
 	CallInst,
 	ExtractValueInst,
 	FCmpInst,
+	FPExtInst,
+	FPToSIInst,
+	FPToUIInst,
+	FPTruncInst,
 	ICmpInst,
 	IndirectBrInst,
 	InsertValueInst,
+	IntToPtrInst,
 	InvokeInst,
 	LandingPadInst,
 	LoadInst,
 	PHINode,
+	PtrToAddrInst,
+	PtrToIntInst,
 	ResumeInst,
 	ReturnInst,
+	SExtInst,
 	SelectInst,
+	SIToFPInst,
 	StoreInst,
 	SwitchInst,
+	TruncInst,
+	UIToFPInst,
 	UnreachableInst,
+	ZExtInst,
 } from "./Instructions";
 import type { IntegerType } from "./IntegerType";
 import type { LLVMContext } from "./LLVMContext";
@@ -354,11 +368,11 @@ export class IRBuilder {
 
 	/**
 	 * Get integer pointer type
-	 * @param _dataLayout The data layout
+	 * @param dataLayout The data layout
 	 * @param addrSpace Optional address space
 	 * @returns The integer type
 	 */
-	public getIntPtrTy(_dataLayout: unknown, addrSpace?: number): IntegerType {
+	public getIntPtrTy(dataLayout: unknown, addrSpace?: number): IntegerType {
 		// TODO: Not implemented yet - need to implement based on data layout
 		throw new Error(
 			"IRBuilder.getIntPtrTy not implemented yet - need to implement based on data layout",
@@ -1006,7 +1020,38 @@ export class IRBuilder {
 		);
 		assert(valueRef !== null, "Failed to create cast instruction");
 
-		return new Value(valueRef);
+		switch (castKind) {
+			case LLVMCastKind.Trunc:
+				return new TruncInst(valueRef);
+			case LLVMCastKind.ZExt:
+				return new ZExtInst(valueRef);
+			case LLVMCastKind.SExt:
+				return new SExtInst(valueRef);
+			case LLVMCastKind.FPTrunc:
+				return new FPTruncInst(valueRef);
+			case LLVMCastKind.FPExt:
+				return new FPExtInst(valueRef);
+			case LLVMCastKind.UIToFP:
+				return new UIToFPInst(valueRef);
+			case LLVMCastKind.SIToFP:
+				return new SIToFPInst(valueRef);
+			case LLVMCastKind.FPToUI:
+				return new FPToUIInst(valueRef);
+			case LLVMCastKind.FPToSI:
+				return new FPToSIInst(valueRef);
+			case LLVMCastKind.PtrToAddr:
+				return new PtrToAddrInst(valueRef);
+			case LLVMCastKind.IntToPtr:
+				return new IntToPtrInst(valueRef);
+			case LLVMCastKind.PtrToInt:
+				return new PtrToIntInst(valueRef);
+			case LLVMCastKind.BitCast:
+				return new BitCastInst(valueRef);
+			case LLVMCastKind.AddrSpaceCast:
+				return new AddrSpaceCastInst(valueRef);
+			default:
+				throw new Error(`Unknown cast kind: ${castKind}`);
+		}
 	}
 
 	/**

@@ -563,7 +563,7 @@ export class InsertValueInst extends Instruction {}
  */
 export class PHINode extends Instruction {
 	public addIncoming(value: Value, basicBlock: BasicBlock): void {
-		// TODO: Not implemented yet
+		// TODO: Not implemented yet, needs more User API changes
 		throw new Error("PHINode.addIncoming not implemented yet");
 	}
 }
@@ -574,12 +574,12 @@ export class PHINode extends Instruction {
  */
 export class LandingPadInst extends Instruction {
 	public setCleanup(value: boolean): void {
-		// TODO: Not implemented yet
+		// TODO: Not implemented yet, needs more User API changes
 		throw new Error("LandingPadInst.setCleanup not implemented yet");
 	}
 
 	public addClause(clauseVal: Constant): void {
-		// TODO: Not implemented yet
+		// TODO: Not implemented yet, needs more User API changes
 		throw new Error("LandingPadInst.addClause not implemented yet");
 	}
 }
@@ -629,7 +629,7 @@ export class BranchInst extends Instruction {
  */
 export class SwitchInst extends Instruction {
 	public addCase(onVal: ConstantInt, dest: BasicBlock): void {
-		// TODO: Not implemented yet
+		// TODO: Not implemented yet, needs more User API changes
 		throw new Error("SwitchInst.addCase not implemented yet");
 	}
 }
@@ -747,6 +747,12 @@ export class FPToUIInst extends Instruction {}
  * Based on LLVM's FPToSIInst class
  */
 export class FPToSIInst extends Instruction {}
+
+/**
+ * PtrToAddrInst - Pointer to address instruction
+ * Based on LLVM's PtrToAddrInst class
+ */
+export class PtrToAddrInst extends Instruction {}
 
 /**
  * IntToPtrInst - Integer to pointer instruction
