@@ -3,7 +3,6 @@ import { assert } from "@/utils";
 import { APInt } from "./APInt";
 import { Constant } from "./Constant";
 import { IntegerType } from "./IntegerType";
-import type { LLVMContext } from "./LLVMContext";
 
 /**
  * Represents a constant integer value in LLVM IR
@@ -18,16 +17,23 @@ export class ConstantInt extends Constant {
 	 * @returns A new ConstantInt or Constant instance
 	 */
 	public static get(
-		context: LLVMContext,
 		value: number | APInt,
+		type?: IntegerType,
 		isSigned: boolean = true,
 	): ConstantInt {
 		assert(typeof value === "number" || value instanceof APInt, "Invalid value type");
 
 		if (typeof value === "number") {
-			return new ConstantInt(ffi.LLVMConstInt(context.ref, value, isSigned));
+			if (type === undefined) {
+				type = IntegerType.getInt64Ty();
+			}
+			return new ConstantInt(ffi.LLVMConstInt(type.ref, value, isSigned));
 		} else if (value instanceof APInt) {
-			return new ConstantInt(value.toConstantInt(IntegerType.get(context, value.getNumBits())).ref);
+			if (type === undefined) {
+				type = IntegerType.get(value.getNumBits());
+			}
+
+			return new ConstantInt(value.toConstantInt(type).ref);
 		} else {
 			assert(false, "Failed to create constant integer");
 		}
@@ -35,30 +41,27 @@ export class ConstantInt extends Constant {
 
 	/**
 	 * Create a constant integer representing true (1).
-	 * @param _context The LLVM context
 	 * @returns A new ConstantInt instance representing true
 	 */
-	public static getTrue(_context: LLVMContext): ConstantInt {
-		return ConstantInt.get(_context, 1);
+	public static getTrue(): ConstantInt {
+		return ConstantInt.get(1);
 	}
 
 	/**
 	 * Create a constant integer representing false (0).
-	 * @param _context The LLVM context
 	 * @returns A new ConstantInt instance representing false
 	 */
-	public static getFalse(_context: LLVMContext): ConstantInt {
-		return ConstantInt.get(_context, 0);
+	public static getFalse(): ConstantInt {
+		return ConstantInt.get(0);
 	}
 
 	/**
 	 * Create a boolean value as a constant integer.
-	 * @param context The LLVM context
 	 * @param value The boolean value
 	 * @returns A new ConstantInt instance representing the boolean value
 	 */
-	public static getBool(context: LLVMContext, value: boolean): ConstantInt {
-		return ConstantInt.get(context, value ? 1 : 0);
+	public static getBool(value: boolean): ConstantInt {
+		return ConstantInt.get(value ? 1 : 0);
 	}
 
 	/**

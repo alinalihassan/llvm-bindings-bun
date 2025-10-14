@@ -18,7 +18,7 @@ const module = new Module("test_module", context);
 const builder = new IRBuilder(context);
 
 // Create function type: int add(int a, int b)
-const int32Type = IntegerType.get(context, 32);
+const int32Type = IntegerType.getInt32Ty();
 const functionType = FunctionType.get(int32Type, [int32Type, int32Type], false);
 
 // Create the add function
@@ -46,7 +46,7 @@ const result = builder.CreateAdd(a, b, "result");
 builder.CreateRet(result);
 
 // Create a main function that calls the add function
-const mainFunctionType = FunctionType.get(IntegerType.get(context, 32), [], false);
+const mainFunctionType = FunctionType.get(IntegerType.getInt32Ty(), [], false);
 const mainFunction = LLVMFunction.Create(
 	mainFunctionType,
 	GlobalValueLinkageTypes.ExternalLinkage,

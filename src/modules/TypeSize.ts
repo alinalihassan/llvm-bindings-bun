@@ -3,6 +3,8 @@
  * Based on LLVM's TypeSize.h implementation
  */
 
+import { assert } from "@/utils";
+
 export class TypeSize {
 	private readonly _fixedValue: number;
 	private readonly _isScalable: boolean;
@@ -114,9 +116,11 @@ export class TypeSize {
 	 * Add another TypeSize to this one
 	 */
 	add(rhs: TypeSize): TypeSize {
-		if (this.isScalable() !== rhs.isScalable() && !this.isZero() && !rhs.isZero()) {
-			throw new Error("Cannot add incompatible TypeSize values (one scalable, one fixed)");
-		}
+		assert(
+			this.isScalable() === rhs.isScalable(),
+			"Cannot add incompatible TypeSize values (one scalable, one fixed)",
+		);
+		assert(!this.isZero() && !rhs.isZero(), "Cannot add zero TypeSize values");
 
 		const newFixed = this._fixedValue + rhs._fixedValue;
 		const newScalable = this._isScalable || rhs._isScalable;
@@ -128,9 +132,11 @@ export class TypeSize {
 	 * Subtract another TypeSize from this one
 	 */
 	subtract(rhs: TypeSize): TypeSize {
-		if (this.isScalable() !== rhs.isScalable() && !this.isZero() && !rhs.isZero()) {
-			throw new Error("Cannot subtract incompatible TypeSize values (one scalable, one fixed)");
-		}
+		assert(
+			this.isScalable() === rhs.isScalable(),
+			"Cannot subtract incompatible TypeSize values (one scalable, one fixed)",
+		);
+		assert(!this.isZero() && !rhs.isZero(), "Cannot subtract zero TypeSize values");
 
 		const newFixed = this._fixedValue - rhs._fixedValue;
 		const newScalable = this._isScalable || rhs._isScalable;
@@ -149,9 +155,8 @@ export class TypeSize {
 	 * Divide this TypeSize by a scalar value
 	 */
 	divide(scalar: number): TypeSize {
-		if (scalar === 0) {
-			throw new Error("Cannot divide by zero");
-		}
+		assert(scalar !== 0, "Cannot divide by zero");
+
 		return new TypeSize(Math.floor(this._fixedValue / scalar), this._isScalable);
 	}
 

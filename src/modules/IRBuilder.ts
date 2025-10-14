@@ -169,7 +169,7 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt1(value: boolean): ConstantInt {
-		return ConstantInt.get(this.context, new APInt(1, value ? 1 : 0, value));
+		return ConstantInt.get(new APInt(1, value ? 1 : 0, value));
 	}
 
 	/**
@@ -194,7 +194,7 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt8(value: number): ConstantInt {
-		return ConstantInt.get(this.context, new APInt(8, value, true));
+		return ConstantInt.get(new APInt(8, value, true));
 	}
 
 	/**
@@ -203,7 +203,7 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt16(value: number): ConstantInt {
-		return ConstantInt.get(this.context, new APInt(16, value, true));
+		return ConstantInt.get(new APInt(16, value, true));
 	}
 
 	/**
@@ -212,7 +212,7 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt32(value: number): ConstantInt {
-		return ConstantInt.get(this.context, new APInt(32, value, true));
+		return ConstantInt.get(new APInt(32, value, true));
 	}
 
 	/**
@@ -221,7 +221,7 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt64(value: number): ConstantInt {
-		return ConstantInt.get(this.context, new APInt(64, value, true));
+		return ConstantInt.get(new APInt(64, value, true));
 	}
 
 	/**
@@ -231,7 +231,7 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getIntN(numBits: number, value: number): ConstantInt {
-		return ConstantInt.get(this.context, new APInt(numBits, value, true));
+		return ConstantInt.get(new APInt(numBits, value, true));
 	}
 
 	/**
@@ -240,7 +240,7 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt(value: APInt): ConstantInt {
-		return ConstantInt.get(this.context, value);
+		return ConstantInt.get(value);
 	}
 
 	//===--------------------------------------------------------------------===//

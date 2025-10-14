@@ -30,7 +30,7 @@ export class IntegerType extends Type {
 	 * @param numBits The number of bits for the integer type
 	 * @returns An IntegerType instance
 	 */
-	static get(_context: unknown, numBits: number): IntegerType {
+	static get(numBits: number): IntegerType {
 		assert(
 			numBits >= IntegerType.MIN_INT_BITS && numBits <= IntegerType.MAX_INT_BITS,
 			`Invalid bit width: ${numBits}. Must be between ${IntegerType.MIN_INT_BITS} and ${IntegerType.MAX_INT_BITS}`,
