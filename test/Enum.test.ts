@@ -86,32 +86,32 @@ describe("LLVM Enums", () => {
 
 	describe("LLVMTypeKind", () => {
 		it("should have correct values for basic types", () => {
-			expect(LLVMTypeKind.VoidTypeKind).toBe(0);
-			expect(LLVMTypeKind.HalfTypeKind).toBe(1);
-			expect(LLVMTypeKind.FloatTypeKind).toBe(2);
-			expect(LLVMTypeKind.DoubleTypeKind).toBe(3);
-			expect(LLVMTypeKind.X86_FP80TypeKind).toBe(4);
-			expect(LLVMTypeKind.FP128TypeKind).toBe(5);
-			expect(LLVMTypeKind.PPC_FP128TypeKind).toBe(6);
+			expect(LLVMTypeKind.VoidType).toBe(0);
+			expect(LLVMTypeKind.HalfType).toBe(1);
+			expect(LLVMTypeKind.FloatType).toBe(2);
+			expect(LLVMTypeKind.DoubleType).toBe(3);
+			expect(LLVMTypeKind.X86_FP80Type).toBe(4);
+			expect(LLVMTypeKind.FP128Type).toBe(5);
+			expect(LLVMTypeKind.PPC_FP128Type).toBe(6);
 		});
 
 		it("should have correct values for complex types", () => {
-			expect(LLVMTypeKind.LabelTypeKind).toBe(7);
-			expect(LLVMTypeKind.IntegerTypeKind).toBe(8);
-			expect(LLVMTypeKind.FunctionTypeKind).toBe(9);
-			expect(LLVMTypeKind.StructTypeKind).toBe(10);
-			expect(LLVMTypeKind.ArrayTypeKind).toBe(11);
-			expect(LLVMTypeKind.PointerTypeKind).toBe(12);
-			expect(LLVMTypeKind.VectorTypeKind).toBe(13);
-			expect(LLVMTypeKind.MetadataTypeKind).toBe(14);
+			expect(LLVMTypeKind.LabelType).toBe(7);
+			expect(LLVMTypeKind.IntegerType).toBe(8);
+			expect(LLVMTypeKind.FunctionType).toBe(9);
+			expect(LLVMTypeKind.StructType).toBe(10);
+			expect(LLVMTypeKind.ArrayType).toBe(11);
+			expect(LLVMTypeKind.PointerType).toBe(12);
+			expect(LLVMTypeKind.VectorType).toBe(13);
+			expect(LLVMTypeKind.MetadataType).toBe(14);
 		});
 
 		it("should have correct values for advanced types", () => {
-			expect(LLVMTypeKind.TokenTypeKind).toBe(16);
-			expect(LLVMTypeKind.ScalableVectorTypeKind).toBe(17);
-			expect(LLVMTypeKind.BFloatTypeKind).toBe(18);
-			expect(LLVMTypeKind.X86_AMXTypeKind).toBe(19);
-			expect(LLVMTypeKind.TargetExtTypeKind).toBe(20);
+			expect(LLVMTypeKind.TokenType).toBe(16);
+			expect(LLVMTypeKind.ScalableVectorType).toBe(17);
+			expect(LLVMTypeKind.BFloatType).toBe(18);
+			expect(LLVMTypeKind.X86_AMXType).toBe(19);
+			expect(LLVMTypeKind.TargetExtType).toBe(20);
 		});
 	});
 
@@ -415,8 +415,8 @@ describe("LLVM Enums", () => {
 		});
 
 		it("should work with type kind checks", () => {
-			const voidKind = LLVMTypeKind.VoidTypeKind;
-			const intKind = LLVMTypeKind.IntegerTypeKind;
+			const voidKind = LLVMTypeKind.VoidType;
+			const intKind = LLVMTypeKind.IntegerType;
 
 			expect(voidKind).toBe(0);
 			expect(intKind).toBe(8);

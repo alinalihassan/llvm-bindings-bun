@@ -102,20 +102,20 @@ describe("Type", () => {
 	describe("Type Kind and Inquiry Methods", () => {
 		it("should return correct type kind for void type", () => {
 			const voidType = Type.getVoidTy();
-			expect(voidType.getTypeKind()).toBe(LLVMTypeKind.VoidTypeKind);
+			expect(voidType.getTypeKind()).toBe(LLVMTypeKind.VoidType);
 		});
 
 		it("should return correct type kind for integer types", () => {
 			const int32Type = Type.getInt32Ty();
-			expect(int32Type.getTypeKind()).toBe(LLVMTypeKind.IntegerTypeKind);
+			expect(int32Type.getTypeKind()).toBe(LLVMTypeKind.IntegerType);
 		});
 
 		it("should return correct type kind for floating point types", () => {
 			const floatType = Type.getFloatTy();
-			expect(floatType.getTypeKind()).toBe(LLVMTypeKind.FloatTypeKind);
+			expect(floatType.getTypeKind()).toBe(LLVMTypeKind.FloatType);
 
 			const doubleType = Type.getDoubleTy();
-			expect(doubleType.getTypeKind()).toBe(LLVMTypeKind.DoubleTypeKind);
+			expect(doubleType.getTypeKind()).toBe(LLVMTypeKind.DoubleType);
 		});
 
 		it("should check if type is sized", () => {

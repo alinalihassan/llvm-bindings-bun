@@ -5,6 +5,8 @@ import type { FunctionType } from "./FunctionType";
 import type { IntegerType } from "./IntegerType";
 import { LLVMContext } from "./LLVMContext";
 import type { PointerType } from "./PointerType";
+import { TypeSize } from "./TypeSize";
+import type { VectorType } from "./VectorType";
 
 export class Type {
 	protected _ref: LLVMTypeRef;
@@ -218,42 +220,42 @@ export class Type {
 	 * Check if this type is a void type
 	 */
 	isVoidTy(): boolean {
-		return this.getTypeKind() === LLVMTypeKind.VoidTypeKind;
+		return this.getTypeKind() === LLVMTypeKind.VoidType;
 	}
 
 	/**
 	 * Check if this type is an integer type
 	 */
 	isIntegerTy(): boolean {
-		return this.getTypeKind() === LLVMTypeKind.IntegerTypeKind;
+		return this.getTypeKind() === LLVMTypeKind.IntegerType;
 	}
 
 	/**
 	 * Check if this type is a function type
 	 */
 	isFunctionTy(): boolean {
-		return this.getTypeKind() === LLVMTypeKind.FunctionTypeKind;
+		return this.getTypeKind() === LLVMTypeKind.FunctionType;
 	}
 
 	/**
 	 * Check if this type is a struct type
 	 */
 	isStructTy(): boolean {
-		return this.getTypeKind() === LLVMTypeKind.StructTypeKind;
+		return this.getTypeKind() === LLVMTypeKind.StructType;
 	}
 
 	/**
 	 * Check if this type is an array type
 	 */
 	isArrayTy(): boolean {
-		return this.getTypeKind() === LLVMTypeKind.ArrayTypeKind;
+		return this.getTypeKind() === LLVMTypeKind.ArrayType;
 	}
 
 	/**
 	 * Check if this type is a pointer type
 	 */
 	isPointerTy(): boolean {
-		return this.getTypeKind() === LLVMTypeKind.PointerTypeKind;
+		return this.getTypeKind() === LLVMTypeKind.PointerType;
 	}
 
 	/**
@@ -261,7 +263,7 @@ export class Type {
 	 */
 	isVectorTy(): boolean {
 		const kind = this.getTypeKind();
-		return kind === LLVMTypeKind.VectorTypeKind || kind === LLVMTypeKind.ScalableVectorTypeKind;
+		return kind === LLVMTypeKind.VectorType || kind === LLVMTypeKind.ScalableVectorType;
 	}
 
 	/**
@@ -270,14 +272,48 @@ export class Type {
 	isFloatingPointTy(): boolean {
 		const kind = this.getTypeKind();
 		return (
-			kind === LLVMTypeKind.HalfTypeKind ||
-			kind === LLVMTypeKind.FloatTypeKind ||
-			kind === LLVMTypeKind.DoubleTypeKind ||
-			kind === LLVMTypeKind.X86_FP80TypeKind ||
-			kind === LLVMTypeKind.FP128TypeKind ||
-			kind === LLVMTypeKind.PPC_FP128TypeKind ||
-			kind === LLVMTypeKind.BFloatTypeKind
+			kind === LLVMTypeKind.HalfType ||
+			kind === LLVMTypeKind.FloatType ||
+			kind === LLVMTypeKind.DoubleType ||
+			kind === LLVMTypeKind.X86_FP80Type ||
+			kind === LLVMTypeKind.FP128Type ||
+			kind === LLVMTypeKind.PPC_FP128Type ||
+			kind === LLVMTypeKind.BFloatType
 		);
+	}
+
+	isHalfTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.HalfType;
+	}
+
+	isBFloatTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.BFloatType;
+	}
+
+	is16BitFPTy(): boolean {
+		return (
+			this.getTypeKind() === LLVMTypeKind.HalfType || this.getTypeKind() === LLVMTypeKind.BFloatType
+		);
+	}
+
+	isFloatTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.FloatType;
+	}
+
+	isDoubleTy(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.DoubleType;
+	}
+
+	isX86_FP80Ty(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.X86_FP80Type;
+	}
+
+	isFP128Ty(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.FP128Type;
+	}
+
+	isPPC_FP128Ty(): boolean {
+		return this.getTypeKind() === LLVMTypeKind.PPC_FP128Type;
 	}
 
 	/**
@@ -285,6 +321,13 @@ export class Type {
 	 */
 	getPointerTo(addressSpace: number = 0): PointerType {
 		return new Type(ffi.LLVMPointerType(this.ref, addressSpace)) as PointerType;
+	}
+
+	getScalarType(): Type {
+		if (this.isVectorTy()) {
+			return (this as unknown as VectorType).getElementType();
+		}
+		return this;
 	}
 
 	/**
@@ -297,8 +340,8 @@ export class Type {
 			this.isIntegerTy() ||
 			this.isPointerTy() ||
 			this.isVectorTy() ||
-			this.getTypeKind() === LLVMTypeKind.X86_AMXTypeKind ||
-			this.getTypeKind() === LLVMTypeKind.TargetExtTypeKind
+			this.getTypeKind() === LLVMTypeKind.X86_AMXType ||
+			this.getTypeKind() === LLVMTypeKind.TargetExtType
 		);
 	}
 
@@ -309,5 +352,38 @@ export class Type {
 	 */
 	isAggregateType(): boolean {
 		return this.isStructTy() || this.isArrayTy();
+	}
+
+	getPrimitiveSizeInBits(): TypeSize {
+		switch (this.getTypeKind()) {
+			case LLVMTypeKind.HalfType:
+				return TypeSize.getFixed(16);
+			case LLVMTypeKind.BFloatType:
+				return TypeSize.getFixed(16);
+			case LLVMTypeKind.FloatType:
+				return TypeSize.getFixed(32);
+			case LLVMTypeKind.DoubleType:
+				return TypeSize.getFixed(64);
+			case LLVMTypeKind.X86_FP80Type:
+				return TypeSize.getFixed(80);
+			case LLVMTypeKind.FP128Type:
+				return TypeSize.getFixed(128);
+			case LLVMTypeKind.PPC_FP128Type:
+				return TypeSize.getFixed(128);
+			case LLVMTypeKind.X86_AMXType:
+				return TypeSize.getFixed(8192);
+			case LLVMTypeKind.IntegerType:
+				return TypeSize.getFixed((this as unknown as IntegerType).getBitWidth());
+			case LLVMTypeKind.VectorType:
+			case LLVMTypeKind.ScalableVectorType: {
+				// const vectorType = this as unknown as VectorType;
+				// const elementCount = vectorType.getElementCount();
+				// const elementTypeSize = vectorType.getElementType().getPrimitiveSizeInBits();
+				// TODO: Not implemented yet, depends on ElementCount, fixed vs scalable
+				throw new Error("Not implemented");
+			}
+			default:
+				return TypeSize.getFixed(0);
+		}
 	}
 }

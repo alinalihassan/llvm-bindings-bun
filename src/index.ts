@@ -79,6 +79,7 @@ import { StructType } from "./modules/StructType";
 import { Target } from "./modules/Target";
 import { TargetMachine } from "./modules/TargetMachine";
 import { Type } from "./modules/Type";
+import { TypeSize } from "./modules/TypeSize";
 import { User } from "./modules/User";
 import { Value } from "./modules/Value";
 import { VectorType } from "./modules/VectorType";
@@ -93,6 +94,7 @@ const llvm = {
 	Target: Target,
 	TargetMachine: TargetMachine,
 	Type: Type,
+	TypeSize: TypeSize,
 	Value: Value,
 	User: User,
 	Instruction: Instruction,
@@ -213,6 +215,7 @@ export * from "@/modules/StructType";
 export * from "@/modules/Target";
 export * from "@/modules/TargetMachine";
 export * from "@/modules/Type";
+export * from "@/modules/TypeSize";
 export * from "@/modules/User";
 export * from "@/modules/Value";
 export * from "@/modules/VectorType";
