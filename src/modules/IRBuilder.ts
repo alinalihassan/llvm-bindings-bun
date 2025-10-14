@@ -156,9 +156,7 @@ export class IRBuilder {
 			name ? cstring(name) : null,
 		);
 
-		if (globalVarRef === null) {
-			throw new Error("Failed to create global string");
-		}
+		assert(globalVarRef !== null, "Failed to create global string");
 
 		return new GlobalVariable(globalVarRef);
 	}
@@ -377,9 +375,8 @@ export class IRBuilder {
 	 */
 	public CreateRetVoid(): ReturnInst {
 		const valueRef = ffi.LLVMBuildRetVoid(this.ref);
-		if (valueRef === null) {
-			throw new Error("Failed to create return void instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create return void instruction");
 
 		return new ReturnInst(valueRef);
 	}
@@ -391,9 +388,8 @@ export class IRBuilder {
 	 */
 	public CreateRet(value: Value): ReturnInst {
 		const valueRef = ffi.LLVMBuildRet(this.ref, value.ref);
-		if (valueRef === null) {
-			throw new Error("Failed to create return instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create return instruction");
 
 		return new ReturnInst(valueRef);
 	}
@@ -405,9 +401,8 @@ export class IRBuilder {
 	 */
 	public CreateBr(destBB: BasicBlock): BranchInst {
 		const valueRef = ffi.LLVMBuildBr(this.ref, destBB.ref);
-		if (valueRef === null) {
-			throw new Error("Failed to create branch instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create branch instruction");
 
 		return new BranchInst(valueRef);
 	}
@@ -421,9 +416,8 @@ export class IRBuilder {
 	 */
 	public CreateCondBr(cond: Value, thenBB: BasicBlock, elseBB: BasicBlock): BranchInst {
 		const valueRef = ffi.LLVMBuildCondBr(this.ref, cond.ref, thenBB.ref, elseBB.ref);
-		if (valueRef === null) {
-			throw new Error("Failed to create conditional branch instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create conditional branch instruction");
 
 		return new BranchInst(valueRef);
 	}
@@ -437,9 +431,8 @@ export class IRBuilder {
 	 */
 	public CreateSwitch(value: Value, dest: BasicBlock, numCases?: number): SwitchInst {
 		const valueRef = ffi.LLVMBuildSwitch(this.ref, value.ref, dest.ref, numCases || 0);
-		if (valueRef === null) {
-			throw new Error("Failed to create switch instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create switch instruction");
 
 		return new SwitchInst(valueRef);
 	}
@@ -452,9 +445,8 @@ export class IRBuilder {
 	 */
 	public CreateIndirectBr(addr: Value, numDests?: number): IndirectBrInst {
 		const valueRef = ffi.LLVMBuildIndirectBr(this.ref, addr.ref, numDests || 0);
-		if (valueRef === null) {
-			throw new Error("Failed to create indirect branch instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create indirect branch instruction");
 
 		return new IndirectBrInst(valueRef);
 	}
@@ -494,9 +486,8 @@ export class IRBuilder {
 			catchBB.ref,
 			cstring(_name),
 		);
-		if (valueRef === null) {
-			throw new Error("Failed to create invoke instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create invoke instruction");
 
 		return new InvokeInst(valueRef);
 	}
@@ -508,9 +499,8 @@ export class IRBuilder {
 	 */
 	public CreateResume(exn: Value): ResumeInst {
 		const valueRef = ffi.LLVMBuildResume(this.ref, exn.ref);
-		if (valueRef === null) {
-			throw new Error("Failed to create resume instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create resume instruction");
 
 		return new ResumeInst(valueRef);
 	}
@@ -521,9 +511,8 @@ export class IRBuilder {
 	 */
 	public CreateUnreachable(): UnreachableInst {
 		const valueRef = ffi.LLVMBuildUnreachable(this.ref);
-		if (valueRef === null) {
-			throw new Error("Failed to create unreachable instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create unreachable instruction");
 
 		return new UnreachableInst(valueRef);
 	}
@@ -541,9 +530,8 @@ export class IRBuilder {
 	 */
 	public CreateAdd(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildAdd(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create add instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create add instruction");
 
 		return new Value(valueRef);
 	}
@@ -557,9 +545,8 @@ export class IRBuilder {
 	 */
 	public CreateFAdd(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildFAdd(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create floating-point add instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create floating-point add instruction");
 
 		return new Value(valueRef);
 	}
@@ -573,9 +560,8 @@ export class IRBuilder {
 	 */
 	public CreateSub(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildSub(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create subtract instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create subtract instruction");
 
 		return new Value(valueRef);
 	}
@@ -589,9 +575,8 @@ export class IRBuilder {
 	 */
 	public CreateFSub(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildFSub(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create floating-point subtract instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create floating-point subtract instruction");
 
 		return new Value(valueRef);
 	}
@@ -605,9 +590,8 @@ export class IRBuilder {
 	 */
 	public CreateMul(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildMul(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create multiply instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create multiply instruction");
 
 		return new Value(valueRef);
 	}
@@ -621,9 +605,8 @@ export class IRBuilder {
 	 */
 	public CreateFMul(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildFMul(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create floating-point multiply instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create floating-point multiply instruction");
 
 		return new Value(valueRef);
 	}
@@ -637,9 +620,8 @@ export class IRBuilder {
 	 */
 	public CreateSDiv(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildSDiv(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create signed divide instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create signed divide instruction");
 
 		return new Value(valueRef);
 	}
@@ -653,9 +635,8 @@ export class IRBuilder {
 	 */
 	public CreateUDiv(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildUDiv(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create unsigned divide instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create unsigned divide instruction");
 
 		return new Value(valueRef);
 	}
@@ -669,9 +650,8 @@ export class IRBuilder {
 	 */
 	public CreateFDiv(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildFDiv(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create floating-point divide instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create floating-point divide instruction");
 
 		return new Value(valueRef);
 	}
@@ -685,9 +665,8 @@ export class IRBuilder {
 	 */
 	public CreateSRem(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildSRem(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create signed remainder instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create signed remainder instruction");
 
 		return new Value(valueRef);
 	}
@@ -701,9 +680,8 @@ export class IRBuilder {
 	 */
 	public CreateURem(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildURem(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create unsigned remainder instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create unsigned remainder instruction");
 
 		return new Value(valueRef);
 	}
@@ -717,9 +695,8 @@ export class IRBuilder {
 	 */
 	public CreateFRem(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildFRem(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create floating-point remainder instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create floating-point remainder instruction");
 
 		return new Value(valueRef);
 	}
@@ -733,9 +710,8 @@ export class IRBuilder {
 	 */
 	public CreateAnd(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildAnd(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create AND instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create AND instruction");
 
 		return new Value(valueRef);
 	}
@@ -749,9 +725,8 @@ export class IRBuilder {
 	 */
 	public CreateOr(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildOr(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create OR instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create OR instruction");
 
 		return new Value(valueRef);
 	}
@@ -765,9 +740,8 @@ export class IRBuilder {
 	 */
 	public CreateXor(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildXor(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create XOR instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create XOR instruction");
 
 		return new Value(valueRef);
 	}
@@ -781,9 +755,8 @@ export class IRBuilder {
 	 */
 	public CreateShl(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildShl(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create left shift instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create left shift instruction");
 
 		return new Value(valueRef);
 	}
@@ -797,9 +770,8 @@ export class IRBuilder {
 	 */
 	public CreateAShr(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildAShr(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create arithmetic right shift instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create arithmetic right shift instruction");
 
 		return new Value(valueRef);
 	}
@@ -813,9 +785,8 @@ export class IRBuilder {
 	 */
 	public CreateLShr(lhs: Value, rhs: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildLShr(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create logical right shift instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create logical right shift instruction");
 
 		return new Value(valueRef);
 	}
@@ -828,9 +799,8 @@ export class IRBuilder {
 	 */
 	public CreateNeg(value: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildNeg(this.ref, value.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create negation instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create negation instruction");
 
 		return new Value(valueRef);
 	}
@@ -843,9 +813,8 @@ export class IRBuilder {
 	 */
 	public CreateFNeg(value: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildFNeg(this.ref, value.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create floating-point negation instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create floating-point negation instruction");
 
 		return new Value(valueRef);
 	}
@@ -858,9 +827,8 @@ export class IRBuilder {
 	 */
 	public CreateNot(value: Value, name?: string): Value {
 		const valueRef = ffi.LLVMBuildNot(this.ref, value.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create NOT instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create NOT instruction");
 
 		return new Value(valueRef);
 	}
@@ -888,9 +856,7 @@ export class IRBuilder {
 		} else {
 			valueRef = ffi.LLVMBuildAlloca(this.ref, type.ref, name ? cstring(name) : null);
 		}
-		if (valueRef === null) {
-			throw new Error("Failed to create alloca instruction");
-		}
+		assert(valueRef !== null, "Failed to create alloca instruction");
 
 		return new AllocaInst(valueRef);
 	}
@@ -904,9 +870,8 @@ export class IRBuilder {
 	 */
 	public CreateLoad(type: Type, ptr: Value, name?: string): LoadInst {
 		const valueRef = ffi.LLVMBuildLoad2(this.ref, type.ref, ptr.ref, name ? cstring(name) : null);
-		if (valueRef === null) {
-			throw new Error("Failed to create load instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create load instruction");
 
 		return new LoadInst(valueRef);
 	}
@@ -919,9 +884,8 @@ export class IRBuilder {
 	 */
 	public CreateStore(value: Value, ptr: Value): StoreInst {
 		const valueRef = ffi.LLVMBuildStore(this.ref, value.ref, ptr.ref);
-		if (valueRef === null) {
-			throw new Error("Failed to create store instruction");
-		}
+
+		assert(valueRef !== null, "Failed to create store instruction");
 
 		return new StoreInst(valueRef);
 	}
@@ -956,9 +920,7 @@ export class IRBuilder {
 			name ? cstring(name) : null,
 		);
 
-		if (valueRef === null) {
-			throw new Error("Failed to create GEP instruction");
-		}
+		assert(valueRef !== null, "Failed to create GEP instruction");
 
 		return new Value(valueRef);
 	}
@@ -984,9 +946,7 @@ export class IRBuilder {
 			cstring(name || ""),
 		);
 
-		if (valueRef === null) {
-			throw new Error("Failed to create in-bounds GEP instruction");
-		}
+		assert(valueRef !== null, "Failed to create in-bounds GEP instruction");
 
 		return new Value(valueRef);
 	}
@@ -1009,9 +969,7 @@ export class IRBuilder {
 			destType.ref,
 			name ? cstring(name) : null,
 		);
-		if (valueRef === null) {
-			throw new Error("Failed to create truncate instruction");
-		}
+		assert(valueRef !== null, "Failed to create truncate instruction");
 
 		return new Value(valueRef);
 	}
@@ -1030,9 +988,7 @@ export class IRBuilder {
 			destType.ref,
 			name ? cstring(name) : null,
 		);
-		if (valueRef === null) {
-			throw new Error("Failed to create zero extend instruction");
-		}
+		assert(valueRef !== null, "Failed to create zero extend instruction");
 
 		return new Value(valueRef);
 	}

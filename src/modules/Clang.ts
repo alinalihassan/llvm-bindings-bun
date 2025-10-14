@@ -1,6 +1,6 @@
 import type { Pointer } from "bun:ffi";
 import { ffi } from "@/ffi";
-import { cstring } from "@/utils";
+import { assert, cstring } from "@/utils";
 
 // Clang constants
 export const CXTranslationUnit_None = 0x0;
@@ -16,9 +16,9 @@ export class ClangIndex {
 			excludeDeclarationsFromPCH ? 1 : 0,
 			0, // displayDiagnostics disabled
 		);
-		if (!result) {
-			throw new Error("Failed to create Clang index");
-		}
+
+		assert(result !== null, "Failed to create Clang index");
+
 		this._ref = result;
 	}
 
@@ -66,9 +66,8 @@ export class ClangTranslationUnit {
 			options,
 		);
 
-		if (!result) {
-			throw new Error("Failed to parse translation unit");
-		}
+		assert(result !== null, "Failed to parse translation unit");
+
 		this._ref = result;
 	}
 

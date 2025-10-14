@@ -64,22 +64,4 @@ export class Constant extends User {
 
 		return new Value(valueRef);
 	}
-
-	/**
-	 * Check if this constant is the value one
-	 * @returns True if this is the value one
-	 */
-	public isOneValue(): boolean {
-		// TODO: Implement
-		throw new Error("Not implemented");
-	}
-
-	/**
-	 * Check if this constant is an all-ones value
-	 * @returns True if this is an all-ones constant
-	 */
-	public isAllOnesValue(): boolean {
-		// TODO: Implement
-		throw new Error("Not implemented");
-	}
 }
