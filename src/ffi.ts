@@ -7,6 +7,7 @@ import { ClangSymbols } from "./symbols/ClangSymbols";
 import { ConstantArraySymbols } from "./symbols/ConstantArraySymbols";
 import { ConstantFPSymbols } from "./symbols/ConstantFPSymbols";
 import { ConstantIntSymbols } from "./symbols/ConstantIntSymbols";
+import { ConstantStructSymbols } from "./symbols/ConstantStructSymbols";
 import { ConstantSymbols } from "./symbols/ConstantSymbols";
 import { FunctionSymbols } from "./symbols/FunctionSymbols";
 import { FunctionTypeSymbols } from "./symbols/FunctionTypeSymbols";
@@ -52,6 +53,7 @@ const llvmFfi = dlopen(getLibPath(llvmLibName), {
 	...ConstantFPSymbols,
 	...ConstantIntSymbols,
 	...ConstantArraySymbols,
+	...ConstantStructSymbols,
 	...GlobalValueSymbols,
 	...GlobalVariableSymbols,
 	...APIntSymbols,
