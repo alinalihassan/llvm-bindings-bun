@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { FunctionCallee } from "@/modules/FunctionCallee";
-import { FunctionType } from "@/modules/FunctionType";
 import { Module } from "@/modules/Module";
 import { Type } from "@/modules/Type";
+import { FunctionType } from "@/modules/types/FunctionType";
 
 describe("FunctionCallee Tests", () => {
 	describe("FunctionCallee Creation", () => {

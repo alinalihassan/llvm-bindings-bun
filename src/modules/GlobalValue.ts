@@ -1,8 +1,8 @@
 import { ffi } from "@/ffi";
+import { Constant } from "@/modules/Constant";
+import { Type } from "@/modules/Type";
+import type { PointerType } from "@/modules/types/PointerType";
 import { assert } from "@/utils";
-import { Constant } from "./Constant";
-import type { PointerType } from "./PointerType";
-import { Type } from "./Type";
 
 /**
  * Represents a global value in LLVM IR

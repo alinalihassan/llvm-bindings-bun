@@ -1,4 +1,4 @@
-import { GlobalValue } from "./GlobalValue";
+import { GlobalValue } from "@/modules/GlobalValue";
 
 /**
  * Represents a global object in LLVM IR

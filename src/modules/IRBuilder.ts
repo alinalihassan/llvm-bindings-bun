@@ -1,15 +1,15 @@
 import { ffi } from "@/ffi";
+import { APInt } from "@/modules/ap/APInt";
+import { BasicBlock } from "@/modules/BasicBlock";
+import { ConstantInt } from "@/modules/constants/ConstantInt";
+import { LLVMCastKind, LLVMCmpInstPredicate } from "@/modules/Enum";
+import type { LLVMFunction } from "@/modules/Function";
+import type { FunctionCallee } from "@/modules/FunctionCallee";
+import { GlobalVariable } from "@/modules/GlobalVariable";
+import type { Instruction } from "@/modules/Instruction";
+import type { FunctionType } from "@/modules/types/FunctionType";
 import type { LLVMBasicBlockRef, LLVMBuilderRef, LLVMValueRef } from "@/utils";
 import { assert, cstring } from "@/utils";
-import { APInt } from "./APInt";
-import { BasicBlock } from "./BasicBlock";
-import { ConstantInt } from "./ConstantInt";
-import { LLVMCastKind, LLVMCmpInstPredicate } from "./Enum";
-import type { LLVMFunction } from "./Function";
-import type { FunctionCallee } from "./FunctionCallee";
-import type { FunctionType } from "./FunctionType";
-import { GlobalVariable } from "./GlobalVariable";
-import type { Instruction } from "./Instruction";
 import {
 	AddrSpaceCastInst,
 	AllocaInst,
@@ -44,10 +44,10 @@ import {
 	UnreachableInst,
 	ZExtInst,
 } from "./Instructions";
-import type { IntegerType } from "./IntegerType";
 import type { LLVMContext } from "./LLVMContext";
-import type { PointerType } from "./PointerType";
 import { Type } from "./Type";
+import type { IntegerType } from "./types/IntegerType";
+import type { PointerType } from "./types/PointerType";
 import { Value } from "./Value";
 
 /**
@@ -1295,7 +1295,7 @@ export class IRBuilder {
 
 		// If both are vector types, assert that element counts match
 		if (destType.isVectorTy() && value.getType().isVectorTy()) {
-			const { VectorType } = require("./VectorType");
+			const { VectorType } = require("@/modules/types/VectorType");
 			const destVectorType = new VectorType(destType.ref);
 			const srcVectorType = new VectorType(value.getType().ref);
 
@@ -1332,7 +1332,7 @@ export class IRBuilder {
 			"Invalid cast: destination must be pointer or pointer vector type",
 		);
 
-		const { PointerType } = require("./PointerType");
+		const { PointerType } = require("@/modules/types/PointerType");
 		const srcTypePtr = new PointerType(value.getType().ref);
 		const destTypePtr = new PointerType(destType.ref);
 

@@ -1,10 +1,10 @@
 import { ffi } from "@/ffi";
+import { LLVMFunction } from "@/modules/Function";
+import { Instruction } from "@/modules/Instruction";
+import type { LLVMContext } from "@/modules/LLVMContext";
+import { Value } from "@/modules/Value";
 import type { LLVMBasicBlockRef } from "@/utils";
 import { assert, cstring } from "@/utils";
-import { LLVMFunction } from "./Function";
-import { Instruction } from "./Instruction";
-import type { LLVMContext } from "./LLVMContext";
-import { Value } from "./Value";
 
 /**
  * Represents a basic block in LLVM IR

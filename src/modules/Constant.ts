@@ -1,8 +1,8 @@
 import { ffi } from "@/ffi";
+import type { Type } from "@/modules/Type";
+import { User } from "@/modules/User";
+import { Value } from "@/modules/Value";
 import { assert } from "@/utils";
-import type { Type } from "./Type";
-import { User } from "./User";
-import { Value } from "./Value";
 
 /**
  * Represents a Constant in LLVM IR

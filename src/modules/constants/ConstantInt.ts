@@ -1,8 +1,8 @@
 import { ffi } from "@/ffi";
+import { APInt } from "@/modules/ap/APInt";
+import { Constant } from "@/modules/Constant";
+import { IntegerType } from "@/modules/types/IntegerType";
 import { assert } from "@/utils";
-import { APInt } from "./APInt";
-import { Constant } from "./Constant";
-import { IntegerType } from "./IntegerType";
 
 /**
  * Represents a constant integer value in LLVM IR

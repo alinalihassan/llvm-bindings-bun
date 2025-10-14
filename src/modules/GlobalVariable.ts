@@ -1,9 +1,9 @@
 import { ffi } from "@/ffi";
+import { Constant } from "@/modules/Constant";
+import { GlobalObject } from "@/modules/GlobalObject";
+import type { Module } from "@/modules/Module";
+import type { Type } from "@/modules/Type";
 import { assert, cstring } from "@/utils";
-import { Constant } from "./Constant";
-import { GlobalObject } from "./GlobalObject";
-import type { Module } from "./Module";
-import type { Type } from "./Type";
 
 /**
  * Represents a global variable in LLVM IR

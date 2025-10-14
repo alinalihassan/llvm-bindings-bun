@@ -1,6 +1,6 @@
 import { ffi } from "@/ffi";
+import { Value } from "@/modules/Value";
 import { assert } from "@/utils";
-import { Value } from "./Value";
 
 /**
  * Represents a User in LLVM IR

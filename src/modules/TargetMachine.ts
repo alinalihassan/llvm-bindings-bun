@@ -1,4 +1,5 @@
 import { ffi } from "@/ffi";
+import { type CodeGenFileType, CodeGenOptLevel, CodeModel, RelocMode } from "@/modules/Enum";
 import type {
 	LLVMMemoryBufferRef,
 	LLVMModuleRef,
@@ -7,7 +8,6 @@ import type {
 	LLVMTargetRef,
 } from "@/utils";
 import { assert, cstring } from "@/utils";
-import { type CodeGenFileType, CodeGenOptLevel, CodeModel, RelocMode } from "./Enum";
 
 export class TargetMachine {
 	private _ref: LLVMTargetMachineRef;

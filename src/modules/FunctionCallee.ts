@@ -1,5 +1,5 @@
-import type { LLVMFunction } from "./Function";
-import type { FunctionType } from "./FunctionType";
+import type { LLVMFunction } from "@/modules/Function";
+import type { FunctionType } from "@/modules/types/FunctionType";
 
 /**
  * A handy container for a FunctionType+Callee-pointer pair, which can be

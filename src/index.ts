@@ -1,7 +1,6 @@
-import { APFloat } from "./modules/APFloat";
-import { APInt } from "./modules/APInt";
 import { Argument } from "./modules/Argument";
-import { ArrayType } from "./modules/ArrayType";
+import { APFloat } from "./modules/ap/APFloat";
+import { APInt } from "./modules/ap/APInt";
 import { BasicBlock } from "./modules/BasicBlock";
 import {
 	ClangIndex,
@@ -11,12 +10,11 @@ import {
 	linkExecutable,
 } from "./modules/Clang";
 import { Constant } from "./modules/Constant";
-import { ConstantFP } from "./modules/ConstantFP";
-import { ConstantInt } from "./modules/ConstantInt";
+import { ConstantFP } from "./modules/constants/ConstantFP";
+import { ConstantInt } from "./modules/constants/ConstantInt";
 import { PassPipeline } from "./modules/Enum";
 import { LLVMFunction } from "./modules/Function";
 import { FunctionCallee } from "./modules/FunctionCallee";
-import { FunctionType } from "./modules/FunctionType";
 import { GlobalObject } from "./modules/GlobalObject";
 import { GlobalValue } from "./modules/GlobalValue";
 import { GlobalVariable } from "./modules/GlobalVariable";
@@ -69,20 +67,22 @@ import {
 	VAArgInst,
 	ZExtInst,
 } from "./modules/Instructions";
-import { IntegerType } from "./modules/IntegerType";
 import { IRBuilder } from "./modules/IRBuilder";
 import { LLVMContext } from "./modules/LLVMContext";
 import { Module } from "./modules/Module";
 import { PassBuilder } from "./modules/PassBuilder";
-import { PointerType } from "./modules/PointerType";
-import { StructType } from "./modules/StructType";
 import { Target } from "./modules/Target";
 import { TargetMachine } from "./modules/TargetMachine";
 import { Type } from "./modules/Type";
 import { TypeSize } from "./modules/TypeSize";
+import { ArrayType } from "./modules/types/ArrayType";
+import { FunctionType } from "./modules/types/FunctionType";
+import { IntegerType } from "./modules/types/IntegerType";
+import { PointerType } from "./modules/types/PointerType";
+import { StructType } from "./modules/types/StructType";
+import { VectorType } from "./modules/types/VectorType";
 import { User } from "./modules/User";
 import { Value } from "./modules/Value";
-import { VectorType } from "./modules/VectorType";
 
 // Create the umbrella llvm object
 const llvm = {
@@ -186,39 +186,39 @@ const clang = {
 	CXTranslationUnit_None: CXTranslationUnit_None,
 } as const;
 
-// Exports
-export * from "@/modules/APFloat";
-export * from "@/modules/APInt";
 export * from "@/modules/Argument";
-export * from "@/modules/ArrayType";
+// Exports
+export * from "@/modules/ap/APFloat";
+export * from "@/modules/ap/APInt";
 export * from "@/modules/BasicBlock";
 export * from "@/modules/Clang";
 export * from "@/modules/Constant";
-export * from "@/modules/ConstantFP";
-export * from "@/modules/ConstantInt";
+export * from "@/modules/constants/ConstantFP";
+export * from "@/modules/constants/ConstantInt";
 export * from "@/modules/Enum";
 export * from "@/modules/Function";
 export * from "@/modules/FunctionCallee";
-export * from "@/modules/FunctionType";
 export * from "@/modules/GlobalObject";
 export * from "@/modules/GlobalValue";
 export * from "@/modules/GlobalVariable";
 export * from "@/modules/Instruction";
 export * from "@/modules/Instructions";
-export * from "@/modules/IntegerType";
 export * from "@/modules/IRBuilder";
 export * from "@/modules/LLVMContext";
 export * from "@/modules/Module";
 export * from "@/modules/PassBuilder";
-export * from "@/modules/PointerType";
-export * from "@/modules/StructType";
 export * from "@/modules/Target";
 export * from "@/modules/TargetMachine";
 export * from "@/modules/Type";
 export * from "@/modules/TypeSize";
+export * from "@/modules/types/ArrayType";
+export * from "@/modules/types/FunctionType";
+export * from "@/modules/types/IntegerType";
+export * from "@/modules/types/PointerType";
+export * from "@/modules/types/StructType";
+export * from "@/modules/types/VectorType";
 export * from "@/modules/User";
 export * from "@/modules/Value";
-export * from "@/modules/VectorType";
 
 export { llvm, clang };
 export default llvm;

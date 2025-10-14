@@ -2,17 +2,17 @@ import { unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { ffi } from "@/ffi";
+import { CodeGenFileType, GlobalValueLinkageTypes } from "@/modules/Enum";
+import { LLVMFunction } from "@/modules/Function";
+import { FunctionCallee } from "@/modules/FunctionCallee";
+import { GlobalVariable } from "@/modules/GlobalVariable";
+import type { LLVMContext } from "@/modules/LLVMContext";
+import { Target } from "@/modules/Target";
+import { TargetMachine } from "@/modules/TargetMachine";
+import type { FunctionType } from "@/modules/types/FunctionType";
+import type { Value } from "@/modules/Value";
 import type { LLVMMemoryBufferRef, LLVMModuleRef, LLVMValueRef } from "@/utils";
 import { cstring } from "@/utils";
-import { CodeGenFileType, GlobalValueLinkageTypes } from "./Enum";
-import { LLVMFunction } from "./Function";
-import { FunctionCallee } from "./FunctionCallee";
-import type { FunctionType } from "./FunctionType";
-import { GlobalVariable } from "./GlobalVariable";
-import type { LLVMContext } from "./LLVMContext";
-import { Target } from "./Target";
-import { TargetMachine } from "./TargetMachine";
-import type { Value } from "./Value";
 
 export class Module {
 	private _ref: LLVMModuleRef;

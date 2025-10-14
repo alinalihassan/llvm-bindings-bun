@@ -2,11 +2,11 @@ import { FunctionCallee, PassBuilder } from "./src";
 import { BasicBlock } from "./src/modules/BasicBlock";
 import { GlobalValueLinkageTypes } from "./src/modules/Enum";
 import { LLVMFunction } from "./src/modules/Function";
-import { FunctionType } from "./src/modules/FunctionType";
-import { IntegerType } from "./src/modules/IntegerType";
 import { IRBuilder } from "./src/modules/IRBuilder";
 import { LLVMContext } from "./src/modules/LLVMContext";
 import { Module } from "./src/modules/Module";
+import { FunctionType } from "./src/modules/types/FunctionType";
+import { IntegerType } from "./src/modules/types/IntegerType";
 
 // Create LLVM context
 const context = new LLVMContext();

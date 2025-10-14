@@ -1,6 +1,6 @@
 import { ffi } from "@/ffi";
+import { Type } from "@/modules/Type";
 import { assert, type LLVMTypeRef } from "@/utils";
-import { Type } from "./Type";
 
 /**
  * Class to represent struct types

@@ -1,7 +1,7 @@
 import { ffi } from "@/ffi";
+import { ConstantInt } from "@/modules/constants/ConstantInt";
+import type { IntegerType } from "@/modules/types/IntegerType";
 import { assert } from "@/utils";
-import { ConstantInt } from "./ConstantInt";
-import type { IntegerType } from "./IntegerType";
 
 /**
  * Represents an arbitrary precision integer (APInt) in LLVM

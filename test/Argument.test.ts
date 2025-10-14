@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { Argument } from "@/modules/Argument";
-import { FunctionType } from "@/modules/FunctionType";
 import { LLVMContext } from "@/modules/LLVMContext";
 import { Module } from "@/modules/Module";
 import { Type } from "@/modules/Type";
+import { FunctionType } from "@/modules/types/FunctionType";
 import { Value } from "@/modules/Value";
 
 describe("Argument Tests", () => {

@@ -1,12 +1,12 @@
 import { ffi } from "@/ffi";
+import type { BasicBlock } from "@/modules/BasicBlock";
+import type { Constant } from "@/modules/Constant";
+import type { ConstantInt } from "@/modules/constants/ConstantInt";
+import { LLVMCmpInstOpcode, LLVMCmpInstPredicate } from "@/modules/Enum";
+import { Instruction } from "@/modules/Instruction";
+import { Type } from "@/modules/Type";
+import { Value } from "@/modules/Value";
 import { assert, type LLVMValueRef } from "@/utils";
-import type { BasicBlock } from "./BasicBlock";
-import type { Constant } from "./Constant";
-import type { ConstantInt } from "./ConstantInt";
-import { LLVMCmpInstOpcode, LLVMCmpInstPredicate } from "./Enum";
-import { Instruction } from "./Instruction";
-import { Type } from "./Type";
-import { Value } from "./Value";
 
 /**
  * AllocaInst - Allocate memory on the stack

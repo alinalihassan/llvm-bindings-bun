@@ -1,9 +1,9 @@
 import { ffi } from "@/ffi";
+import { PassPipeline } from "@/modules/Enum";
+import type { LLVMFunction } from "@/modules/Function";
+import type { Module } from "@/modules/Module";
 import type { LLVMPassBuilderOptionsRef, LLVMTargetMachineRef } from "@/utils";
 import { assert, cstring } from "@/utils";
-import { PassPipeline } from "./Enum";
-import type { LLVMFunction } from "./Function";
-import type { Module } from "./Module";
 
 /**
  * Internal PassBuilder Options class for configuring pass execution

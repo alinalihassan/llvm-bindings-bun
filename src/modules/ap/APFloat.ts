@@ -1,5 +1,5 @@
-import { ConstantFP } from "./ConstantFP";
-import type { Type } from "./Type";
+import { ConstantFP } from "@/modules/constants/ConstantFP";
+import type { Type } from "@/modules/Type";
 
 /**
  * Represents an arbitrary precision floating point (APFloat) in LLVM

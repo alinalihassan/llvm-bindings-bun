@@ -1,7 +1,7 @@
 import { ffi } from "@/ffi";
+import { Type } from "@/modules/Type";
 import type { LLVMValueRef } from "@/utils";
 import { assert, cstring } from "@/utils";
-import { Type } from "./Type";
 
 /**
  * Base class for all LLVM values

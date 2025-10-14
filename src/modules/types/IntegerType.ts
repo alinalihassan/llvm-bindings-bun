@@ -1,6 +1,6 @@
 import { ffi } from "@/ffi";
+import { Type } from "@/modules/Type";
 import { assert } from "@/utils";
-import { Type } from "./Type";
 
 /**
  * Class to represent integer types. Note that this class is also used to

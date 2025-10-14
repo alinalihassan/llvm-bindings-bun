@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import { APFloat } from "@/modules/APFloat";
-import { ConstantFP } from "@/modules/ConstantFP";
+import { APFloat } from "@/modules/ap/APFloat";
+import { ConstantFP } from "@/modules/constants/ConstantFP";
 import { Type } from "@/modules/Type";
 
 describe("APFloat Tests", () => {

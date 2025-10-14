@@ -1,8 +1,8 @@
 import { ffi } from "@/ffi";
+import { APFloat } from "@/modules/ap/APFloat";
+import { Constant } from "@/modules/Constant";
+import { Type } from "@/modules/Type";
 import { assert, cstring, type LLVMValueRef } from "@/utils";
-import { APFloat } from "./APFloat";
-import { Constant } from "./Constant";
-import { Type } from "./Type";
 
 /**
  * Represents a constant floating point value in LLVM IR

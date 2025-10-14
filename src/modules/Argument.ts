@@ -1,8 +1,8 @@
 import { ffi } from "@/ffi";
+import { LLVMFunction } from "@/modules/Function";
+import type { Type } from "@/modules/Type";
+import { Value } from "@/modules/Value";
 import { assert, type LLVMValueRef } from "@/utils";
-import { LLVMFunction } from "./Function";
-import type { Type } from "./Type";
-import { Value } from "./Value";
 
 /**
  * Represents a function argument in LLVM IR

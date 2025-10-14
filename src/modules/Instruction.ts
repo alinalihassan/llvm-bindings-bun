@@ -1,7 +1,7 @@
 import { ffi } from "@/ffi";
+import { BasicBlock } from "@/modules/BasicBlock";
+import { User } from "@/modules/User";
 import { assert } from "@/utils";
-import { BasicBlock } from "./BasicBlock";
-import { User } from "./User";
 
 /**
  * Represents an instruction in LLVM IR

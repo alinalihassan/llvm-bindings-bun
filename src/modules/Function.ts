@@ -1,12 +1,12 @@
 import { ffi } from "@/ffi";
+import { Argument } from "@/modules/Argument";
+import { Constant } from "@/modules/Constant";
+import type { GlobalValueLinkageTypes } from "@/modules/Enum";
+import { GlobalObject } from "@/modules/GlobalObject";
+import type { Module } from "@/modules/Module";
+import { Type } from "@/modules/Type";
+import type { FunctionType } from "@/modules/types/FunctionType";
 import { assert, cstring, type LLVMValueRef } from "@/utils";
-import { Argument } from "./Argument";
-import { Constant } from "./Constant";
-import type { GlobalValueLinkageTypes } from "./Enum";
-import type { FunctionType } from "./FunctionType";
-import { GlobalObject } from "./GlobalObject";
-import type { Module } from "./Module";
-import { Type } from "./Type";
 
 /**
  * Represents a function in LLVM IR
