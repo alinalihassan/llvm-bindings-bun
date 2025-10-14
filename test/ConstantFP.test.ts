@@ -74,7 +74,7 @@ describe("ConstantFP Tests", () => {
 			const value = Math.PI;
 			const apFloat = new APFloat(value);
 			const doubleType = Type.getDoubleTy();
-			const constant = ConstantFP.getWithAPFloat(doubleType, apFloat);
+			const constant = ConstantFP.get(doubleType, apFloat);
 
 			expect(constant).toBeDefined();
 			expect(constant).toBeInstanceOf(ConstantFP);
@@ -83,7 +83,7 @@ describe("ConstantFP Tests", () => {
 		it("should create ConstantFP from APFloat with zero", () => {
 			const apFloat = new APFloat(0.0);
 			const doubleType = Type.getDoubleTy();
-			const constant = ConstantFP.getWithAPFloat(doubleType, apFloat);
+			const constant = ConstantFP.get(doubleType, apFloat);
 
 			expect(constant).toBeDefined();
 			expect(constant).toBeInstanceOf(ConstantFP);
@@ -92,7 +92,7 @@ describe("ConstantFP Tests", () => {
 		it("should create ConstantFP from APFloat with negative value", () => {
 			const apFloat = new APFloat(-Math.E);
 			const doubleType = Type.getDoubleTy();
-			const constant = ConstantFP.getWithAPFloat(doubleType, apFloat);
+			const constant = ConstantFP.get(doubleType, apFloat);
 
 			expect(constant).toBeDefined();
 			expect(constant).toBeInstanceOf(ConstantFP);
@@ -102,7 +102,7 @@ describe("ConstantFP Tests", () => {
 	describe("ConstantFP Creation from String", () => {
 		it("should create ConstantFP from string", () => {
 			const doubleType = Type.getDoubleTy();
-			const constant = ConstantFP.getFromString(doubleType, "3.14159");
+			const constant = ConstantFP.get(doubleType, "3.14159");
 
 			expect(constant).toBeDefined();
 			expect(constant).toBeInstanceOf(ConstantFP);
@@ -110,7 +110,7 @@ describe("ConstantFP Tests", () => {
 
 		it("should create ConstantFP from string with zero", () => {
 			const doubleType = Type.getDoubleTy();
-			const constant = ConstantFP.getFromString(doubleType, "0.0");
+			const constant = ConstantFP.get(doubleType, "0.0");
 
 			expect(constant).toBeDefined();
 			expect(constant).toBeInstanceOf(ConstantFP);
@@ -118,7 +118,7 @@ describe("ConstantFP Tests", () => {
 
 		it("should create ConstantFP from string with negative value", () => {
 			const doubleType = Type.getDoubleTy();
-			const constant = ConstantFP.getFromString(doubleType, "-2.718");
+			const constant = ConstantFP.get(doubleType, "-2.718");
 
 			expect(constant).toBeDefined();
 			expect(constant).toBeInstanceOf(ConstantFP);
@@ -126,7 +126,7 @@ describe("ConstantFP Tests", () => {
 
 		it("should create ConstantFP from string with scientific notation", () => {
 			const doubleType = Type.getDoubleTy();
-			const constant = ConstantFP.getFromString(doubleType, "1.23e-4");
+			const constant = ConstantFP.get(doubleType, "1.23e-4");
 
 			expect(constant).toBeDefined();
 			expect(constant).toBeInstanceOf(ConstantFP);
@@ -462,22 +462,22 @@ describe("ConstantFP Tests", () => {
 			}).toThrow();
 		});
 
-		it("should throw error for invalid APFloat", () => {
+		it("should throw error for invalid input type", () => {
 			const doubleType = Type.getDoubleTy();
 
 			expect(() => {
-				// @ts-expect-error - Testing invalid input
-				ConstantFP.getWithAPFloat(doubleType, "not an APFloat");
-			}).toThrow();
+				// biome-ignore lint/suspicious/noExplicitAny: testing invalid input
+				ConstantFP.get(doubleType, {} as any);
+			}).toThrow("Value must be a number, APFloat, or string");
 		});
 
-		it("should throw error for invalid string", () => {
+		it("should create NaN for invalid string format", () => {
 			const doubleType = Type.getDoubleTy();
 
-			expect(() => {
-				// @ts-expect-error - Testing invalid input
-				ConstantFP.getFromString(doubleType, 123);
-			}).toThrow();
+			const result = ConstantFP.get(doubleType, "not a valid number");
+			expect(result).toBeDefined();
+			expect(result).toBeInstanceOf(ConstantFP);
+			expect(result.isNaN()).toBe(true);
 		});
 	});
 });
