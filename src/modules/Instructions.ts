@@ -562,7 +562,7 @@ export class InsertValueInst extends Instruction {}
  * Based on LLVM's PHINode class
  */
 export class PHINode extends Instruction {
-	public addIncoming(value: Value, basicBlock: BasicBlock): void {
+	public addIncoming(_value: Value, _basicBlock: BasicBlock): void {
 		// TODO: Not implemented yet, needs more User API changes
 		throw new Error("PHINode.addIncoming not implemented yet");
 	}
@@ -573,12 +573,12 @@ export class PHINode extends Instruction {
  * Based on LLVM's LandingPadInst class
  */
 export class LandingPadInst extends Instruction {
-	public setCleanup(value: boolean): void {
+	public setCleanup(_value: boolean): void {
 		// TODO: Not implemented yet, needs more User API changes
 		throw new Error("LandingPadInst.setCleanup not implemented yet");
 	}
 
-	public addClause(clauseVal: Constant): void {
+	public addClause(_clauseVal: Constant): void {
 		// TODO: Not implemented yet, needs more User API changes
 		throw new Error("LandingPadInst.addClause not implemented yet");
 	}
@@ -628,7 +628,7 @@ export class BranchInst extends Instruction {
  * TODO: Implement this
  */
 export class SwitchInst extends Instruction {
-	public addCase(onVal: ConstantInt, dest: BasicBlock): void {
+	public addCase(_onVal: ConstantInt, _dest: BasicBlock): void {
 		// TODO: Not implemented yet, needs more User API changes
 		throw new Error("SwitchInst.addCase not implemented yet");
 	}

@@ -372,7 +372,7 @@ export class IRBuilder {
 	 * @param addrSpace Optional address space
 	 * @returns The integer type
 	 */
-	public getIntPtrTy(dataLayout: unknown, addrSpace?: number): IntegerType {
+	public getIntPtrTy(_dataLayout: unknown, _addrSpace?: number): IntegerType {
 		// TODO: Not implemented yet - need to implement based on data layout
 		throw new Error(
 			"IRBuilder.getIntPtrTy not implemented yet - need to implement based on data layout",
@@ -1719,7 +1719,7 @@ export class IRBuilder {
 	 * @param name Optional name
 	 * @returns The PHI node
 	 */
-	public CreatePHI(type: Type, numReservedValues: number, name?: string): PHINode {
+	public CreatePHI(type: Type, _numReservedValues: number, name?: string): PHINode {
 		// TODO: More work needed
 		const valueRef = ffi.LLVMBuildPhi(this.ref, type.ref, cstring(name ?? ""));
 		assert(valueRef !== null, "Failed to create PHI node");
