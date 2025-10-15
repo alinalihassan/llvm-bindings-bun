@@ -69,6 +69,14 @@ const InstructionSymbols = {
 		args: [/* Inst: LLVMValueRef */ FFIType.ptr],
 		returns: /* LLVMBool */ FFIType.bool,
 	},
+	LLVMGetParentCatchSwitch: {
+		args: [/* CatchPad: LLVMValueRef */ FFIType.ptr],
+		returns: /* LLVMValueRef */ FFIType.ptr,
+	},
+	LLVMSetParentCatchSwitch: {
+		args: [/* CatchPad: LLVMValueRef */ FFIType.ptr, /* CatchSwitch: LLVMValueRef */ FFIType.ptr],
+		returns: /* void */ FFIType.void,
+	},
 } as const;
 
 export { InstructionSymbols };
