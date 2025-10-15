@@ -677,10 +677,9 @@ export class CleanupPadInst extends Instruction {}
 export class CatchPadInst extends Instruction {
 	/**
 	 * Get the parent catchswitch instruction of a catchpad instruction.
-	 * This only works on llvm::CatchPadInst instructions.
 	 * @returns The parent catchswitch instruction
 	 */
-	public getParentCatchSwitch(): CatchSwitchInst {
+	public getCatchSwitch(): CatchSwitchInst {
 		const catchSwitchRef = ffi.LLVMGetParentCatchSwitch(this.ref);
 		assert(catchSwitchRef !== null, "Failed to get parent catchswitch instruction");
 
@@ -689,10 +688,9 @@ export class CatchPadInst extends Instruction {
 
 	/**
 	 * Set the parent catchswitch instruction of a catchpad instruction.
-	 * This only works on llvm::CatchPadInst instructions.
 	 * @param catchSwitch The catchswitch instruction to set as parent
 	 */
-	public setParentCatchSwitch(catchSwitch: CatchSwitchInst): void {
+	public setCatchSwitch(catchSwitch: CatchSwitchInst): void {
 		assert(catchSwitch.ref !== null, "Catch Switch instruction cannot be null");
 		ffi.LLVMSetParentCatchSwitch(this.ref, catchSwitch.ref);
 	}
