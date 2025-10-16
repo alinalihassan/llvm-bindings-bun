@@ -11,8 +11,5 @@
 	"devDependencies": {
 		"@types/bun": "latest",
 		"typescript": "^5"
-	},
-	"peerDependencies": {
-		"typescript": "^5"
 	}
 }
