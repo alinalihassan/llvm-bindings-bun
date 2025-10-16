@@ -198,17 +198,6 @@ export class Module {
 	}
 
 	/**
-	 * Writes the module to a memory buffer as bitcode.
-	 * This method is for internal use only.
-	 * @returns A memory buffer containing the bitcode, or null on error
-	 */
-
-	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: Might be useful in the future
-	private writeToMemoryBuffer(): LLVMMemoryBufferRef {
-		return ffi.LLVMWriteBitcodeToMemoryBuffer(this._ref);
-	}
-
-	/**
 	 * Get the default target triple for the host machine.
 	 * @returns The target triple string
 	 */

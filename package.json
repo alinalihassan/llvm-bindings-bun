@@ -1,15 +1,44 @@
 {
 	"name": "llvm-bindings-bun",
-	"module": "index.ts",
 	"type": "module",
-	"private": true,
+	"version": "0.0.1",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		"types": "./dist/index.d.ts",
+		"import": "./dist/index.js",
+		"require": "./dist/index.cjs"
+	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"test": "bun test test/",
 		"test:watch": "bun test --watch test/",
-		"test:coverage": "bun test --coverage test/"
+		"test:coverage": "bun test --coverage test/",
+		"build": "bun run build.ts",
+		"prepublishOnly": "bun run build"
 	},
+	"keywords": [
+		"llvm",
+		"bun",
+		"ffi",
+		"bindings"
+	],
+	"license": "MIT",
+	"homepage": "https://github.com/alinalihassan/llvm-bindings-bun",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/alinalihassan/llvm-bindings-bun.git"
+	},
+	"bugs": {
+		"url": "https://github.com/alinalihassan/llvm-bindings-bun/issues"
+	},
+	"author": "Alin Ali Hassan <hassanalinali@gmail.com>",
 	"devDependencies": {
 		"@types/bun": "latest",
+		"bun-plugin-dts": "^0.3.0",
 		"typescript": "^5"
 	}
 }
