@@ -1,10 +1,11 @@
-import { FunctionCallee, PassBuilder } from "./src";
 import { BasicBlock } from "./src/modules/BasicBlock";
 import { GlobalValueLinkageTypes } from "./src/modules/Enum";
 import { LLVMFunction } from "./src/modules/Function";
+import { FunctionCallee } from "./src/modules/FunctionCallee";
 import { IRBuilder } from "./src/modules/IRBuilder";
 import { LLVMContext } from "./src/modules/LLVMContext";
 import { Module } from "./src/modules/Module";
+import { PassBuilder } from "./src/modules/PassBuilder";
 import { FunctionType } from "./src/modules/types/FunctionType";
 import { IntegerType } from "./src/modules/types/IntegerType";
 

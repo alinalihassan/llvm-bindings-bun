@@ -12,7 +12,8 @@ import {
 import { Constant } from "./modules/Constant";
 import { ConstantFP } from "./modules/constants/ConstantFP";
 import { ConstantInt } from "./modules/constants/ConstantInt";
-import { PassPipeline } from "./modules/Enum";
+import { ConstantPointerNull } from "./modules/constants/ConstantPointerNull";
+import { ConstantStruct } from "./modules/constants/ConstantStruct";
 import { LLVMFunction } from "./modules/Function";
 import { FunctionCallee } from "./modules/FunctionCallee";
 import { GlobalObject } from "./modules/GlobalObject";
@@ -89,8 +90,8 @@ const llvm = {
 	// Core classes
 	LLVMContext: LLVMContext,
 	Module: Module,
+	IRBuilder: IRBuilder,
 	PassBuilder: PassBuilder,
-	PassPipeline: PassPipeline,
 	Target: Target,
 	TargetMachine: TargetMachine,
 	Type: Type,
@@ -99,76 +100,86 @@ const llvm = {
 	User: User,
 	Instruction: Instruction,
 	Constant: Constant,
-	ConstantFP: ConstantFP,
-	ConstantInt: ConstantInt,
 	GlobalValue: GlobalValue,
 	GlobalObject: GlobalObject,
 	GlobalVariable: GlobalVariable,
 	Function: LLVMFunction,
 	Argument: Argument,
+	FunctionCallee: FunctionCallee,
 	BasicBlock: BasicBlock,
-	IRBuilder: IRBuilder,
+
+	constants: {
+		ConstantFP: ConstantFP,
+		ConstantInt: ConstantInt,
+		ConstantPointerNull: ConstantPointerNull,
+		ConstantStruct: ConstantStruct,
+	},
 
 	// Instruction classes
-	AllocaInst: AllocaInst,
-	LoadInst: LoadInst,
-	StoreInst: StoreInst,
-	FenceInst: FenceInst,
-	AtomicCmpXchgInst: AtomicCmpXchgInst,
-	AtomicRMWInst: AtomicRMWInst,
-	GetElementPtrInst: GetElementPtrInst,
-	ICmpInst: ICmpInst,
-	FCmpInst: FCmpInst,
-	CallInst: CallInst,
-	SelectInst: SelectInst,
-	VAArgInst: VAArgInst,
-	ExtractElementInst: ExtractElementInst,
-	InsertElementInst: InsertElementInst,
-	ShuffleVectorInst: ShuffleVectorInst,
-	ExtractValueInst: ExtractValueInst,
-	InsertValueInst: InsertValueInst,
-	PHINode: PHINode,
-	LandingPadInst: LandingPadInst,
-	ReturnInst: ReturnInst,
-	BranchInst: BranchInst,
-	SwitchInst: SwitchInst,
-	IndirectBrInst: IndirectBrInst,
-	InvokeInst: InvokeInst,
-	CallBrInst: CallBrInst,
-	ResumeInst: ResumeInst,
-	CatchSwitchInst: CatchSwitchInst,
-	CleanupPadInst: CleanupPadInst,
-	CatchPadInst: CatchPadInst,
-	CatchReturnInst: CatchReturnInst,
-	CleanupReturnInst: CleanupReturnInst,
-	UnreachableInst: UnreachableInst,
-	TruncInst: TruncInst,
-	ZExtInst: ZExtInst,
-	SExtInst: SExtInst,
-	FPTruncInst: FPTruncInst,
-	FPExtInst: FPExtInst,
-	UIToFPInst: UIToFPInst,
-	SIToFPInst: SIToFPInst,
-	FPToUIInst: FPToUIInst,
-	FPToSIInst: FPToSIInst,
-	IntToPtrInst: IntToPtrInst,
-	PtrToIntInst: PtrToIntInst,
-	BitCastInst: BitCastInst,
-	AddrSpaceCastInst: AddrSpaceCastInst,
-	FreezeInst: FreezeInst,
+	instructions: {
+		AllocaInst: AllocaInst,
+		LoadInst: LoadInst,
+		StoreInst: StoreInst,
+		FenceInst: FenceInst,
+		AtomicCmpXchgInst: AtomicCmpXchgInst,
+		AtomicRMWInst: AtomicRMWInst,
+		GetElementPtrInst: GetElementPtrInst,
+		ICmpInst: ICmpInst,
+		FCmpInst: FCmpInst,
+		CallInst: CallInst,
+		SelectInst: SelectInst,
+		VAArgInst: VAArgInst,
+		ExtractElementInst: ExtractElementInst,
+		InsertElementInst: InsertElementInst,
+		ShuffleVectorInst: ShuffleVectorInst,
+		ExtractValueInst: ExtractValueInst,
+		InsertValueInst: InsertValueInst,
+		PHINode: PHINode,
+		LandingPadInst: LandingPadInst,
+		ReturnInst: ReturnInst,
+		BranchInst: BranchInst,
+		SwitchInst: SwitchInst,
+		IndirectBrInst: IndirectBrInst,
+		InvokeInst: InvokeInst,
+		CallBrInst: CallBrInst,
+		ResumeInst: ResumeInst,
+		CatchSwitchInst: CatchSwitchInst,
+		CleanupPadInst: CleanupPadInst,
+		CatchPadInst: CatchPadInst,
+		CatchReturnInst: CatchReturnInst,
+		CleanupReturnInst: CleanupReturnInst,
+		UnreachableInst: UnreachableInst,
+		TruncInst: TruncInst,
+		ZExtInst: ZExtInst,
+		SExtInst: SExtInst,
+		FPTruncInst: FPTruncInst,
+		FPExtInst: FPExtInst,
+		UIToFPInst: UIToFPInst,
+		SIToFPInst: SIToFPInst,
+		FPToUIInst: FPToUIInst,
+		FPToSIInst: FPToSIInst,
+		IntToPtrInst: IntToPtrInst,
+		PtrToIntInst: PtrToIntInst,
+		BitCastInst: BitCastInst,
+		AddrSpaceCastInst: AddrSpaceCastInst,
+		FreezeInst: FreezeInst,
+	},
 
 	// Arbitrary precision classes
-	APInt: APInt,
-	APFloat: APFloat,
+	ap: {
+		APInt: APInt,
+		APFloat: APFloat,
+	},
 
 	// Derived types
-	IntegerType: IntegerType,
-	FunctionType: FunctionType,
-	VectorType: VectorType,
-	ArrayType: ArrayType,
-	StructType: StructType,
-	PointerType: PointerType,
-	FunctionCallee: FunctionCallee,
+	types: {
+		IntegerType: IntegerType,
+		FunctionType: FunctionType,
+		VectorType: VectorType,
+		ArrayType: ArrayType,
+		StructType: StructType,
+		PointerType: PointerType,
+	},
 
 	// Convenience methods for creating instances
 	createContext: () => new LLVMContext(),
@@ -186,39 +197,4 @@ const clang = {
 	CXTranslationUnit_None: CXTranslationUnit_None,
 } as const;
 
-export * from "@/modules/Argument";
-// Exports
-export * from "@/modules/ap/APFloat";
-export * from "@/modules/ap/APInt";
-export * from "@/modules/BasicBlock";
-export * from "@/modules/Clang";
-export * from "@/modules/Constant";
-export * from "@/modules/constants/ConstantFP";
-export * from "@/modules/constants/ConstantInt";
-export * from "@/modules/Enum";
-export * from "@/modules/Function";
-export * from "@/modules/FunctionCallee";
-export * from "@/modules/GlobalObject";
-export * from "@/modules/GlobalValue";
-export * from "@/modules/GlobalVariable";
-export * from "@/modules/Instruction";
-export * from "@/modules/Instructions";
-export * from "@/modules/IRBuilder";
-export * from "@/modules/LLVMContext";
-export * from "@/modules/Module";
-export * from "@/modules/PassBuilder";
-export * from "@/modules/Target";
-export * from "@/modules/TargetMachine";
-export * from "@/modules/Type";
-export * from "@/modules/TypeSize";
-export * from "@/modules/types/ArrayType";
-export * from "@/modules/types/FunctionType";
-export * from "@/modules/types/IntegerType";
-export * from "@/modules/types/PointerType";
-export * from "@/modules/types/StructType";
-export * from "@/modules/types/VectorType";
-export * from "@/modules/User";
-export * from "@/modules/Value";
-
 export { llvm, clang };
-export default llvm;
