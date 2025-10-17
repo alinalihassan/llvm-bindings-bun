@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const TargetSymbols = {
+const TargetSymbols: Record<string, FFIFunction> = {
 	LLVMGetDefaultTargetTriple: {
 		args: [],
 		returns: /* char * */ FFIType.cstring,
@@ -58,6 +58,6 @@ const TargetSymbols = {
 	LLVMInitializeARMTargetMC: { args: [], returns: FFIType.void },
 	LLVMInitializeARMAsmParser: { args: [], returns: FFIType.void },
 	LLVMInitializeARMAsmPrinter: { args: [], returns: FFIType.void },
-} as const;
+};
 
 export { TargetSymbols };

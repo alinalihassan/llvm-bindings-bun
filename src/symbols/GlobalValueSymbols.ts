@@ -1,10 +1,10 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const GlobalValueSymbols = {
+const GlobalValueSymbols: Record<string, FFIFunction> = {
 	LLVMGlobalGetValueType: {
 		args: [/* GlobalVal: LLVMValueRef */ FFIType.ptr],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
-} as const;
+};
 
 export { GlobalValueSymbols };

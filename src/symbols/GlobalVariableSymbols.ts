@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const GlobalVariableSymbols = {
+const GlobalVariableSymbols: Record<string, FFIFunction> = {
 	LLVMAddGlobal: {
 		args: [
 			/* M: LLVMModuleRef */ FFIType.ptr,
@@ -74,6 +74,6 @@ const GlobalVariableSymbols = {
 		args: [/* GlobalVar: LLVMValueRef */ FFIType.ptr, /* Viz: LLVMVisibility */ FFIType.u32],
 		returns: /* void */ FFIType.void,
 	},
-} as const;
+};
 
 export { GlobalVariableSymbols };

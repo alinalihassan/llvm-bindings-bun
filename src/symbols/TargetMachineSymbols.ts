@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const TargetMachineSymbols = {
+const TargetMachineSymbols: Record<string, FFIFunction> = {
 	LLVMCreateTargetMachine: {
 		args: [
 			/* T: LLVMTargetRef */ FFIType.ptr,
@@ -41,6 +41,6 @@ const TargetMachineSymbols = {
 		],
 		returns: /* LLVMBool */ FFIType.bool,
 	},
-} as const;
+};
 
 export { TargetMachineSymbols };

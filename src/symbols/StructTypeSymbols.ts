@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const StructTypeSymbols = {
+const StructTypeSymbols: Record<string, FFIFunction> = {
 	LLVMStructType: {
 		args: [
 			/* ElementTypes: LLVMTypeRef * */ FFIType.ptr,
@@ -37,6 +37,6 @@ const StructTypeSymbols = {
 		args: [/* StructTy: LLVMTypeRef */ FFIType.ptr],
 		returns: /* const char * */ FFIType.cstring,
 	},
-} as const;
+};
 
 export { StructTypeSymbols };

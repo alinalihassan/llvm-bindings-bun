@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const ModuleSymbols = {
+const ModuleSymbols: Record<string, FFIFunction> = {
 	LLVMModuleCreateWithName: {
 		args: [/* ModuleID: const char * */ FFIType.cstring],
 		returns: /* LLVMModuleRef */ FFIType.ptr,
@@ -95,6 +95,6 @@ const ModuleSymbols = {
 		args: [/* M: LLVMModuleRef */ FFIType.ptr],
 		returns: /* LLVMMemoryBufferRef */ FFIType.ptr,
 	},
-} as const;
+};
 
 export { ModuleSymbols };

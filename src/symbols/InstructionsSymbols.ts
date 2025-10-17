@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const InstructionsSymbols = {
+const InstructionsSymbols: Record<string, FFIFunction> = {
 	LLVMGetAlignment: {
 		args: [/* Value: LLVMValueRef */ FFIType.ptr],
 		returns: /* unsigned */ FFIType.u32,
@@ -26,6 +26,6 @@ const InstructionsSymbols = {
 		args: [/* Alloca: LLVMValueRef */ FFIType.ptr],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
-} as const;
+};
 
 export { InstructionsSymbols };

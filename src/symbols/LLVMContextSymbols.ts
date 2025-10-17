@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const LLVMContextSymbols = {
+const LLVMContextSymbols: Record<string, FFIFunction> = {
 	LLVMContextCreate: {
 		args: [],
 		returns: /* LLVMContextRef */ FFIType.ptr,
@@ -9,6 +9,6 @@ const LLVMContextSymbols = {
 		args: [/* C: LLVMContextRef */ FFIType.ptr],
 		returns: /* void */ FFIType.void,
 	},
-} as const;
+};
 
 export { LLVMContextSymbols };

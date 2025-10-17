@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const ValueSymbols = {
+const ValueSymbols: Record<string, FFIFunction> = {
 	LLVMTypeOf: {
 		args: [/* Val: LLVMValueRef */ FFIType.ptr],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
@@ -21,6 +21,6 @@ const ValueSymbols = {
 		args: [/* OldVal: LLVMValueRef */ FFIType.ptr, /* NewVal: LLVMValueRef */ FFIType.ptr],
 		returns: /* void */ FFIType.void,
 	},
-} as const;
+};
 
 export { ValueSymbols };

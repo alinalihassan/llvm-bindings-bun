@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const ConstantIntSymbols = {
+const ConstantIntSymbols: Record<string, FFIFunction> = {
 	LLVMConstInt: {
 		args: [
 			/* IntTy: LLVMTypeRef */ FFIType.ptr,
@@ -9,6 +9,6 @@ const ConstantIntSymbols = {
 		],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
-} as const;
+};
 
 export { ConstantIntSymbols };

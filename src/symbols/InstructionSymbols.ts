@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const InstructionSymbols = {
+const InstructionSymbols: Record<string, FFIFunction> = {
 	LLVMGetInstructionParent: {
 		args: [/* Inst: LLVMValueRef */ FFIType.ptr],
 		returns: /* LLVMBasicBlockRef */ FFIType.ptr,
@@ -77,6 +77,6 @@ const InstructionSymbols = {
 		args: [/* CatchPad: LLVMValueRef */ FFIType.ptr, /* CatchSwitch: LLVMValueRef */ FFIType.ptr],
 		returns: /* void */ FFIType.void,
 	},
-} as const;
+};
 
 export { InstructionSymbols };

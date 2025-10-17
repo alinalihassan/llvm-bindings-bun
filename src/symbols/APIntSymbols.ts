@@ -1,6 +1,6 @@
-import { FFIType } from "bun:ffi";
+import { type FFIFunction, FFIType } from "bun:ffi";
 
-const APIntSymbols = {
+const APIntSymbols: Record<string, FFIFunction> = {
 	LLVMConstIntOfArbitraryPrecision: {
 		args: [
 			/* IntTy: LLVMTypeRef */ FFIType.ptr,
@@ -17,6 +17,6 @@ const APIntSymbols = {
 		],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
-} as const;
+};
 
 export { APIntSymbols };
