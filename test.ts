@@ -1,5 +1,5 @@
 import { BasicBlock } from "./src/modules/BasicBlock";
-import { GlobalValueLinkageTypes } from "./src/modules/Enum";
+import { GlobalValueLinkageTypes, PassPipeline } from "./src/modules/Enum";
 import { LLVMFunction } from "./src/modules/Function";
 import { FunctionCallee } from "./src/modules/FunctionCallee";
 import { IRBuilder } from "./src/modules/IRBuilder";
@@ -73,12 +73,14 @@ const callResult = builder.CreateCall(functionCallee, [arg1, arg2], "call_result
 // Return the result
 builder.CreateRet(callResult);
 
-// Run the passes using the new enum-only API
-// PassBuilder.runMaxOptimization(module);
-
 console.log("Generated LLVM IR:");
 console.log(module.print());
 
-PassBuilder.runMaxOptimization(module);
+PassBuilder.runPasses(module, PassPipeline.AggressiveOptimization);
+// Equivalent to:
+// PassBuilder.runMaxOptimization(module);
+
+console.log("\n\nOptimized LLVM IR:");
+console.log(module.print());
 
 module.compileToExecutable("test");
