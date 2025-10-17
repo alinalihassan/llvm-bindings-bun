@@ -36,10 +36,10 @@ sudo apt-get install llvm-21-dev
 sudo pacman -S llvm21
 ```
 
-### Install Dependencies
+### Installation
 
 ```bash
-bun install
+bun add llvm-bindings-bun
 ```
 
 ### Environment Variables
@@ -60,20 +60,24 @@ This is particularly useful for:
 Here's a simple example that creates an LLVM function to add two integers:
 
 ```typescript
-import {
+import { llvm } from "llvm-bindings-bun";
+
+const {
   LLVMContext,
   Module,
   IRBuilder,
-  IntegerType,
+  Type,
   FunctionType,
   LLVMFunction,
   BasicBlock,
   GlobalValueLinkageTypes,
-  FunctionCallee
-} from "./src";
+  PassBuilder,
+  PassPipeline
+} = llvm;
 
-// Module creates a context by default
-const module = new Module("example");
+// Create context and module
+const context = new LLVMContext();
+const module = new Module("example", context);
 const builder = new IRBuilder(context);
 
 // Create function type: int add(int a, int b)
@@ -98,7 +102,18 @@ const result = builder.CreateAdd(a, b, "result");
 builder.CreateRet(result);
 
 // Print the generated LLVM IR
+console.log("Generated LLVM IR:");
 console.log(module.print());
+
+// Run Optimization passes to the module
+PassBuilder.runPasses(module, PassPipeline.AggressiveOptimization);
+// Equivalent to:
+// PassBuilder.runMaxOptimization(module);
+
+console.log("\n\nOptimized LLVM IR:");
+console.log(module.print());
+
+module.compileToExecutable("test");
 ```
 
 ## Testing
