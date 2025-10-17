@@ -2,10 +2,11 @@ import { beforeEach, describe, expect, it } from "bun:test";
 import { existsSync, unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { FunctionType, IntegerType } from "@/index.js";
-import { LLVMContext } from "../src/modules/LLVMContext.js";
-import { Module } from "../src/modules/Module.js";
-import { Type } from "../src/modules/Type.js";
+import { LLVMContext } from "@/modules/LLVMContext";
+import { Module } from "@/modules/Module";
+import { Type } from "@/modules/Type";
+import type { FunctionType } from "@/modules/types/FunctionType";
+import type { IntegerType } from "@/modules/types/IntegerType";
 
 describe("Module Tests", () => {
 	let context: LLVMContext;
