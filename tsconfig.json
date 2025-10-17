@@ -17,6 +17,9 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
 		"noImplicitOverride": true,
+		"outDir": "./dist",
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
 
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,

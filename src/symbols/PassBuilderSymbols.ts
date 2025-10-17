@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const PassBuilderSymbols: Record<string, FFIFunction> = {
+const PassBuilderSymbols = {
 	LLVMRunPasses: {
 		args: [
 			/* M: LLVMModuleRef */ FFIType.ptr,
@@ -41,6 +41,6 @@ const PassBuilderSymbols: Record<string, FFIFunction> = {
 		args: [/* Options: LLVMPassBuilderOptionsRef */ FFIType.ptr],
 		returns: /* void */ FFIType.void,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { PassBuilderSymbols };

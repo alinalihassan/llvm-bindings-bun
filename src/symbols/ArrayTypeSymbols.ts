@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const ArrayTypeSymbols: Record<string, FFIFunction> = {
+const ArrayTypeSymbols = {
 	LLVMArrayType: {
 		args: [/* ElementType: LLVMTypeRef */ FFIType.ptr, /* ElementCount: unsigned */ FFIType.u32],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
@@ -13,6 +13,6 @@ const ArrayTypeSymbols: Record<string, FFIFunction> = {
 		args: [/* ArrayTy: LLVMTypeRef */ FFIType.ptr],
 		returns: /* uint64_t */ FFIType.u64,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { ArrayTypeSymbols };

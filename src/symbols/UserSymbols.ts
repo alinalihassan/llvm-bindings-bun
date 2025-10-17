@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const UserSymbols: Record<string, FFIFunction> = {
+const UserSymbols = {
 	LLVMGetOperand: {
 		args: [/* Val: LLVMValueRef */ FFIType.ptr, /* Index: unsigned */ FFIType.u32],
 		returns: /* LLVMValueRef */ FFIType.ptr,
@@ -21,6 +21,6 @@ const UserSymbols: Record<string, FFIFunction> = {
 		args: [/* Val: LLVMValueRef */ FFIType.ptr],
 		returns: /* LLVMBool */ FFIType.i32,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { UserSymbols };

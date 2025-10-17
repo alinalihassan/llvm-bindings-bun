@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const FunctionSymbols: Record<string, FFIFunction> = {
+const FunctionSymbols = {
 	LLVMAddFunction: {
 		args: [
 			/* M: LLVMModuleRef */ FFIType.ptr,
@@ -155,6 +155,6 @@ const FunctionSymbols: Record<string, FFIFunction> = {
 		],
 		returns: /* void */ FFIType.void,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { FunctionSymbols };

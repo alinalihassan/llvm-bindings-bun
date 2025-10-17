@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const IRBuilderSymbols: Record<string, FFIFunction> = {
+const IRBuilderSymbols = {
 	// IRBuilder creation and management
 	LLVMCreateBuilder: {
 		args: [],
@@ -596,6 +596,6 @@ const IRBuilderSymbols: Record<string, FFIFunction> = {
 		],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { IRBuilderSymbols };

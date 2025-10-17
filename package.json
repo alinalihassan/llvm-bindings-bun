@@ -18,7 +18,8 @@
 		"test:watch": "bun test --watch test/",
 		"test:coverage": "bun test --coverage test/",
 		"build": "bun run build.ts",
-		"prepublishOnly": "bun run build"
+		"prepublishOnly": "bun run build",
+		"publish": "bun publish"
 	},
 	"keywords": [
 		"llvm",

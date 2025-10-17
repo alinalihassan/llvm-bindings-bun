@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const TypeSymbols: Record<string, FFIFunction> = {
+const TypeSymbols = {
 	LLVMInt1Type: {
 		args: [],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
@@ -110,6 +110,6 @@ const TypeSymbols: Record<string, FFIFunction> = {
 		args: [/* Ty: LLVMTypeRef */ FFIType.ptr],
 		returns: /* unsigned */ FFIType.u32,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { TypeSymbols };

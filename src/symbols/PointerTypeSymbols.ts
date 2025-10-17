@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const PointerTypeSymbols: Record<string, FFIFunction> = {
+const PointerTypeSymbols = {
 	LLVMPointerType: {
 		args: [/* ElementType: LLVMTypeRef */ FFIType.ptr, /* AddressSpace: unsigned */ FFIType.u32],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
@@ -17,6 +17,6 @@ const PointerTypeSymbols: Record<string, FFIFunction> = {
 		args: [/* PointerTy: LLVMTypeRef */ FFIType.ptr],
 		returns: /* LLVMBool */ FFIType.bool,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { PointerTypeSymbols };

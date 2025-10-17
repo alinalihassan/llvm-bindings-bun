@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const ConstantArraySymbols: Record<string, FFIFunction> = {
+const ConstantArraySymbols = {
 	LLVMConstArray2: {
 		args: [
 			/* Ty: LLVMTypeRef */ FFIType.ptr,
@@ -9,6 +9,6 @@ const ConstantArraySymbols: Record<string, FFIFunction> = {
 		],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { ConstantArraySymbols };

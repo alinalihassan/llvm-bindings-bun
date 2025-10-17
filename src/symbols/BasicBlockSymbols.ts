@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const BasicBlockSymbols: Record<string, FFIFunction> = {
+const BasicBlockSymbols = {
 	// BasicBlock creation and management
 	LLVMCreateBasicBlockInContext: {
 		args: [/* Context: LLVMContextRef */ FFIType.ptr, /* Name: const char* */ FFIType.ptr],
@@ -66,6 +66,6 @@ const BasicBlockSymbols: Record<string, FFIFunction> = {
 		args: [/* BB: LLVMBasicBlockRef */ FFIType.ptr],
 		returns: /* LLVMBasicBlockRef */ FFIType.ptr,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { BasicBlockSymbols };

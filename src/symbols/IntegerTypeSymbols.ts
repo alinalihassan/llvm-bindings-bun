@@ -1,10 +1,10 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-const IntegerTypeSymbols: Record<string, FFIFunction> = {
+const IntegerTypeSymbols = {
 	LLVMGetIntTypeWidth: {
 		args: [/* IntegerTy: LLVMTypeRef */ FFIType.ptr],
 		returns: /* unsigned */ FFIType.u32,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
 
 export { IntegerTypeSymbols };

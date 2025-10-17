@@ -1,6 +1,6 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
-export const ClangSymbols: Record<string, FFIFunction> = {
+export const ClangSymbols = {
 	// Index functions
 	clang_createIndex: {
 		args: [FFIType.i32, FFIType.i32],
@@ -30,4 +30,4 @@ export const ClangSymbols: Record<string, FFIFunction> = {
 		args: [FFIType.ptr],
 		returns: FFIType.void,
 	},
-};
+} as const satisfies Record<string, FFIFunction>;
