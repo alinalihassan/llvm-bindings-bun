@@ -106,7 +106,6 @@ console.log(module.print());
 Run the test suite:
 
 ```bash
-# Run all tests
 bun test
 ```
 
