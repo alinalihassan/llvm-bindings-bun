@@ -95,6 +95,19 @@ const ModuleSymbols = {
 		args: [/* M: LLVMModuleRef */ FFIType.ptr],
 		returns: /* LLVMMemoryBufferRef */ FFIType.ptr,
 	},
+	// Verifier APIs
+	LLVMVerifyModule: {
+		args: [
+			/* M: LLVMModuleRef */ FFIType.ptr,
+			/* Action: LLVMVerifierFailureAction */ FFIType.u32,
+			/* OutMessage: char ** */ FFIType.ptr,
+		],
+		returns: /* LLVMBool */ FFIType.bool,
+	},
+	LLVMDisposeMessage: {
+		args: [/* Message: char * */ FFIType.ptr],
+		returns: /* void */ FFIType.void,
+	},
 } as const satisfies Record<string, FFIFunction>;
 
 export { ModuleSymbols };

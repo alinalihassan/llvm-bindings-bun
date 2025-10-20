@@ -1,8 +1,13 @@
+import { CString, type Pointer, ptr } from "bun:ffi";
 import { unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { ffi } from "@/ffi";
-import { CodeGenFileType, GlobalValueLinkageTypes } from "@/modules/Enum";
+import {
+	CodeGenFileType,
+	GlobalValueLinkageTypes,
+	LLVMVerifierFailureAction,
+} from "@/modules/Enum";
 import { LLVMFunction } from "@/modules/Function";
 import { FunctionCallee } from "@/modules/FunctionCallee";
 import { GlobalVariable } from "@/modules/GlobalVariable";
@@ -206,12 +211,48 @@ export class Module {
 	}
 
 	/**
+	 * Verify that the module is valid.
+	 * @throws Error if the module is invalid, with a description of the error
+	 */
+	verify(): void {
+		const errorMessagePtrBuffer = new BigUint64Array(1);
+		const failed = ffi.LLVMVerifyModule(
+			this._ref,
+			LLVMVerifierFailureAction.ReturnStatusAction,
+			ptr(errorMessagePtrBuffer),
+		);
+
+		if (failed) {
+			// Read the error message pointer from the buffer
+			const errorMsgPtr = errorMessagePtrBuffer[0];
+			let errorMessage = "Module verification failed";
+
+			if (errorMsgPtr && errorMsgPtr !== 0n) {
+				try {
+					// Try to read the error message
+					const msgPtr = Number(errorMsgPtr) as unknown as Pointer;
+					const cstr = new CString(msgPtr);
+					errorMessage = `Module verification failed: ${cstr.toString()}`;
+					// Free the error message
+					ffi.LLVMDisposeMessage(msgPtr);
+				} catch (e) {
+					// If reading fails, just use the generic message
+					console.error("Failed to read error message:", e);
+				}
+			}
+
+			throw new Error(errorMessage);
+		}
+	}
+
+	/**
 	 * Compile the module to an object file.
 	 * @param outputPath The path where the object file should be written
 	 * @param targetTriple Optional target triple (defaults to host triple)
 	 * @param cpu Optional CPU target (defaults to "generic")
 	 * @param features Optional CPU features (defaults to "")
 	 * @returns true on success, false on error
+	 * @throws Error if the module contains invalid IR
 	 */
 	compileToObjectFile(
 		outputPath: string,
@@ -219,6 +260,9 @@ export class Module {
 		cpu: string = "generic",
 		features: string = "",
 	): boolean {
+		// Verify the module before compiling
+		this.verify();
+
 		try {
 			Target.initializeAllTargets();
 
@@ -248,6 +292,7 @@ export class Module {
 	 * @param cpu Optional CPU target (defaults to "generic")
 	 * @param features Optional CPU features (defaults to "")
 	 * @returns false on success (no error), true on error
+	 * @throws Error if the module contains invalid IR
 	 */
 	compileToAssembly(
 		outputPath: string,
@@ -255,6 +300,9 @@ export class Module {
 		cpu: string = "generic",
 		features: string = "",
 	): boolean {
+		// Verify the module before compiling
+		this.verify();
+
 		try {
 			Target.initializeAllTargets();
 
@@ -283,12 +331,16 @@ export class Module {
 	 * @param cpu Optional CPU target (defaults to "generic")
 	 * @param features Optional CPU features (defaults to "")
 	 * @returns Memory buffer containing object code, or null on error
+	 * @throws Error if the module contains invalid IR
 	 */
 	compileToMemoryBuffer(
 		targetTriple?: string,
 		cpu: string = "generic",
 		features: string = "",
 	): LLVMMemoryBufferRef | null {
+		// Verify the module before compiling
+		this.verify();
+
 		try {
 			Target.initializeAllTargets();
 

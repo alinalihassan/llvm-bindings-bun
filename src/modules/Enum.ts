@@ -887,3 +887,13 @@ export enum CodeGenFileType {
 	AssemblyFile = 0,
 	ObjectFile = 1,
 }
+
+/**
+ * LLVM Verifier Failure Action enumeration
+ * Represents the action to take when module verification fails
+ */
+export enum LLVMVerifierFailureAction {
+	AbortProcessAction = 0 /**< Abort the process when verification fails */,
+	PrintMessageAction = 1 /**< Print a message and return 1 when verification fails */,
+	ReturnStatusAction = 2 /**< Return 1 when verification fails */,
+}
