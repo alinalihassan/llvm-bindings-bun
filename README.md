@@ -2,6 +2,15 @@
 
 A lightweight LLVM TypeScript binding for writing JIT compilers and code generators, built with Bun's FFI and inspired by [llvmlite](https://github.com/numba/llvmlite).
 
+> **⚠️ Development Status**
+>
+> This project is in **active development** and is **not considered stable for production use**.
+>
+> - **Pre-1.0 Status**: The API is subject to breaking changes without notice
+> - **Breaking Changes**: Expect breaking changes between releases
+>
+> Use at your own risk in production environments. We recommend pinning to specific versions and thoroughly testing before upgrading.
+
 ## Key Features
 
 - **TypeScript-first**: Full TypeScript support with comprehensive type definitions
