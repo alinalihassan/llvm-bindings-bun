@@ -13,11 +13,13 @@ await Promise.all([
 		format: "esm",
 		naming: "[dir]/[name].js",
 		target: "bun",
+		sourcemap: "external",
 	}),
 	Bun.build({
 		...defaultBuildConfig,
 		format: "cjs",
 		naming: "[dir]/[name].cjs",
 		target: "bun",
+		sourcemap: "external",
 	}),
 ]);
