@@ -1,7 +1,6 @@
 import { ffi } from "@/ffi";
 import type { Type } from "@/modules/Type";
 import { User } from "@/modules/User";
-import { Value } from "@/modules/Value";
 import { assert } from "@/utils";
 
 /**
@@ -42,26 +41,26 @@ export class Constant extends User {
 		return ffi.LLVMIsNull(this.ref);
 	}
 
-	// TODO: Implement UndefValue class
-	public getUndefValue(): Value {
+	public getUndefValue() {
+		const { UndefValue } = require("@/modules/constants/UndefValue");
 		const valueRef = ffi.LLVMGetUndef(this.ref);
 		assert(valueRef !== null, "Failed to get undef value");
 
-		return new Value(valueRef);
+		return new UndefValue(valueRef);
 	}
 
-	// TODO: Implement PoisonValue class
-	public getPoisonValue(): Value {
+	public getPoisonValue() {
+		const { PoisonValue } = require("@/modules/constants/PoisonValue");
 		const valueRef = ffi.LLVMGetPoison(this.ref);
 		assert(valueRef !== null, "Failed to get poison value");
 
-		return new Value(valueRef);
+		return new PoisonValue(valueRef);
 	}
 
-	public getPointerNullValue(): Value {
+	public getPointerNullValue(): Constant {
 		const valueRef = ffi.LLVMConstPointerNull(this.ref);
 		assert(valueRef !== null, "Failed to get pointer null value");
 
-		return new Value(valueRef);
+		return new Constant(valueRef);
 	}
 }

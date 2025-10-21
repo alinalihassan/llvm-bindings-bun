@@ -10,10 +10,13 @@ import {
 	linkExecutable,
 } from "./modules/Clang";
 import { Constant } from "./modules/Constant";
+import { ConstantArray } from "./modules/constants/ConstantArray";
 import { ConstantFP } from "./modules/constants/ConstantFP";
 import { ConstantInt } from "./modules/constants/ConstantInt";
 import { ConstantPointerNull } from "./modules/constants/ConstantPointerNull";
 import { ConstantStruct } from "./modules/constants/ConstantStruct";
+import { PoisonValue } from "./modules/constants/PoisonValue";
+import { UndefValue } from "./modules/constants/UndefValue";
 import { LLVMFunction } from "./modules/Function";
 import { FunctionCallee } from "./modules/FunctionCallee";
 import { GlobalObject } from "./modules/GlobalObject";
@@ -109,10 +112,13 @@ const llvm = {
 	BasicBlock: BasicBlock,
 
 	constants: {
+		ConstantArray: ConstantArray,
 		ConstantFP: ConstantFP,
 		ConstantInt: ConstantInt,
 		ConstantPointerNull: ConstantPointerNull,
 		ConstantStruct: ConstantStruct,
+		PoisonValue: PoisonValue,
+		UndefValue: UndefValue,
 	},
 
 	// Instruction classes
