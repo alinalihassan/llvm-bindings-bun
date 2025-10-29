@@ -1,13 +1,16 @@
-import { BasicBlock } from "./src/modules/BasicBlock";
-import { GlobalValueLinkageTypes, PassPipeline } from "./src/modules/Enum";
-import { LLVMFunction } from "./src/modules/Function";
-import { FunctionCallee } from "./src/modules/FunctionCallee";
-import { IRBuilder } from "./src/modules/IRBuilder";
-import { LLVMContext } from "./src/modules/LLVMContext";
-import { Module } from "./src/modules/Module";
-import { PassBuilder } from "./src/modules/PassBuilder";
-import { FunctionType } from "./src/modules/types/FunctionType";
-import { IntegerType } from "./src/modules/types/IntegerType";
+import { llvm } from "llvm-bindings-bun";
+
+const {
+	BasicBlock,
+	Function: LLVMFunction,
+	FunctionCallee,
+	IRBuilder,
+	LLVMContext,
+	Module,
+	PassBuilder,
+	enums: { GlobalValueLinkageTypes, PassPipeline },
+} = llvm;
+const { FunctionType, IntegerType } = llvm.types;
 
 // Create LLVM context
 const context = new LLVMContext();

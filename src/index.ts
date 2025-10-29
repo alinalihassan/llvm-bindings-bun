@@ -17,6 +17,7 @@ import { ConstantPointerNull } from "./modules/constants/ConstantPointerNull";
 import { ConstantStruct } from "./modules/constants/ConstantStruct";
 import { PoisonValue } from "./modules/constants/PoisonValue";
 import { UndefValue } from "./modules/constants/UndefValue";
+import * as Enums from "./modules/Enum";
 import { LLVMFunction } from "./modules/Function";
 import { FunctionCallee } from "./modules/FunctionCallee";
 import { GlobalObject } from "./modules/GlobalObject";
@@ -186,6 +187,9 @@ const llvm = {
 		StructType: StructType,
 		PointerType: PointerType,
 	},
+
+	// Enums
+	enums: Enums,
 
 	// Convenience methods for creating instances
 	createContext: () => new LLVMContext(),
