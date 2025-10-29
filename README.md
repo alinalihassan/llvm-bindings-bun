@@ -69,28 +69,33 @@ This is particularly useful for:
 Here's a simple example that creates an LLVM function to add two integers:
 
 ```typescript
-import { llvm } from "llvm-bindings-bun";
-
-const {
-  LLVMContext,
-  Module,
-  IRBuilder,
-  Type,
-  FunctionType,
-  LLVMFunction,
+import {
   BasicBlock,
-  GlobalValueLinkageTypes,
+  Enums,
+  FunctionCallee,
+  FunctionType,
+  IntegerType,
+  IRBuilder,
+  LLVMContext,
+  LLVMFunction,
+  Module,
   PassBuilder,
-  PassPipeline
-} = llvm;
+} from "llvm-bindings-bun";
 
-// Create context and module
+const { GlobalValueLinkageTypes, PassPipeline } = Enums;
+
+// Create LLVM context
 const context = new LLVMContext();
+
+// Create a module
 const module = new Module("example", context);
+
+// Create IR builder
 const builder = new IRBuilder(context);
 
 // Create function type: int add(int a, int b)
-const functionType = FunctionType.get(Type.getInt32Ty(), [Type.getInt32Ty(), Type.getInt32Ty()], false);
+const int32Type = IntegerType.getInt32Ty();
+const functionType = FunctionType.get(int32Type, [int32Type, int32Type], false);
 
 // Create the add function
 const addFunction = LLVMFunction.Create(
@@ -100,21 +105,27 @@ const addFunction = LLVMFunction.Create(
   module
 );
 
-// Create function body
+// Create a basic block for the function body
 const entryBlock = BasicBlock.Create(context, "entry", addFunction);
+
+// Set the insertion point to the entry block
 builder.SetInsertPoint(entryBlock);
 
-// Get function arguments and create add instruction
-const a = addFunction.getArg(0);
-const b = addFunction.getArg(1);
+// Get the function arguments
+const a = addFunction.getArg(0); // First argument
+const b = addFunction.getArg(1); // Second argument
+
+// Create the add instruction: result = a + b
 const result = builder.CreateAdd(a, b, "result");
+
+// Create return instruction
 builder.CreateRet(result);
 
 // Print the generated LLVM IR
 console.log("Generated LLVM IR:");
 console.log(module.print());
 
-// Run Optimization passes to the module
+// Run optimization passes on the module
 PassBuilder.runPasses(module, PassPipeline.AggressiveOptimization);
 // Equivalent to:
 // PassBuilder.runMaxOptimization(module);
@@ -122,6 +133,7 @@ PassBuilder.runPasses(module, PassPipeline.AggressiveOptimization);
 console.log("\n\nOptimized LLVM IR:");
 console.log(module.print());
 
+// Compile to executable
 module.compileToExecutable("test");
 ```
 
