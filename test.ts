@@ -1,22 +1,26 @@
-import { llvm } from "llvm-bindings-bun";
-
-const {
+import {
 	BasicBlock,
-	Function: LLVMFunction,
+	Enums,
 	FunctionCallee,
+	FunctionType,
+	IntegerType,
 	IRBuilder,
 	LLVMContext,
+	LLVMFunction,
 	Module,
 	PassBuilder,
-	enums: { GlobalValueLinkageTypes, PassPipeline },
-} = llvm;
-const { FunctionType, IntegerType } = llvm.types;
+} from "llvm-bindings-bun";
+
+const { GlobalValueLinkageTypes, PassPipeline } = Enums;
 
 // Create LLVM context
-const context = new LLVMContext();
+const context: LLVMContext = new LLVMContext();
 
 // Create a module
-const module = new Module("test_module", context);
+const module: Module = new Module(
+	"test_module",
+	context /* optional, defaults to new LLVMContext() */,
+);
 
 // Create IR builder
 const builder = new IRBuilder(context);
