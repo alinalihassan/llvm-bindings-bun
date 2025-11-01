@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { Argument } from "@/modules/Argument";
+import type { LLVMFunction } from "@/modules/Function";
 import { LLVMContext } from "@/modules/LLVMContext";
 import { Module } from "@/modules/Module";
 import { Type } from "@/modules/Type";
@@ -73,7 +74,7 @@ describe("Argument Tests", () => {
 		it("should be created when function is created", () => {
 			// Create a function with arguments
 			const func = module.getOrInsertFunction("test_func", funcType);
-			const functionRef = func.getCallee();
+			const functionRef = func.getCallee() as LLVMFunction;
 
 			// Test that the function has arguments
 			expect(functionRef.getNumArgs()).toBe(2);
@@ -82,7 +83,7 @@ describe("Argument Tests", () => {
 		it("should allow getting arguments from function", () => {
 			// Create a function with arguments
 			const func = module.getOrInsertFunction("test_func", funcType);
-			const functionRef = func.getCallee();
+			const functionRef = func.getCallee() as LLVMFunction;
 
 			// Test getting arguments
 			const arg0 = functionRef.getArg(0);
@@ -97,7 +98,7 @@ describe("Argument Tests", () => {
 		it("should allow getting all arguments from function", () => {
 			// Create a function with arguments
 			const func = module.getOrInsertFunction("test_func", funcType);
-			const functionRef = func.getCallee();
+			const functionRef = func.getCallee() as LLVMFunction;
 
 			// Test getting all arguments
 			const args = functionRef.getArgs();
@@ -126,7 +127,7 @@ describe("Argument Tests", () => {
 		it("should have a parent function", () => {
 			// Create a function with arguments
 			const func = module.getOrInsertFunction("test_func", funcType);
-			const functionRef = func.getCallee();
+			const functionRef = func.getCallee() as LLVMFunction;
 			const arg = functionRef.getArg(0);
 
 			// Test that argument has a parent function
@@ -138,7 +139,7 @@ describe("Argument Tests", () => {
 		it("should be able to set and get name", () => {
 			// Create a function with arguments
 			const func = module.getOrInsertFunction("test_func", funcType);
-			const functionRef = func.getCallee();
+			const functionRef = func.getCallee() as LLVMFunction;
 			const arg = functionRef.getArg(0);
 
 			// Test setting and getting name
@@ -161,7 +162,7 @@ describe("Argument Tests", () => {
 
 			// Create a function with no arguments
 			const func = module.getOrInsertFunction("no_args_func", funcType);
-			const functionRef = func.getCallee();
+			const functionRef = func.getCallee() as LLVMFunction;
 
 			// Test that function has no arguments
 			expect(functionRef.getNumArgs()).toBe(0);
@@ -182,7 +183,7 @@ describe("Argument Tests", () => {
 
 			// Create a function with many arguments
 			const func = module.getOrInsertFunction("many_args_func", funcType);
-			const functionRef = func.getCallee();
+			const functionRef = func.getCallee() as LLVMFunction;
 
 			// Test that function has the expected number of arguments
 			expect(functionRef.getNumArgs()).toBe(5);
@@ -206,7 +207,7 @@ describe("Argument Tests", () => {
 
 			// Create a function with different argument types
 			const func = module.getOrInsertFunction("mixed_args_func", funcType);
-			const functionRef = func.getCallee();
+			const functionRef = func.getCallee() as LLVMFunction;
 
 			// Test that function has the expected number of arguments
 			expect(functionRef.getNumArgs()).toBe(3);
@@ -214,7 +215,7 @@ describe("Argument Tests", () => {
 			// Test that all arguments are Argument instances
 			const args = functionRef.getArgs();
 			expect(args.length).toBe(3);
-			args.forEach((arg) => {
+			args.forEach((arg: Argument) => {
 				expect(arg).toBeInstanceOf(Argument);
 			});
 		});
