@@ -8,6 +8,7 @@
 		"allowJs": true,
 
 		"moduleResolution": "bundler",
+		"rootDir": "./src",
 		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": true,
 		"noEmit": true,
@@ -28,5 +29,7 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		}
-	}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
 }
