@@ -1808,12 +1808,12 @@ export class IRBuilder {
 	 * @param name Optional name
 	 * @returns The result value
 	 */
-	public CreateInsertValue(agg: Value, value: Value, idxs: number[], name?: string): Value {
+	public CreateInsertValue(agg: Value, value: Value, idx: number, name?: string): Value {
 		const valueRef = ffi.LLVMBuildInsertValue(
 			this.ref,
 			agg.ref,
 			value.ref,
-			idxs.length,
+			idx,
 			cstring(name ?? ""),
 		);
 		assert(valueRef !== null, "Failed to create insert value instruction");
