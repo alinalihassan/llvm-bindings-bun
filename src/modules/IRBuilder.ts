@@ -1734,11 +1734,13 @@ export class IRBuilder {
 	 * @param name Optional name string
 	 * @returns The call instruction
 	 */
-	public CreateCall(callee: FunctionCallee, args?: Value[], name?: string): CallInst {
-		assert(callee.getFunctionType().ref !== null, "Function type reference cannot be null");
+	public CreateCall(callee: FunctionCallee, args: Value[] = [], name?: string): CallInst {
+		const fnType = callee.getFunctionType();
+
+		assert(fnType.ref !== null, "Function type reference cannot be null");
 		assert(
-			callee.getFunctionType().getNumParams() === args?.length,
-			`Number of arguments must match function type (expected ${callee.getFunctionType().getNumParams()}, got ${args?.length})`,
+			fnType.isVarArg() || fnType.getNumParams() === args.length,
+			`Number of arguments must match function type (expected ${fnType.getNumParams()}, got ${args.length})`,
 		);
 
 		const argsBuffer = new ArrayBuffer(args.length * 8);
@@ -1751,7 +1753,7 @@ export class IRBuilder {
 
 		const valueRef = ffi.LLVMBuildCall2(
 			this.ref,
-			callee.getFunctionType().ref,
+			fnType.ref,
 			callee.getCallee().ref,
 			argsView,
 			args.length,
