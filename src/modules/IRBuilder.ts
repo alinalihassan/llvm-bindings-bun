@@ -1736,8 +1736,10 @@ export class IRBuilder {
 	 */
 	public CreateCall(callee: FunctionCallee, args?: Value[], name?: string): CallInst {
 		assert(callee.getFunctionType().ref !== null, "Function type reference cannot be null");
-		assert(args !== undefined, "Arguments array cannot be undefined");
-		assert(args.length > 0, "Arguments array cannot be empty");
+		assert(
+			callee.getFunctionType().getNumParams() === args?.length,
+			`Number of arguments must match function type (expected ${callee.getFunctionType().getNumParams()}, got ${args?.length})`,
+		);
 
 		const argsBuffer = new ArrayBuffer(args.length * 8);
 		const argsView = new BigUint64Array(argsBuffer);
