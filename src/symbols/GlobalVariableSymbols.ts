@@ -22,6 +22,14 @@ const GlobalVariableSymbols = {
 		args: [/* M: LLVMModuleRef */ FFIType.ptr, /* Name: const char * */ FFIType.cstring],
 		returns: /* LLVMValueRef */ FFIType.ptr,
 	},
+	LLVMGetNamedGlobalWithLength: {
+		args: [
+			/* M: LLVMModuleRef */ FFIType.ptr,
+			/* Name: const char * */ FFIType.cstring,
+			/* Length: size_t */ FFIType.u64,
+		],
+		returns: /* LLVMValueRef */ FFIType.ptr,
+	},
 	LLVMGetFirstGlobal: {
 		args: [/* M: LLVMModuleRef */ FFIType.ptr],
 		returns: /* LLVMValueRef */ FFIType.ptr,
@@ -72,6 +80,30 @@ const GlobalVariableSymbols = {
 	},
 	LLVMSetVisibility: {
 		args: [/* GlobalVar: LLVMValueRef */ FFIType.ptr, /* Viz: LLVMVisibility */ FFIType.u32],
+		returns: /* void */ FFIType.void,
+	},
+	LLVMIsThreadLocal: {
+		args: [/* GlobalVar: LLVMValueRef */ FFIType.ptr],
+		returns: /* LLVMBool */ FFIType.bool,
+	},
+	LLVMSetThreadLocal: {
+		args: [/* GlobalVar: LLVMValueRef */ FFIType.ptr, /* IsThreadLocal: LLVMBool */ FFIType.bool],
+		returns: /* void */ FFIType.void,
+	},
+	LLVMGetThreadLocalMode: {
+		args: [/* GlobalVar: LLVMValueRef */ FFIType.ptr],
+		returns: /* LLVMThreadLocalMode */ FFIType.u32,
+	},
+	LLVMSetThreadLocalMode: {
+		args: [/* GlobalVar: LLVMValueRef */ FFIType.ptr, /* Mode: LLVMThreadLocalMode */ FFIType.u32],
+		returns: /* void */ FFIType.void,
+	},
+	LLVMIsExternallyInitialized: {
+		args: [/* GlobalVar: LLVMValueRef */ FFIType.ptr],
+		returns: /* LLVMBool */ FFIType.bool,
+	},
+	LLVMSetExternallyInitialized: {
+		args: [/* GlobalVar: LLVMValueRef */ FFIType.ptr, /* IsExtInit: LLVMBool */ FFIType.bool],
 		returns: /* void */ FFIType.void,
 	},
 } as const satisfies Record<string, FFIFunction>;
