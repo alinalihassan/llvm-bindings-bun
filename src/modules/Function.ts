@@ -1,12 +1,15 @@
 import { ffi } from "@/ffi";
 import { Argument } from "@/modules/Argument";
 import { Constant } from "@/modules/Constant";
-import type { GlobalValueLinkageTypes } from "@/modules/Enum";
+import type { AttributeKind, GlobalValueLinkageTypes } from "@/modules/Enum";
 import { GlobalObject } from "@/modules/GlobalObject";
 import type { Module } from "@/modules/Module";
 import { Type } from "@/modules/Type";
 import type { FunctionType } from "@/modules/types/FunctionType";
 import { assert, cstring, type LLVMValueRef } from "@/utils";
+
+// Attribute index constants
+const LLVM_ATTRIBUTE_FUNCTION_INDEX = -1;
 
 /**
  * Represents a function in LLVM IR
@@ -145,5 +148,76 @@ export class LLVMFunction extends GlobalObject {
 
 	public delete(): void {
 		ffi.LLVMDeleteFunction(this.ref);
+	}
+
+	/**
+	 * Add an attribute to this function.
+	 * @param kind The attribute kind to add
+	 * @param value Optional value for the attribute (e.g., for alignment)
+	 */
+	public addAttribute(kind: AttributeKind, value: number = 0): void {
+		// Get the module context
+		const moduleRef = ffi.LLVMGetGlobalParent(this.ref);
+		assert(moduleRef !== null, "Failed to get parent module");
+
+		const contextRef = ffi.LLVMGetModuleContext(moduleRef);
+		assert(contextRef !== null, "Failed to get module context");
+
+		// Get the attribute kind ID by name
+		const attrName = kind as string;
+		const kindID = ffi.LLVMGetEnumAttributeKindForName(cstring(attrName), BigInt(attrName.length));
+
+		if (kindID === 0) {
+			throw new Error(`Invalid attribute kind: ${attrName}`);
+		}
+
+		// Create the enum attribute
+		const attr = ffi.LLVMCreateEnumAttribute(contextRef, kindID, value);
+		assert(attr !== null, "Failed to create attribute");
+
+		// Add the attribute to the function
+		ffi.LLVMAddAttributeAtIndex(this.ref, LLVM_ATTRIBUTE_FUNCTION_INDEX, attr);
+	}
+
+	/**
+	 * Check if this function has a specific attribute.
+	 * @param kind The attribute kind to check for
+	 * @returns True if the function has the attribute
+	 */
+	public hasAttribute(kind: AttributeKind): boolean {
+		// Get the attribute kind ID by name
+		const attrName = kind as string;
+		const kindID = ffi.LLVMGetEnumAttributeKindForName(cstring(attrName), BigInt(attrName.length));
+
+		if (kindID === 0) {
+			return false;
+		}
+
+		// Try to get the attribute
+		const attr = ffi.LLVMGetEnumAttributeAtIndex(this.ref, LLVM_ATTRIBUTE_FUNCTION_INDEX, kindID);
+		return attr !== null;
+	}
+
+	/**
+	 * Remove an attribute from this function.
+	 * @param kind The attribute kind to remove
+	 */
+	public removeAttribute(kind: AttributeKind): void {
+		// Get the attribute kind ID by name
+		const attrName = kind as string;
+		const kindID = ffi.LLVMGetEnumAttributeKindForName(cstring(attrName), BigInt(attrName.length));
+
+		assert(kindID !== 0, `Failed to get attribute kind ID for ${attrName}`);
+
+		// Remove the attribute from the function
+		ffi.LLVMRemoveEnumAttributeAtIndex(this.ref, LLVM_ATTRIBUTE_FUNCTION_INDEX, kindID);
+	}
+
+	/**
+	 * Get the number of attributes this function has.
+	 * @returns The number of attributes
+	 */
+	public getAttributeCount(): number {
+		return ffi.LLVMGetAttributeCountAtIndex(this.ref, LLVM_ATTRIBUTE_FUNCTION_INDEX);
 	}
 }

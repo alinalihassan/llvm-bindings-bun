@@ -2,6 +2,7 @@ import { dlopen } from "bun:ffi";
 import { APIntSymbols } from "./symbols/APIntSymbols";
 import { ArgumentSymbols } from "./symbols/ArgumentSymbols";
 import { ArrayTypeSymbols } from "./symbols/ArrayTypeSymbols";
+import { AttributeSymbols } from "./symbols/AttributeSymbols";
 import { BasicBlockSymbols } from "./symbols/BasicBlockSymbols";
 import { ClangSymbols } from "./symbols/ClangSymbols";
 import { ConstantArraySymbols } from "./symbols/ConstantArraySymbols";
@@ -61,6 +62,7 @@ const llvmFfi = dlopen(getLibPath(llvmLibName), {
 	...TargetSymbols,
 	...TargetMachineSymbols,
 	...VectorTypeSymbols,
+	...AttributeSymbols,
 });
 
 const clangFfi = dlopen(getLibPath("libclang"), {

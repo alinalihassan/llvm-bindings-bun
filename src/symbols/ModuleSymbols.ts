@@ -1,6 +1,10 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
 const ModuleSymbols = {
+	LLVMGetModuleContext: {
+		args: [/* M: LLVMModuleRef */ FFIType.ptr],
+		returns: /* LLVMContextRef */ FFIType.ptr,
+	},
 	LLVMModuleCreateWithName: {
 		args: [/* ModuleID: const char * */ FFIType.cstring],
 		returns: /* LLVMModuleRef */ FFIType.ptr,
