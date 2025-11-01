@@ -164,11 +164,7 @@ export class IRBuilder {
 	 * @returns The global variable
 	 */
 	public CreateGlobalString(str: string, name?: string): GlobalVariable {
-		const globalVarRef = ffi.LLVMBuildGlobalString(
-			this.ref,
-			cstring(str),
-			name ? cstring(name) : null,
-		);
+		const globalVarRef = ffi.LLVMBuildGlobalString(this.ref, cstring(str), cstring(name ?? ""));
 
 		assert(globalVarRef !== null, "Failed to create global string");
 
@@ -543,7 +539,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateAdd(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildAdd(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildAdd(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create add instruction");
 
@@ -558,7 +554,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateFAdd(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildFAdd(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildFAdd(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create floating-point add instruction");
 
@@ -573,7 +569,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateSub(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildSub(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildSub(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create subtract instruction");
 
@@ -588,7 +584,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateFSub(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildFSub(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildFSub(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create floating-point subtract instruction");
 
@@ -603,7 +599,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateMul(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildMul(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildMul(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create multiply instruction");
 
@@ -618,7 +614,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateFMul(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildFMul(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildFMul(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create floating-point multiply instruction");
 
@@ -633,7 +629,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateSDiv(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildSDiv(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildSDiv(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create signed divide instruction");
 
@@ -648,7 +644,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateUDiv(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildUDiv(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildUDiv(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create unsigned divide instruction");
 
@@ -663,7 +659,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateFDiv(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildFDiv(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildFDiv(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create floating-point divide instruction");
 
@@ -678,7 +674,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateSRem(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildSRem(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildSRem(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create signed remainder instruction");
 
@@ -693,7 +689,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateURem(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildURem(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildURem(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create unsigned remainder instruction");
 
@@ -708,7 +704,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateFRem(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildFRem(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildFRem(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create floating-point remainder instruction");
 
@@ -723,7 +719,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateAnd(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildAnd(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildAnd(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create AND instruction");
 
@@ -738,7 +734,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateOr(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildOr(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildOr(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create OR instruction");
 
@@ -753,7 +749,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateXor(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildXor(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildXor(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create XOR instruction");
 
@@ -768,7 +764,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateShl(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildShl(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildShl(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create left shift instruction");
 
@@ -783,7 +779,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateAShr(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildAShr(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildAShr(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create arithmetic right shift instruction");
 
@@ -798,7 +794,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateLShr(lhs: Value, rhs: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildLShr(this.ref, lhs.ref, rhs.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildLShr(this.ref, lhs.ref, rhs.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create logical right shift instruction");
 
@@ -812,7 +808,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateNeg(value: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildNeg(this.ref, value.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildNeg(this.ref, value.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create negation instruction");
 
@@ -826,7 +822,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateFNeg(value: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildFNeg(this.ref, value.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildFNeg(this.ref, value.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create floating-point negation instruction");
 
@@ -840,7 +836,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateNot(value: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildNot(this.ref, value.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildNot(this.ref, value.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create NOT instruction");
 
@@ -861,14 +857,9 @@ export class IRBuilder {
 	public CreateAlloca(type: Type, arraySize?: Value | null, name?: string): AllocaInst {
 		let valueRef: LLVMValueRef;
 		if (arraySize) {
-			valueRef = ffi.LLVMBuildArrayAlloca(
-				this.ref,
-				type.ref,
-				arraySize.ref,
-				name ? cstring(name) : null,
-			);
+			valueRef = ffi.LLVMBuildArrayAlloca(this.ref, type.ref, arraySize.ref, cstring(name ?? ""));
 		} else {
-			valueRef = ffi.LLVMBuildAlloca(this.ref, type.ref, name ? cstring(name) : null);
+			valueRef = ffi.LLVMBuildAlloca(this.ref, type.ref, cstring(name ?? ""));
 		}
 		assert(valueRef !== null, "Failed to create alloca instruction");
 
@@ -883,7 +874,7 @@ export class IRBuilder {
 	 * @returns The load instruction
 	 */
 	public CreateLoad(type: Type, ptr: Value, name?: string): LoadInst {
-		const valueRef = ffi.LLVMBuildLoad2(this.ref, type.ref, ptr.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildLoad2(this.ref, type.ref, ptr.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create load instruction");
 
@@ -931,7 +922,7 @@ export class IRBuilder {
 			ptr.ref,
 			indexRefs,
 			indices.length,
-			name ? cstring(name) : null,
+			cstring(name ?? ""),
 		);
 
 		assert(valueRef !== null, "Failed to create GEP instruction");
@@ -977,12 +968,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateTrunc(value: Value, destType: Type, name?: string): Value {
-		const valueRef = ffi.LLVMBuildTrunc(
-			this.ref,
-			value.ref,
-			destType.ref,
-			name ? cstring(name) : null,
-		);
+		const valueRef = ffi.LLVMBuildTrunc(this.ref, value.ref, destType.ref, cstring(name ?? ""));
 		assert(valueRef !== null, "Failed to create truncate instruction");
 
 		return new Value(valueRef);
@@ -996,12 +982,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateZExt(value: Value, destType: Type, name?: string): Value {
-		const valueRef = ffi.LLVMBuildZExt(
-			this.ref,
-			value.ref,
-			destType.ref,
-			name ? cstring(name) : null,
-		);
+		const valueRef = ffi.LLVMBuildZExt(this.ref, value.ref, destType.ref, cstring(name ?? ""));
 		assert(valueRef !== null, "Failed to create zero extend instruction");
 
 		return new Value(valueRef);
@@ -1433,13 +1414,7 @@ export class IRBuilder {
 	 */
 	public CreateICmp(predicate: LLVMCmpInstPredicate, lhs: Value, rhs: Value, name?: string): Value {
 		// TODO: Need to implement constant compile-time folding
-		const valueRef = ffi.LLVMBuildICmp(
-			this.ref,
-			predicate,
-			lhs.ref,
-			rhs.ref,
-			name ? cstring(name) : null,
-		);
+		const valueRef = ffi.LLVMBuildICmp(this.ref, predicate, lhs.ref, rhs.ref, cstring(name ?? ""));
 		assert(valueRef !== null, "Failed to create integer comparison instruction");
 
 		return new ICmpInst(valueRef, predicate, lhs, rhs, name);
@@ -1454,13 +1429,7 @@ export class IRBuilder {
 	 */
 	public CreateFCmp(predicate: LLVMCmpInstPredicate, lhs: Value, rhs: Value, name?: string): Value {
 		// TODO: Need to implement constant compile-time folding
-		const valueRef = ffi.LLVMBuildFCmp(
-			this.ref,
-			predicate,
-			lhs.ref,
-			rhs.ref,
-			name ? cstring(name) : null,
-		);
+		const valueRef = ffi.LLVMBuildFCmp(this.ref, predicate, lhs.ref, rhs.ref, cstring(name ?? ""));
 		assert(valueRef !== null, "Failed to create floating-point comparison instruction");
 
 		return new FCmpInst(valueRef, predicate, lhs, rhs, name);
@@ -1866,7 +1835,7 @@ export class IRBuilder {
 	 * @returns The result value
 	 */
 	public CreateIsNotNull(value: Value, name?: string): Value {
-		const valueRef = ffi.LLVMBuildIsNotNull(this.ref, value.ref, name ? cstring(name) : null);
+		const valueRef = ffi.LLVMBuildIsNotNull(this.ref, value.ref, cstring(name ?? ""));
 
 		assert(valueRef !== null, "Failed to create is not null comparison");
 
@@ -1887,7 +1856,7 @@ export class IRBuilder {
 			elemType.ref,
 			lhs.ref,
 			rhs.ref,
-			name ? cstring(name) : null,
+			cstring(name ?? ""),
 		);
 		assert(valueRef !== null, "Failed to create pointer difference instruction");
 

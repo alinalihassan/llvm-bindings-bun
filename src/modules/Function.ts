@@ -25,8 +25,8 @@ export class LLVMFunction extends GlobalObject {
 	public static Create(
 		funcType: FunctionType,
 		linkage: GlobalValueLinkageTypes,
-		name: string,
-		module: Module,
+		name: string, // TODO: LLVM allows empty strings for the name
+		module: Module, // TODO: LLVM uses null for the module if it's not provided
 	): LLVMFunction {
 		assert(module?.ref !== null, "Module reference cannot be null");
 		assert(funcType.ref !== null, "FunctionType reference cannot be null");
