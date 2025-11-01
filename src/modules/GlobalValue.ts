@@ -11,24 +11,6 @@ import { assert } from "@/utils";
  */
 export class GlobalValue extends Constant {
 	/**
-	 * An enumeration for the kinds of linkage for global values.
-	 * Based on LLVM's LinkageTypes enum
-	 */
-	public static readonly LinkageTypes = {
-		ExternalLinkage: 0, ///< Externally visible function
-		AvailableExternallyLinkage: 1, ///< Available for inspection, not emission
-		LinkOnceAnyLinkage: 2, ///< Keep one copy of function when linking (inline)
-		LinkOnceODRLinkage: 3, ///< Same, but only replaced by something equivalent
-		WeakAnyLinkage: 4, ///< Keep one copy of named function when linking (weak)
-		WeakODRLinkage: 5, ///< Same, but only replaced by something equivalent
-		AppendingLinkage: 6, ///< Special purpose, only applies to global arrays
-		InternalLinkage: 7, ///< Rename collisions when linking (static functions)
-		PrivateLinkage: 8, ///< Like Internal, but omit from symbol table
-		ExternalWeakLinkage: 9, ///< ExternalWeak linkage description
-		CommonLinkage: 10, ///< Tentative definitions
-	} as const;
-
-	/**
 	 * An enumeration for the kinds of visibility of global values.
 	 * Based on LLVM's VisibilityTypes enum
 	 */

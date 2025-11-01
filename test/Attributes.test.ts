@@ -25,10 +25,6 @@ describe("Function Attributes", () => {
 
 		// Check attribute count
 		expect(func.getAttributeCount()).toBeGreaterThan(0);
-
-		// Clean up
-		module.dispose();
-		context.dispose();
 	});
 
 	test("should add noinline attribute", () => {
@@ -51,10 +47,6 @@ describe("Function Attributes", () => {
 		// Check the IR contains the attribute
 		const ir = module.print();
 		expect(ir).toContain("noinline");
-
-		// Clean up
-		module.dispose();
-		context.dispose();
 	});
 
 	test("should add multiple attributes", () => {
@@ -84,10 +76,6 @@ describe("Function Attributes", () => {
 
 		// Check attribute count
 		expect(func.getAttributeCount()).toBeGreaterThanOrEqual(3);
-
-		// Clean up
-		module.dispose();
-		context.dispose();
 	});
 
 	test("should add optnone and noinline together", () => {
@@ -112,9 +100,5 @@ describe("Function Attributes", () => {
 		const ir = module.print();
 		expect(ir).toContain("optnone");
 		expect(ir).toContain("noinline");
-
-		// Clean up
-		module.dispose();
-		context.dispose();
 	});
 });
