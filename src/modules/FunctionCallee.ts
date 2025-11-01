@@ -1,5 +1,5 @@
-import type { LLVMFunction } from "@/modules/Function";
 import type { FunctionType } from "@/modules/types/FunctionType";
+import type { Value } from "@/modules/Value";
 
 /**
  * A handy container for a FunctionType+Callee-pointer pair, which can be
@@ -9,7 +9,7 @@ import type { FunctionType } from "@/modules/types/FunctionType";
  */
 export class FunctionCallee {
 	private _functionType: FunctionType;
-	private _callee: LLVMFunction;
+	private _callee: Value;
 
 	/**
 	 * Construct a FunctionCallee from a function type and callee value.
@@ -17,7 +17,7 @@ export class FunctionCallee {
 	 * @param functionType The function type
 	 * @param callee The callee value (function pointer)
 	 */
-	constructor(functionType: FunctionType, callee: LLVMFunction) {
+	constructor(functionType: FunctionType, callee: Value) {
 		this._functionType = functionType;
 		this._callee = callee;
 	}
@@ -36,7 +36,7 @@ export class FunctionCallee {
 	 *
 	 * @returns The callee value
 	 */
-	getCallee(): LLVMFunction {
+	getCallee(): Value {
 		return this._callee;
 	}
 }
