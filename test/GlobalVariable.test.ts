@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "bun:test";
+import { Enums } from "@/index";
 import { ConstantInt } from "@/modules/constants/ConstantInt";
 import { GlobalValue } from "@/modules/GlobalValue";
 import { GlobalVariable } from "@/modules/GlobalVariable";
@@ -196,8 +197,8 @@ describe("GlobalVariable Tests", () => {
 			const visibility = globalVar.getVisibility();
 			expect(visibility).toBeDefined();
 
-			globalVar.setVisibility(GlobalValue.VisibilityTypes.HiddenVisibility);
-			expect(globalVar.getVisibility()).toBe(GlobalValue.VisibilityTypes.HiddenVisibility);
+			globalVar.setVisibility(Enums.GlobalValueVisibilityTypes.HiddenVisibility);
+			expect(globalVar.getVisibility()).toBe(Enums.GlobalValueVisibilityTypes.HiddenVisibility);
 		});
 	});
 

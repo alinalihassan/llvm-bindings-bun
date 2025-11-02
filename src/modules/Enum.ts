@@ -4,6 +4,71 @@
  */
 
 /**
+ * LLVM Metadata Kind enumeration
+ * Represents the well-known metadata kinds in LLVM
+ * Based on LLVM's LLVMContext metadata kind IDs
+ * @see https://llvm.org/doxygen/classllvm_1_1LLVMContext.html
+ */
+export enum LLVMMetadataKind {
+	/** Debug metadata ("dbg") - Source-level debugging information */
+	MD_dbg = 0,
+	/** Type-based alias analysis metadata ("tbaa") */
+	MD_tbaa = 1,
+	/** Profiling metadata ("prof") */
+	MD_prof = 2,
+	/** Floating-point math metadata ("fpmath") */
+	MD_fpmath = 3,
+	/** Range metadata ("range") - Integer value ranges */
+	MD_range = 4,
+	/** TBAA struct metadata ("tbaa.struct") */
+	MD_tbaa_struct = 5,
+	/** Invariant load metadata ("invariant.load") */
+	MD_invariant_load = 6,
+	/** Alias scope metadata ("alias.scope") */
+	MD_alias_scope = 7,
+	/** No-alias metadata ("noalias") */
+	MD_noalias = 8,
+	/** Non-temporal metadata ("nontemporal") */
+	MD_nontemporal = 9,
+	/** Memory parallel loop access metadata ("llvm.mem.parallel_loop_access") */
+	MD_mem_parallel_loop_access = 10,
+	/** Non-null metadata ("nonnull") */
+	MD_nonnull = 11,
+	/** Dereferenceable metadata ("dereferenceable") */
+	MD_dereferenceable = 12,
+	/** Dereferenceable or null metadata ("dereferenceable_or_null") */
+	MD_dereferenceable_or_null = 13,
+	/** Make implicit metadata ("make.implicit") */
+	MD_make_implicit = 14,
+	/** Unpredictable metadata ("unpredictable") */
+	MD_unpredictable = 15,
+	/** Invariant group metadata ("invariant.group") */
+	MD_invariant_group = 16,
+	/** Alignment metadata ("align") */
+	MD_align = 17,
+	/** Loop metadata ("llvm.loop") */
+	MD_loop = 18,
+	/** Type metadata ("type") */
+	MD_type = 19,
+	/** Section prefix metadata ("section_prefix") */
+	MD_section_prefix = 20,
+	/** Absolute symbol metadata ("absolute_symbol") */
+	MD_absolute_symbol = 21,
+	/** Associated metadata ("associated") */
+	MD_associated = 22,
+	/** Callees metadata ("callees") */
+	MD_callees = 23,
+	/** Irreducible loop metadata ("irr_loop") */
+	MD_irr_loop = 24,
+	/** Access group metadata ("llvm.access.group") */
+	MD_access_group = 25,
+	/** Callback metadata ("callback") */
+	MD_callback = 26,
+	/** Preserve access index metadata ("llvm.preserve.access.index") */
+	MD_preserve_access_index = 27,
+}
+
+/**
  * LLVM Opcode enumeration
  * Represents the different types of LLVM instructions
  */

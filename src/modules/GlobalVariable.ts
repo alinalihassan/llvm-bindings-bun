@@ -1,5 +1,6 @@
 import { ffi } from "@/ffi";
 import { Constant } from "@/modules/Constant";
+import type { GlobalValueVisibilityTypes } from "@/modules/Enum";
 import { LLVMThreadLocalMode } from "@/modules/Enum";
 import { GlobalObject } from "@/modules/GlobalObject";
 import type { Module } from "@/modules/Module";
@@ -247,9 +248,9 @@ export class GlobalVariable extends GlobalObject {
 
 	/**
 	 * Set the visibility of this global variable.
-	 * @param visibility The visibility type (from GlobalValue.VisibilityTypes)
+	 * @param visibility The visibility type (from GlobalValueVisibilityTypes)
 	 */
-	public setVisibility(visibility: number): void {
+	public setVisibility(visibility: GlobalValueVisibilityTypes): void {
 		ffi.LLVMSetVisibility(this.ref, visibility);
 	}
 

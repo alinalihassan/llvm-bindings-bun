@@ -17,6 +17,8 @@
 		"test": "bun test test/",
 		"test:watch": "bun test --watch test/",
 		"test:coverage": "bun test --coverage test/",
+		"lint": "biome check src/",
+		"lint:fix": "biome check --write src/",
 		"build": "bun run build.ts",
 		"prepublishOnly": "bun run build"
 	},

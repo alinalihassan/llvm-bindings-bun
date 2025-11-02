@@ -1,7 +1,11 @@
 import { ffi } from "@/ffi";
 import { BasicBlock } from "@/modules/BasicBlock";
 import { DbgRecord } from "@/modules/DbgRecord";
+import type { LLVMMetadataKind } from "@/modules/Enum";
+import type { LLVMContext } from "@/modules/LLVMContext";
+import { Metadata } from "@/modules/Metadata";
 import { User } from "@/modules/User";
+import { Value } from "@/modules/Value";
 import { assert } from "@/utils";
 
 /**
@@ -138,6 +142,46 @@ export class Instruction extends User {
 		assert(terminatorRef !== null, "Failed to check if instruction is a terminator");
 
 		return terminatorRef;
+	}
+
+	//===--------------------------------------------------------------------===//
+	// Metadata Methods
+	//===--------------------------------------------------------------------===//
+
+	/**
+	 * Set metadata on this instruction
+	 * @param context The LLVM context (needed to convert metadata to value)
+	 * @param kindID The metadata kind ID (use LLVMMetadataKind enum)
+	 * @param metadata The metadata to attach
+	 */
+	public setMetadata(context: LLVMContext, kindID: LLVMMetadataKind, metadata: Metadata): void {
+		// Convert metadata to value for the C API
+		const mdValue = metadata.toValue(context);
+		ffi.LLVMSetMetadata(this.ref, kindID, mdValue.ref);
+	}
+
+	/**
+	 * Get metadata attached to this instruction
+	 * @param kindID The metadata kind ID (use LLVMMetadataKind enum)
+	 * @returns The metadata, or null if not found
+	 */
+	public getMetadata(kindID: LLVMMetadataKind): Metadata | null {
+		const valueRef = ffi.LLVMGetMetadata(this.ref, kindID);
+		if (!valueRef) {
+			return null;
+		}
+
+		// Convert the value back to metadata
+		const value = new Value(valueRef);
+		return Metadata.fromValue(value);
+	}
+
+	/**
+	 * Check if this instruction has any metadata attached
+	 * @returns true if metadata is attached
+	 */
+	public hasMetadata(): boolean {
+		return ffi.LLVMHasMetadata(this.ref) !== 0;
 	}
 
 	//===--------------------------------------------------------------------===//

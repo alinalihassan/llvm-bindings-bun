@@ -77,6 +77,23 @@ const InstructionSymbols = {
 		args: [/* CatchPad: LLVMValueRef */ FFIType.ptr, /* CatchSwitch: LLVMValueRef */ FFIType.ptr],
 		returns: /* void */ FFIType.void,
 	},
+	// Instruction metadata
+	LLVMSetMetadata: {
+		args: [
+			/* Val: LLVMValueRef */ FFIType.ptr,
+			/* KindID: unsigned */ FFIType.u32,
+			/* Node: LLVMValueRef */ FFIType.ptr,
+		],
+		returns: /* void */ FFIType.void,
+	},
+	LLVMGetMetadata: {
+		args: [/* Val: LLVMValueRef */ FFIType.ptr, /* KindID: unsigned */ FFIType.u32],
+		returns: /* LLVMValueRef */ FFIType.ptr,
+	},
+	LLVMHasMetadata: {
+		args: [/* Val: LLVMValueRef */ FFIType.ptr],
+		returns: /* int */ FFIType.i32,
+	},
 } as const satisfies Record<string, FFIFunction>;
 
 export { InstructionSymbols };
