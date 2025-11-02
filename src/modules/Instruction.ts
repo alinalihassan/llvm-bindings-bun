@@ -1,5 +1,6 @@
 import { ffi } from "@/ffi";
 import { BasicBlock } from "@/modules/BasicBlock";
+import { DbgRecord } from "@/modules/DbgRecord";
 import { User } from "@/modules/User";
 import { assert } from "@/utils";
 
@@ -137,5 +138,27 @@ export class Instruction extends User {
 		assert(terminatorRef !== null, "Failed to check if instruction is a terminator");
 
 		return terminatorRef;
+	}
+
+	//===--------------------------------------------------------------------===//
+	// Debug Record Methods
+	//===--------------------------------------------------------------------===//
+
+	/**
+	 * Get the first debug record attached to this instruction
+	 * @returns The first debug record, or null if there are none
+	 */
+	public getFirstDbgRecord(): DbgRecord | null {
+		const dbgRecordRef = ffi.LLVMGetFirstDbgRecord(this.ref);
+		return dbgRecordRef ? new DbgRecord(dbgRecordRef) : null;
+	}
+
+	/**
+	 * Get the last debug record attached to this instruction
+	 * @returns The last debug record, or null if there are none
+	 */
+	public getLastDbgRecord(): DbgRecord | null {
+		const dbgRecordRef = ffi.LLVMGetLastDbgRecord(this.ref);
+		return dbgRecordRef ? new DbgRecord(dbgRecordRef) : null;
 	}
 }

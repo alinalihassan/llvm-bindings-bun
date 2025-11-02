@@ -75,4 +75,44 @@ export class Value {
 
 		ffi.LLVMReplaceAllUsesWith(this._ref, newValue._ref);
 	}
+
+	//===--------------------------------------------------------------------===//
+	// Debug Location Methods
+	//===--------------------------------------------------------------------===//
+
+	/**
+	 * Get the directory of the debug location for this value
+	 * @returns The directory path, or empty string if no debug location
+	 */
+	public getDebugLocDirectory(): string {
+		const lengthBuffer = new Uint32Array(1);
+		const dirPtr = ffi.LLVMGetDebugLocDirectory(this._ref, lengthBuffer);
+		return dirPtr ? dirPtr.toString() : "";
+	}
+
+	/**
+	 * Get the filename of the debug location for this value
+	 * @returns The filename, or empty string if no debug location
+	 */
+	public getDebugLocFilename(): string {
+		const lengthBuffer = new Uint32Array(1);
+		const filenamePtr = ffi.LLVMGetDebugLocFilename(this._ref, lengthBuffer);
+		return filenamePtr ? filenamePtr.toString() : "";
+	}
+
+	/**
+	 * Get the line number of the debug location for this value
+	 * @returns The line number, or 0 if no debug location
+	 */
+	public getDebugLocLine(): number {
+		return ffi.LLVMGetDebugLocLine(this._ref);
+	}
+
+	/**
+	 * Get the column number of the debug location for this value
+	 * @returns The column number, or 0 if no debug location
+	 */
+	public getDebugLocColumn(): number {
+		return ffi.LLVMGetDebugLocColumn(this._ref);
+	}
 }

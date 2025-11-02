@@ -45,6 +45,7 @@ import {
 	ZExtInst,
 } from "./Instructions";
 import type { LLVMContext } from "./LLVMContext";
+import { Metadata } from "./Metadata";
 import { Type } from "./Type";
 import type { IntegerType } from "./types/IntegerType";
 import type { PointerType } from "./types/PointerType";
@@ -1861,6 +1862,52 @@ export class IRBuilder {
 		assert(valueRef !== null, "Failed to create pointer difference instruction");
 
 		return new Value(valueRef);
+	}
+
+	//===--------------------------------------------------------------------===//
+	// Metadata Methods
+	//===--------------------------------------------------------------------===//
+
+	/**
+	 * Add metadata registered with this builder to an instruction
+	 * @param inst The instruction to add metadata to
+	 */
+	public AddMetadataToInst(inst: Value): void {
+		ffi.LLVMAddMetadataToInst(this.ref, inst.ref);
+	}
+
+	/**
+	 * Get the default floating-point math metadata for this builder
+	 * @returns The default FP math tag metadata, or null if not set
+	 */
+	public getDefaultFPMathTag(): Metadata | null {
+		const metadataRef = ffi.LLVMBuilderGetDefaultFPMathTag(this.ref);
+		return metadataRef ? new Metadata(metadataRef) : null;
+	}
+
+	/**
+	 * Set the default floating-point math metadata for this builder
+	 * @param fpMathTag The FP math tag metadata to set, or null to clear
+	 */
+	public setDefaultFPMathTag(fpMathTag: Metadata | null): void {
+		ffi.LLVMBuilderSetDefaultFPMathTag(this.ref, fpMathTag ? fpMathTag.ref : null);
+	}
+
+	/**
+	 * Get the current debug location
+	 * @returns The current debug location metadata, or null if not set
+	 */
+	public getCurrentDebugLocation(): Metadata | null {
+		const metadataRef = ffi.LLVMGetCurrentDebugLocation2(this.ref);
+		return metadataRef ? new Metadata(metadataRef) : null;
+	}
+
+	/**
+	 * Set the current debug location
+	 * @param loc The debug location metadata to set, or null to clear
+	 */
+	public setCurrentDebugLocation(loc: Metadata | null): void {
+		ffi.LLVMSetCurrentDebugLocation2(this.ref, loc ? loc.ref : null);
 	}
 
 	/**

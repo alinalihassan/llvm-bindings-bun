@@ -23,6 +23,9 @@ export type LLVMMemoryBufferRef = Pointer | null;
 export type LLVMTargetRef = Pointer | null;
 export type LLVMTargetDataRef = Pointer | null;
 export type LLVMAttributeRef = Pointer | null;
+export type LLVMNamedMDNodeRef = Pointer | null;
+export type LLVMMetadataRef = Pointer | null;
+export type LLVMDbgRecordRef = Pointer | null;
 
 // Helper function to convert string to C string
 export function cstring(str: string): Buffer {

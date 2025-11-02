@@ -10,6 +10,7 @@ import { ConstantFPSymbols } from "./symbols/ConstantFPSymbols";
 import { ConstantIntSymbols } from "./symbols/ConstantIntSymbols";
 import { ConstantStructSymbols } from "./symbols/ConstantStructSymbols";
 import { ConstantSymbols } from "./symbols/ConstantSymbols";
+import { DbgRecordSymbols } from "./symbols/DbgRecordSymbols";
 import { FunctionSymbols } from "./symbols/FunctionSymbols";
 import { FunctionTypeSymbols } from "./symbols/FunctionTypeSymbols";
 import { GlobalValueSymbols } from "./symbols/GlobalValueSymbols";
@@ -19,7 +20,9 @@ import { InstructionsSymbols } from "./symbols/InstructionsSymbols";
 import { IntegerTypeSymbols } from "./symbols/IntegerTypeSymbols";
 import { IRBuilderSymbols } from "./symbols/IRBuilderSymbols";
 import { LLVMContextSymbols } from "./symbols/LLVMContextSymbols";
+import { MetadataSymbols } from "./symbols/MetadataSymbols";
 import { ModuleSymbols } from "./symbols/ModuleSymbols";
+import { NamedMDNodeSymbols } from "./symbols/NamedMDNodeSymbols";
 import { PassBuilderSymbols } from "./symbols/PassBuilderSymbols";
 import { PointerTypeSymbols } from "./symbols/PointerTypeSymbols";
 import { StructTypeSymbols } from "./symbols/StructTypeSymbols";
@@ -63,6 +66,9 @@ const llvmFfi = dlopen(getLibPath(llvmLibName), {
 	...TargetMachineSymbols,
 	...VectorTypeSymbols,
 	...AttributeSymbols,
+	...NamedMDNodeSymbols,
+	...MetadataSymbols,
+	...DbgRecordSymbols,
 });
 
 const clangFfi = dlopen(getLibPath("libclang"), {

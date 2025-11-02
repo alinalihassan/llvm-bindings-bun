@@ -12,6 +12,7 @@ import { LLVMFunction } from "@/modules/Function";
 import { FunctionCallee } from "@/modules/FunctionCallee";
 import { GlobalVariable } from "@/modules/GlobalVariable";
 import type { LLVMContext } from "@/modules/LLVMContext";
+import { NamedMDNode } from "@/modules/NamedMDNode";
 import { Target } from "@/modules/Target";
 import { TargetMachine } from "@/modules/TargetMachine";
 import type { FunctionType } from "@/modules/types/FunctionType";
@@ -184,6 +185,89 @@ export class Module {
 		const firstFunc = ffi.LLVMGetFirstFunction(this._ref);
 		const firstGlobal = ffi.LLVMGetFirstGlobal(this._ref);
 		return !firstFunc && !firstGlobal;
+	}
+
+	//===--------------------------------------------------------------------===//
+	// Named Metadata Methods
+	//===--------------------------------------------------------------------===//
+
+	/**
+	 * Get the first named metadata node in the module
+	 * @returns The first named metadata node, or null if there are none
+	 */
+	getFirstNamedMetadata(): NamedMDNode | null {
+		const mdRef = ffi.LLVMGetFirstNamedMetadata(this._ref);
+		return mdRef ? new NamedMDNode(mdRef) : null;
+	}
+
+	/**
+	 * Get the last named metadata node in the module
+	 * @returns The last named metadata node, or null if there are none
+	 */
+	getLastNamedMetadata(): NamedMDNode | null {
+		const mdRef = ffi.LLVMGetLastNamedMetadata(this._ref);
+		return mdRef ? new NamedMDNode(mdRef) : null;
+	}
+
+	/**
+	 * Retrieve a named metadata node with the given name
+	 * @param name The name of the metadata node
+	 * @returns The named metadata node, or null if it doesn't exist
+	 */
+	getNamedMetadata(name: string): NamedMDNode | null {
+		const mdRef = ffi.LLVMGetNamedMetadata(this._ref, cstring(name), name.length);
+		return mdRef ? new NamedMDNode(mdRef) : null;
+	}
+
+	/**
+	 * Retrieve a named metadata node with the given name, creating it if it doesn't exist
+	 * @param name The name of the metadata node
+	 * @returns The named metadata node
+	 */
+	getOrInsertNamedMetadata(name: string): NamedMDNode {
+		const mdRef = ffi.LLVMGetOrInsertNamedMetadata(this._ref, cstring(name), name.length);
+		return new NamedMDNode(mdRef);
+	}
+
+	/**
+	 * Get the number of operands for a named metadata node
+	 * @param name The name of the metadata node
+	 * @returns The number of operands
+	 */
+	getNamedMetadataNumOperands(name: string): number {
+		return ffi.LLVMGetNamedMetadataNumOperands(this._ref, cstring(name));
+	}
+
+	/**
+	 * Get the operands for a named metadata node
+	 * @param name The name of the metadata node
+	 * @returns An array of Value references representing the operands
+	 */
+	getNamedMetadataOperands(name: string): LLVMValueRef[] {
+		const numOperands = this.getNamedMetadataNumOperands(name);
+		if (numOperands === 0) {
+			return [];
+		}
+
+		const destBuffer = new BigUint64Array(numOperands);
+		ffi.LLVMGetNamedMetadataOperands(this._ref, cstring(name), destBuffer);
+
+		const operands: LLVMValueRef[] = [];
+		for (let i = 0; i < numOperands; i++) {
+			// Convert BigInt back to Pointer
+			operands.push(Number(destBuffer[i]) as unknown as Pointer);
+		}
+
+		return operands;
+	}
+
+	/**
+	 * Add an operand to a named metadata node
+	 * @param name The name of the metadata node
+	 * @param val The value to add as an operand
+	 */
+	addNamedMetadataOperand(name: string, val: Value): void {
+		ffi.LLVMAddNamedMetadataOperand(this._ref, cstring(name), val.ref);
 	}
 
 	/**

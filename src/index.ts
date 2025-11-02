@@ -17,6 +17,7 @@ import { ConstantPointerNull } from "./modules/constants/ConstantPointerNull";
 import { ConstantStruct } from "./modules/constants/ConstantStruct";
 import { PoisonValue } from "./modules/constants/PoisonValue";
 import { UndefValue } from "./modules/constants/UndefValue";
+import { DbgRecord } from "./modules/DbgRecord";
 import * as Enums from "./modules/Enum";
 import { LLVMFunction } from "./modules/Function";
 import { FunctionCallee } from "./modules/FunctionCallee";
@@ -74,7 +75,9 @@ import {
 } from "./modules/Instructions";
 import { IRBuilder } from "./modules/IRBuilder";
 import { LLVMContext } from "./modules/LLVMContext";
+import { Metadata } from "./modules/Metadata";
 import { Module } from "./modules/Module";
+import { NamedMDNode } from "./modules/NamedMDNode";
 import { PassBuilder } from "./modules/PassBuilder";
 import { Target } from "./modules/Target";
 import { TargetMachine } from "./modules/TargetMachine";
@@ -112,6 +115,10 @@ export {
 	FunctionCallee,
 	BasicBlock,
 	Enums,
+	// Metadata and Debug Support
+	Metadata,
+	NamedMDNode,
+	DbgRecord,
 	// Constants
 	ConstantArray,
 	ConstantFP,
