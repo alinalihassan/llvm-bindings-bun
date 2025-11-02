@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { LLVMTypeKind } from "@/modules/Enum";
+import { LLVMContext } from "@/modules/LLVMContext";
 import { Type } from "@/modules/Type";
+import { PointerType } from "@/modules/types/PointerType";
 
 describe("Type", () => {
 	describe("Basic Type Creation", () => {
@@ -538,6 +540,74 @@ describe("Type", () => {
 				int32Type.getPointerTo(1),
 				int32Type.getPointerTo(2),
 				int32Type.getPointerTo(10),
+			];
+
+			// All should be different
+			for (let i = 0; i < pointers.length; i++) {
+				for (let j = i + 1; j < pointers.length; j++) {
+					const pointer1 = pointers[i];
+					const pointer2 = pointers[j];
+					if (pointer1 && pointer2) {
+						expect(pointer1.ref).not.toBe(pointer2.ref);
+					}
+				}
+			}
+		});
+	});
+
+	describe("Opaque Pointer Types (LLVM 15+)", () => {
+		let context: LLVMContext;
+
+		beforeEach(() => {
+			context = new LLVMContext();
+		});
+
+		it("should create opaque pointer type using get", () => {
+			const pointerType = PointerType.get(context);
+
+			expect(pointerType).toBeDefined();
+			expect(pointerType.ref).not.toBe(0);
+			expect(pointerType.isPointerTy()).toBe(true);
+			expect(pointerType.isOpaque()).toBe(true);
+		});
+
+		it("should create opaque pointer type with custom address space", () => {
+			const pointerType = PointerType.get(context, 1);
+
+			expect(pointerType).toBeDefined();
+			expect(pointerType.ref).not.toBe(0);
+			expect(pointerType.isPointerTy()).toBe(true);
+			expect(pointerType.isOpaque()).toBe(true);
+		});
+
+		it("should create different opaque pointer types for different address spaces", () => {
+			const pointerType0 = PointerType.get(context, 0);
+			const pointerType1 = PointerType.get(context, 1);
+
+			expect(pointerType0.ref).not.toBe(pointerType1.ref);
+		});
+
+		it("should create same opaque pointer type for same address space", () => {
+			const pointerType1 = PointerType.get(context, 0);
+			const pointerType2 = PointerType.get(context, 0);
+
+			expect(pointerType1.ref).toBe(pointerType2.ref);
+		});
+
+		it("should create opaque pointer without needing element type", () => {
+			const pointerType = PointerType.get(context);
+
+			expect(pointerType).toBeDefined();
+			expect(pointerType.isPointerTy()).toBe(true);
+			expect(pointerType.isOpaque()).toBe(true);
+		});
+
+		it("should work with multiple address spaces", () => {
+			const pointers = [
+				PointerType.get(context, 0),
+				PointerType.get(context, 1),
+				PointerType.get(context, 2),
+				PointerType.get(context, 10),
 			];
 
 			// All should be different

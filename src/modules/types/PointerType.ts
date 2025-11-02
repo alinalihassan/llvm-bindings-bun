@@ -1,4 +1,5 @@
 import { ffi } from "@/ffi";
+import type { LLVMContext } from "@/modules/LLVMContext";
 import { Type } from "@/modules/Type";
 import { assert } from "@/utils";
 
@@ -7,16 +8,19 @@ import { assert } from "@/utils";
  */
 export class PointerType extends Type {
 	/**
-	 * This static method is the primary way of constructing a PointerType.
+	 * Creates an opaque pointer type in the given context.
 	 *
-	 * @param elementType The type that the pointer points to
+	 * In LLVM 15+, all pointers are opaque and don't have element types.
+	 * This is the primary way to create pointer types.
+	 *
+	 * @param context The LLVM context
 	 * @param addressSpace The address space (default: 0)
 	 * @returns A PointerType instance
 	 */
-	static get(elementType: Type, addressSpace: number = 0): PointerType {
+	static get(context: LLVMContext, addressSpace: number = 0): PointerType {
 		assert(addressSpace >= 0, "Address space must be non-negative");
 
-		const pointerTypeRef = ffi.LLVMPointerType(elementType.ref, addressSpace);
+		const pointerTypeRef = ffi.LLVMPointerTypeInContext(context.ref, addressSpace);
 
 		assert(pointerTypeRef !== null, "Failed to create pointer type");
 

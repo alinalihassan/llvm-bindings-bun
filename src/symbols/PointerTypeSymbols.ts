@@ -5,6 +5,10 @@ const PointerTypeSymbols = {
 		args: [/* ElementType: LLVMTypeRef */ FFIType.ptr, /* AddressSpace: unsigned */ FFIType.u32],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
+	LLVMPointerTypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr, /* AddressSpace: unsigned */ FFIType.u32],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
 	LLVMGetElementType: {
 		args: [/* Ty: LLVMTypeRef */ FFIType.ptr],
 		returns: /* LLVMTypeRef */ FFIType.ptr,

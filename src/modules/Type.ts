@@ -385,10 +385,12 @@ export class Type {
 	}
 
 	/**
-	 * Get a pointer type pointing to this type
+	 * Get an opaque pointer type in the same context as this type.
+	 * In LLVM 15+, pointers are opaque and don't point to specific types.
 	 */
 	getPointerTo(addressSpace: number = 0): PointerType {
-		return new Type(ffi.LLVMPointerType(this.ref, addressSpace)) as PointerType;
+		const context = this.getContext();
+		return new Type(ffi.LLVMPointerTypeInContext(context.ref, addressSpace)) as PointerType;
 	}
 
 	/**
