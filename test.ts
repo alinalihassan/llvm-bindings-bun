@@ -72,7 +72,12 @@ builder.SetInsertPoint(mainEntryBlock);
 const arg1 = builder.getInt32(5);
 const arg2 = builder.getInt32(3);
 
+// Two ways to create FunctionCallee:
+// 1. Traditional way (when you have the FunctionType):
 const functionCallee = new FunctionCallee(functionType, addFunction);
+
+// 2. NEW: Using fromFunction() - convenient when you only have the function:
+// const functionCallee = FunctionCallee.fromFunction(addFunction);
 
 // Call the add function
 const callResult = builder.CreateCall(functionCallee, [arg1, arg2], "call_result");

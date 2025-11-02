@@ -1,5 +1,7 @@
-import type { FunctionType } from "@/modules/types/FunctionType";
+import { ffi } from "@/ffi";
+import { FunctionType } from "@/modules/types/FunctionType";
 import type { Value } from "@/modules/Value";
+import type { LLVMFunction } from "./Function";
 
 /**
  * A handy container for a FunctionType+Callee-pointer pair, which can be
@@ -20,6 +22,16 @@ export class FunctionCallee {
 	constructor(functionType: FunctionType, callee: Value) {
 		this._functionType = functionType;
 		this._callee = callee;
+	}
+
+	/**
+	 * Creates a FunctionCallee from an LLVMFunction
+	 * @param fn The function to create a callee from
+	 * @returns A new FunctionCallee wrapping the function
+	 */
+	static fromFunction(fn: LLVMFunction): FunctionCallee {
+		const functionType = new FunctionType(ffi.LLVMGlobalGetValueType(fn.ref));
+		return new FunctionCallee(functionType, fn);
 	}
 
 	/**

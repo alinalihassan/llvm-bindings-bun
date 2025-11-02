@@ -147,80 +147,162 @@ describe("FunctionCallee Tests", () => {
 		});
 	});
 
-	describe("Function.getCallee()", () => {
-		it("should return FunctionCallee from LLVMFunction instance", () => {
+	describe("FunctionCallee.fromFunction() Static Method", () => {
+		it("should create FunctionCallee from an LLVMFunction", () => {
 			const module = new Module("test_module");
 			const int32Type = Type.getInt32Ty();
-			const funcType = FunctionType.get(int32Type, [int32Type, int32Type]);
-			const func = LLVMFunction.Create(
+			const funcType = FunctionType.get(int32Type, [int32Type]);
+
+			// Create a function using LLVMFunction.Create
+			const fn = LLVMFunction.Create(
 				funcType,
 				GlobalValueLinkageTypes.ExternalLinkage,
-				"my_function",
+				"test_function",
 				module,
 			);
 
-			const functionCallee = func.getCallee();
+			// Create FunctionCallee from the function
+			const callee = FunctionCallee.fromFunction(fn);
 
-			expect(functionCallee).toBeDefined();
-			expect(functionCallee).toBeInstanceOf(FunctionCallee);
-			expect(functionCallee.getFunctionType()).toBeDefined();
-			expect(functionCallee.getCallee()).toBeDefined();
+			expect(callee).toBeDefined();
+			expect(callee.getFunctionType()).toBeDefined();
+			expect(callee.getCallee()).toBe(fn);
 		});
 
-		it("should return FunctionCallee with correct function type", () => {
+		it("should correctly extract function type from LLVMFunction", () => {
+			const module = new Module("test_module");
+			const int32Type = Type.getInt32Ty();
+			const floatType = Type.getFloatTy();
+			const funcType = FunctionType.get(int32Type, [floatType, int32Type]);
+
+			const fn = LLVMFunction.Create(
+				funcType,
+				GlobalValueLinkageTypes.ExternalLinkage,
+				"typed_function",
+				module,
+			);
+
+			const callee = FunctionCallee.fromFunction(fn);
+			const extractedType = callee.getFunctionType();
+
+			expect(extractedType).toBeDefined();
+			expect(extractedType.getReturnType()).toBeDefined();
+			expect(extractedType.getNumParams()).toBe(2);
+		});
+
+		it("should work with void return type functions", () => {
 			const module = new Module("test_module");
 			const voidType = Type.getVoidTy();
 			const funcType = FunctionType.get(voidType);
-			const func = LLVMFunction.Create(
+
+			const fn = LLVMFunction.Create(
 				funcType,
 				GlobalValueLinkageTypes.ExternalLinkage,
 				"void_function",
 				module,
 			);
 
-			const functionCallee = func.getCallee();
-			const returnedFuncType = functionCallee.getFunctionType();
+			const callee = FunctionCallee.fromFunction(fn);
 
-			expect(returnedFuncType).toBeDefined();
-			expect(returnedFuncType).toBeInstanceOf(FunctionType);
+			expect(callee).toBeDefined();
+			expect(callee.getFunctionType()).toBeDefined();
+			expect(callee.getCallee()).toBe(fn);
 		});
 
-		it("should return FunctionCallee for function with multiple parameters", () => {
+		it("should work with functions having multiple parameters", () => {
 			const module = new Module("test_module");
 			const int32Type = Type.getInt32Ty();
 			const floatType = Type.getFloatTy();
-			const funcType = FunctionType.get(int32Type, [int32Type, floatType, int32Type]);
-			const func = LLVMFunction.Create(
+			const doubleType = Type.getDoubleTy();
+			const funcType = FunctionType.get(int32Type, [int32Type, floatType, doubleType, int32Type]);
+
+			const fn = LLVMFunction.Create(
 				funcType,
 				GlobalValueLinkageTypes.ExternalLinkage,
 				"multi_param_function",
 				module,
 			);
 
-			const functionCallee = func.getCallee();
+			const callee = FunctionCallee.fromFunction(fn);
 
-			expect(functionCallee).toBeDefined();
-			expect(functionCallee.getFunctionType()).toBeDefined();
-			expect(functionCallee.getCallee()).toBeDefined();
+			expect(callee).toBeDefined();
+			const extractedType = callee.getFunctionType();
+			expect(extractedType.getNumParams()).toBe(4);
 		});
 
-		it("should return FunctionCallee that references the original function", () => {
+		it("should work with variadic functions", () => {
 			const module = new Module("test_module");
 			const int32Type = Type.getInt32Ty();
-			const funcType = FunctionType.get(int32Type);
-			const func = LLVMFunction.Create(
+			const funcType = FunctionType.get(int32Type, [int32Type], true);
+
+			const fn = LLVMFunction.Create(
 				funcType,
 				GlobalValueLinkageTypes.ExternalLinkage,
-				"reference_test",
+				"variadic_function",
 				module,
 			);
 
-			const functionCallee = func.getCallee();
-			const callee = functionCallee.getCallee();
+			const callee = FunctionCallee.fromFunction(fn);
 
-			// The callee should reference the original function
 			expect(callee).toBeDefined();
-			expect(callee).not.toBe(0);
+			const extractedType = callee.getFunctionType();
+			expect(extractedType.isVarArg()).toBe(true);
+		});
+
+		it("should handle functions obtained from module", () => {
+			const module = new Module("test_module");
+			const int32Type = Type.getInt32Ty();
+			const funcType = FunctionType.get(int32Type);
+
+			// Create function via module.getOrInsertFunction
+			const functionCallee1 = module.getOrInsertFunction("existing_func", funcType);
+			const fn = functionCallee1.getCallee() as LLVMFunction;
+
+			// Create new FunctionCallee from the function
+			const callee = FunctionCallee.fromFunction(fn);
+
+			expect(callee).toBeDefined();
+			expect(callee.getCallee()).toBe(fn);
+		});
+
+		it("should allow creating callee without pre-existing FunctionType reference", () => {
+			const module = new Module("test_module");
+			const int32Type = Type.getInt32Ty();
+			const funcType = FunctionType.get(int32Type, [int32Type, int32Type]);
+
+			const fn = LLVMFunction.Create(
+				funcType,
+				GlobalValueLinkageTypes.ExternalLinkage,
+				"no_type_ref_function",
+				module,
+			);
+
+			// This demonstrates the use case from the issue:
+			// Creating FunctionCallee without having the original FunctionType reference
+			const callee = FunctionCallee.fromFunction(fn);
+
+			expect(callee).toBeDefined();
+			expect(callee.getFunctionType()).toBeDefined();
+			expect(callee.getFunctionType().getNumParams()).toBe(2);
+		});
+
+		it("should maintain correct function reference", () => {
+			const module = new Module("test_module");
+			const int32Type = Type.getInt32Ty();
+			const funcType = FunctionType.get(int32Type);
+
+			const fn = LLVMFunction.Create(
+				funcType,
+				GlobalValueLinkageTypes.ExternalLinkage,
+				"ref_test_function",
+				module,
+			);
+
+			const callee = FunctionCallee.fromFunction(fn);
+
+			// Verify that the callee maintains the same function reference
+			const retrievedFn = callee.getCallee();
+			expect(retrievedFn).toBe(fn);
 		});
 	});
 });
