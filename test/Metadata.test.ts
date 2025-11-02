@@ -145,7 +145,7 @@ describe("Metadata Tests", () => {
 
 	it("should get and set debug location on IRBuilder", () => {
 		const context = new LLVMContext();
-		const module = new Module("test_debug_loc", context);
+		new Module("test_debug_loc", context);
 		const builder = new IRBuilder(context);
 
 		// Get current debug location (should be null initially)
@@ -168,7 +168,7 @@ describe("Metadata Tests", () => {
 
 	it("should get and set default FP math tag on IRBuilder", () => {
 		const context = new LLVMContext();
-		const module = new Module("test_fp_math", context);
+		new Module("test_fp_math", context);
 		const builder = new IRBuilder(context);
 
 		// Get default FP math tag (should be null initially)
@@ -194,7 +194,6 @@ describe("Debug Location Tests", () => {
 	it("should get debug location info from values", () => {
 		const context = new LLVMContext();
 		const module = new Module("test_debug_info", context);
-		const builder = new IRBuilder(context);
 
 		// Create a simple function
 		const funcType = Type.getFunctionType(Type.getVoidTy(), [], false);
@@ -218,11 +217,10 @@ describe("Debug Record Tests", () => {
 	it("should get debug records from instructions", () => {
 		const context = new LLVMContext();
 		const module = new Module("test_dbg_records", context);
-		const builder = new IRBuilder(context);
 
 		// Create a simple function with a basic block
 		const funcType = Type.getFunctionType(Type.getVoidTy(), [], false);
-		const func = module.getOrInsertFunction("test_func", funcType);
+		module.getOrInsertFunction("test_func", funcType);
 
 		// Note: Getting debug records requires instructions with attached debug info
 		// For now, we verify that the method exists and returns null for empty instructions
