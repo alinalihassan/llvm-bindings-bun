@@ -5,8 +5,9 @@ import type { AttributeKind, GlobalValueLinkageTypes } from "@/modules/Enum";
 import { GlobalObject } from "@/modules/GlobalObject";
 import type { Module } from "@/modules/Module";
 import { Type } from "@/modules/Type";
-import type { FunctionType } from "@/modules/types/FunctionType";
+import { FunctionType } from "@/modules/types/FunctionType";
 import { assert, cstring, type LLVMValueRef } from "@/utils";
+import { FunctionCallee } from "./FunctionCallee";
 
 // Attribute index constants
 const LLVM_ATTRIBUTE_FUNCTION_INDEX = -1;
@@ -87,6 +88,15 @@ export class LLVMFunction extends GlobalObject {
 	 */
 	public getReturnType(): Type {
 		return new Type(ffi.LLVMGetReturnType(this.getType().ref));
+	}
+
+	/**
+	 * Get the callee of this function.
+	 * @returns A FunctionCallee object containing the function type and callee
+	 */
+	public getCallee(): FunctionCallee {
+		const functionType = new FunctionType(ffi.LLVMGetElementType(this.ref));
+		return new FunctionCallee(functionType, this);
 	}
 
 	/**
