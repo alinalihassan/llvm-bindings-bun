@@ -11,23 +11,28 @@ import { assert } from "@/utils";
 export class ConstantInt extends Constant {
 	/**
 	 * Create a ConstantInt or Constant with the specified parameters.
-	 * @param contextOrType The LLVM context or type
-	 * @param value The APInt or number value
+	 * @param value The APInt, number, or bigint value
+	 * @param type The integer type (optional, defaults to i64)
 	 * @param isSigned Whether the value should be treated as signed (default: true)
 	 * @returns A new ConstantInt or Constant instance
 	 */
 	public static get(
-		value: number | APInt,
+		value: number | bigint | APInt,
 		type?: IntegerType,
 		isSigned: boolean = true,
 	): ConstantInt {
-		assert(typeof value === "number" || value instanceof APInt, "Invalid value type");
+		assert(
+			typeof value === "number" || typeof value === "bigint" || value instanceof APInt,
+			"Invalid value type",
+		);
 
-		if (typeof value === "number") {
+		if (typeof value === "number" || typeof value === "bigint") {
 			if (type === undefined) {
 				type = IntegerType.getInt64Ty();
 			}
-			return new ConstantInt(ffi.LLVMConstInt(type.ref, value, isSigned));
+			// Convert to bigint if needed - Bun FFI accepts both number and bigint
+			const valueAsBigInt = typeof value === "bigint" ? value : BigInt(value);
+			return new ConstantInt(ffi.LLVMConstInt(type.ref, valueAsBigInt, isSigned));
 		} else if (value instanceof APInt) {
 			if (type === undefined) {
 				type = IntegerType.get(value.getNumBits());
