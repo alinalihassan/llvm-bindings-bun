@@ -1,6 +1,7 @@
 import { type FFIFunction, FFIType } from "bun:ffi";
 
 const TypeSymbols = {
+	// Global context type functions
 	LLVMInt1Type: {
 		args: [],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
@@ -47,6 +48,55 @@ const TypeSymbols = {
 	},
 	LLVMVoidType: {
 		args: [],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	// Context-aware type functions
+	LLVMInt1TypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMInt8TypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMInt16TypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMInt32TypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMInt64TypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMInt128TypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMIntTypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr, /* NumBits: unsigned */ FFIType.u32],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMHalfTypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMBFloatTypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMFloatTypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMDoubleTypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMVoidTypeInContext: {
+		args: [/* C: LLVMContextRef */ FFIType.ptr],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
 	LLVMPointerType: {

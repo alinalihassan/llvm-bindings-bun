@@ -23,11 +23,11 @@ Please note we have a code of conduct, please follow it in all your interactions
    - **Arch Linux**: `sudo pacman -S llvm21`
 
 2. Clone the repository and install dependencies:
-   ```bash
-   git clone <repository-url>
-   cd llvm-bindings-bun
-   bun install
-   ```
+    ```bash
+    git clone https://github.com/alinalihassan/llvm-bindings-bun.git
+    cd llvm-bindings-bun
+    bun install
+    ```
 
 3. Run tests to verify your setup:
    ```bash
@@ -84,6 +84,72 @@ This is particularly useful for:
 - All pull requests require at least one review
 - Ensure CI tests pass before requesting review
 - Address feedback promptly and keep discussions constructive
+
+## Troubleshooting
+
+### LLVM Not Found
+
+If you get an error about LLVM not being found during `bun install`:
+
+1. **Verify LLVM is installed:**
+   ```bash
+   llvm-config-21 --version
+   # or
+   llvm-config --version
+   ```
+
+2. **Find your LLVM library directory:**
+   ```bash
+   # macOS with Homebrew:
+   brew --prefix llvm@21
+   # Then check the lib folder:
+   ls /usr/local/opt/llvm@21/lib
+
+   # Linux (Ubuntu/Debian):
+   dpkg -L llvm-21-dev | grep "\.so"
+   ```
+
+3. **Set LLVM_LIB_DIR environment variable:**
+   ```bash
+   export LLVM_LIB_DIR=/path/to/llvm/lib
+   bun install
+   ```
+
+### Tests Failing After Setup
+
+If tests fail with FFI errors:
+
+- Ensure you're using Bun 1.x or later: `bun --version`
+- Try removing `node_modules` and `bun.lock` and reinstalling:
+  ```bash
+  rm -rf node_modules bun.lock
+  bun install
+  ```
+- Check that `LLVM_LIB_DIR` is correctly set
+- Verify the LLVM version matches 21.x.x: `llvm-config --version`
+
+### macOS Specific Issues
+
+If using custom LLVM installation from Homebrew:
+
+```bash
+export LLVM_LIB_DIR=$(brew --prefix llvm@21)/lib
+export LDFLAGS="-L$(brew --prefix llvm@21)/lib"
+export CPPFLAGS="-I$(brew --prefix llvm@21)/include"
+bun install
+```
+
+### Linux Specific Issues
+
+On Ubuntu/Debian, if `llvm-21-dev` is not found:
+
+```bash
+# Add LLVM repository
+wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+echo "deb http://apt.llvm.org/$(lsb_release -cs)/ llvm-toolchain-$(lsb_release -cs)-21 main" | sudo tee /etc/apt/sources.list.d/llvm-21.list
+sudo apt-get update
+sudo apt-get install llvm-21-dev
+```
 
 ## Code of Conduct
 

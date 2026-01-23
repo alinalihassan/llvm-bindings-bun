@@ -111,6 +111,101 @@ export class Type {
 		return new Type(ffi.LLVMDoubleType());
 	}
 
+	// ========================================================================
+	// Context-aware type methods
+	// ========================================================================
+
+	/**
+	 * Static method to get void type in a specific context
+	 */
+	static getVoidTyInContext(context: LLVMContext): Type {
+		return new Type(ffi.LLVMVoidTypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get int1 type in a specific context
+	 */
+	static getInt1TyInContext(context: LLVMContext): IntegerType {
+		const { IntegerType } = require("@/modules/types/IntegerType");
+		return new IntegerType(ffi.LLVMInt1TypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get int8 type in a specific context
+	 */
+	static getInt8TyInContext(context: LLVMContext): IntegerType {
+		const { IntegerType } = require("@/modules/types/IntegerType");
+		return new IntegerType(ffi.LLVMInt8TypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get int16 type in a specific context
+	 */
+	static getInt16TyInContext(context: LLVMContext): IntegerType {
+		const { IntegerType } = require("@/modules/types/IntegerType");
+		return new IntegerType(ffi.LLVMInt16TypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get int32 type in a specific context
+	 */
+	static getInt32TyInContext(context: LLVMContext): IntegerType {
+		const { IntegerType } = require("@/modules/types/IntegerType");
+		return new IntegerType(ffi.LLVMInt32TypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get int64 type in a specific context
+	 */
+	static getInt64TyInContext(context: LLVMContext): IntegerType {
+		const { IntegerType } = require("@/modules/types/IntegerType");
+		return new IntegerType(ffi.LLVMInt64TypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get int128 type in a specific context
+	 */
+	static getInt128TyInContext(context: LLVMContext): IntegerType {
+		const { IntegerType } = require("@/modules/types/IntegerType");
+		return new IntegerType(ffi.LLVMInt128TypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get intN type in a specific context
+	 */
+	static getIntNTyInContext(context: LLVMContext, numBits: number): IntegerType {
+		const { IntegerType } = require("@/modules/types/IntegerType");
+		return new IntegerType(ffi.LLVMIntTypeInContext(context.ref, numBits));
+	}
+
+	/**
+	 * Static method to get half type in a specific context
+	 */
+	static getHalfTyInContext(context: LLVMContext): Type {
+		return new Type(ffi.LLVMHalfTypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get bfloat type in a specific context
+	 */
+	static getBFloatTyInContext(context: LLVMContext): Type {
+		return new Type(ffi.LLVMBFloatTypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get float type in a specific context
+	 */
+	static getFloatTyInContext(context: LLVMContext): Type {
+		return new Type(ffi.LLVMFloatTypeInContext(context.ref));
+	}
+
+	/**
+	 * Static method to get double type in a specific context
+	 */
+	static getDoubleTyInContext(context: LLVMContext): Type {
+		return new Type(ffi.LLVMDoubleTypeInContext(context.ref));
+	}
+
 	/**
 	 * Static method to create a function type
 	 */

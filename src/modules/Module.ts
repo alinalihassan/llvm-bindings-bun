@@ -529,8 +529,8 @@ export class Module {
 
 			// Run the executable and get the result
 			const proc = Bun.spawnSync([tempExecutable], {
-				stdout: "pipe",
-				stderr: "pipe",
+				stdout: "inherit",
+				stderr: "inherit",
 			});
 
 			// Clean up the temporary executable

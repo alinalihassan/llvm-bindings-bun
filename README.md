@@ -2,6 +2,19 @@
 
 A lightweight LLVM TypeScript binding for writing JIT compilers and code generators, built with Bun's FFI and inspired by [llvmlite](https://github.com/numba/llvmlite).
 
+## Table of Contents
+
+- [Development Status](#development-status)
+- [Key Features](#key-features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Testing](#testing)
+- [Building and Compilation](#building-and-compilation)
+- [Feature Status](#feature-status)
+- [Compatibility](#compatibility)
+- [Contributing](#contributing)
+- [License](#license)
+
 > **⚠️ Development Status**
 >
 > This project is in **active development** and is **not considered stable for production use**.
@@ -169,6 +182,35 @@ module.run()
 module.writeToFile("module.bc");
 ```
 
+## Feature Status
+
+### Fully Implemented
+
+- LLVM context and module management
+- Function and function type creation
+- Basic block management
+- IR instruction building (arithmetic, comparison, control flow, memory operations)
+- Type system (Integer, Float, Array, Struct, Vector, Pointer types)
+- Constants and constant values
+- Global variables
+- Basic optimization passes
+- Compilation to object files, assembly, and executables
+- JIT compilation
+
+### Partial/In Progress
+
+- Advanced optimization passes (some passes incomplete)
+- Debug metadata and DWARF debug info support
+- Clang integration for AST parsing
+
+### Not Yet Implemented
+
+- Some specialized instructions (check specific instruction availability)
+- Inline assembly support
+- Complex metadata operations
+- Full DWARF support
+
+For a complete and up-to-date list of what's implemented, check the [GitHub issues](https://github.com/sst/llvm-bindings-bun/issues) or inspect the source code.
 
 ## Compatibility
 

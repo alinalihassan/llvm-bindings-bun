@@ -178,7 +178,8 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt1(value: boolean): ConstantInt {
-		return ConstantInt.get(new APInt(1, value ? 1 : 0, value));
+		const type = Type.getInt1TyInContext(this.context) as IntegerType;
+		return ConstantInt.get(new APInt(1, value ? 1 : 0, value), type);
 	}
 
 	/**
@@ -203,7 +204,8 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt8(value: number): ConstantInt {
-		return ConstantInt.get(new APInt(8, value, true));
+		const type = Type.getInt8TyInContext(this.context);
+		return ConstantInt.get(new APInt(8, value, true), type);
 	}
 
 	/**
@@ -212,7 +214,8 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt16(value: number): ConstantInt {
-		return ConstantInt.get(new APInt(16, value, true));
+		const type = Type.getInt16TyInContext(this.context);
+		return ConstantInt.get(new APInt(16, value, true), type);
 	}
 
 	/**
@@ -221,7 +224,8 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt32(value: number): ConstantInt {
-		return ConstantInt.get(new APInt(32, value, true));
+		const type = Type.getInt32TyInContext(this.context);
+		return ConstantInt.get(new APInt(32, value, true), type);
 	}
 
 	/**
@@ -230,7 +234,8 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt64(value: number): ConstantInt {
-		return ConstantInt.get(new APInt(64, value, true));
+		const type = Type.getInt64TyInContext(this.context);
+		return ConstantInt.get(new APInt(64, value, true), type);
 	}
 
 	/**
@@ -240,7 +245,8 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getIntN(numBits: number, value: number): ConstantInt {
-		return ConstantInt.get(new APInt(numBits, value, true));
+		const type = Type.getIntNTyInContext(this.context, numBits);
+		return ConstantInt.get(new APInt(numBits, value, true), type);
 	}
 
 	/**
@@ -249,7 +255,8 @@ export class IRBuilder {
 	 * @returns The constant integer
 	 */
 	public getInt(value: APInt): ConstantInt {
-		return ConstantInt.get(value);
+		const type = Type.getIntNTyInContext(this.context, value.getNumBits());
+		return ConstantInt.get(value, type);
 	}
 
 	//===--------------------------------------------------------------------===//
@@ -261,7 +268,7 @@ export class IRBuilder {
 	 * @returns The integer type
 	 */
 	public getInt1Ty(): IntegerType {
-		return Type.getInt1Ty();
+		return Type.getInt1TyInContext(this.context);
 	}
 
 	/**
@@ -269,7 +276,7 @@ export class IRBuilder {
 	 * @returns The integer type
 	 */
 	public getInt8Ty(): IntegerType {
-		return Type.getInt8Ty();
+		return Type.getInt8TyInContext(this.context);
 	}
 
 	/**
@@ -277,7 +284,7 @@ export class IRBuilder {
 	 * @returns The integer type
 	 */
 	public getInt16Ty(): IntegerType {
-		return Type.getInt16Ty();
+		return Type.getInt16TyInContext(this.context);
 	}
 
 	/**
@@ -285,7 +292,7 @@ export class IRBuilder {
 	 * @returns The integer type
 	 */
 	public getInt32Ty(): IntegerType {
-		return Type.getInt32Ty();
+		return Type.getInt32TyInContext(this.context);
 	}
 
 	/**
@@ -293,7 +300,7 @@ export class IRBuilder {
 	 * @returns The integer type
 	 */
 	public getInt64Ty(): IntegerType {
-		return Type.getInt64Ty();
+		return Type.getInt64TyInContext(this.context);
 	}
 
 	/**
@@ -301,7 +308,7 @@ export class IRBuilder {
 	 * @returns The integer type
 	 */
 	public getInt128Ty(): IntegerType {
-		return Type.getInt128Ty();
+		return Type.getInt128TyInContext(this.context);
 	}
 
 	/**
@@ -310,7 +317,7 @@ export class IRBuilder {
 	 * @returns The integer type
 	 */
 	public getIntNTy(numBits: number): IntegerType {
-		return Type.getIntNTy(numBits);
+		return Type.getIntNTyInContext(this.context, numBits);
 	}
 
 	/**
@@ -318,7 +325,7 @@ export class IRBuilder {
 	 * @returns The type
 	 */
 	public getHalfTy(): Type {
-		return Type.getHalfTy();
+		return Type.getHalfTyInContext(this.context);
 	}
 
 	/**
@@ -326,7 +333,7 @@ export class IRBuilder {
 	 * @returns The type
 	 */
 	public getBFloatTy(): Type {
-		return Type.getBFloatTy();
+		return Type.getBFloatTyInContext(this.context);
 	}
 
 	/**
@@ -334,7 +341,7 @@ export class IRBuilder {
 	 * @returns The type
 	 */
 	public getFloatTy(): Type {
-		return Type.getFloatTy();
+		return Type.getFloatTyInContext(this.context);
 	}
 
 	/**
@@ -342,7 +349,7 @@ export class IRBuilder {
 	 * @returns The type
 	 */
 	public getDoubleTy(): Type {
-		return Type.getDoubleTy();
+		return Type.getDoubleTyInContext(this.context);
 	}
 
 	/**
@@ -350,7 +357,7 @@ export class IRBuilder {
 	 * @returns The type
 	 */
 	public getVoidTy(): Type {
-		return Type.getVoidTy();
+		return Type.getVoidTyInContext(this.context);
 	}
 
 	/**
@@ -359,7 +366,7 @@ export class IRBuilder {
 	 * @returns The pointer type
 	 */
 	public getInt8PtrTy(addrSpace?: number): PointerType {
-		const int8Type = Type.getInt8Ty();
+		const int8Type = Type.getInt8TyInContext(this.context);
 		return int8Type.getPointerTo(addrSpace || 0);
 	}
 

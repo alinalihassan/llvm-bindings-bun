@@ -1,3 +1,22 @@
+/**
+ * LLVM Bindings for TypeScript - A lightweight TypeScript binding for LLVM using Bun's FFI
+ *
+ * This module provides high-level TypeScript bindings for the LLVM C API, making it easy to
+ * create JIT compilers and code generators. It handles memory management automatically and
+ * provides a more idiomatic TypeScript API compared to raw LLVM C bindings.
+ *
+ * @example
+ * ```typescript
+ * import { LLVMContext, Module, IRBuilder, IntegerType, FunctionType } from "llvm-bindings-bun";
+ *
+ * const context = new LLVMContext();
+ * const module = new Module("example", context);
+ * const builder = new IRBuilder(context);
+ * const int32 = IntegerType.getInt32Ty();
+ * // ... create and build IR
+ * ```
+ */
+
 import { Argument } from "./modules/Argument";
 import { APFloat } from "./modules/ap/APFloat";
 import { APInt } from "./modules/ap/APInt";
@@ -92,6 +111,23 @@ import { VectorType } from "./modules/types/VectorType";
 import { User } from "./modules/User";
 import { Value } from "./modules/Value";
 
+/**
+ * Main LLVM Bindings Module
+ *
+ * Core exports for building LLVM IR:
+ * - {@link LLVMContext} - LLVM execution context
+ * - {@link Module} - Container for all IR
+ * - {@link IRBuilder} - Helper for creating IR instructions
+ * - {@link LLVMFunction} - Represents an LLVM function
+ * - {@link BasicBlock} - Basic block within a function
+ *
+ * Type system exports:
+ * - {@link IntegerType}, {@link ArrayType}, {@link StructType}, {@link VectorType}, {@link PointerType}
+ *
+ * Instruction exports for IR construction (60+ instruction types)
+ *
+ * For more information, see the README and examples in the repository.
+ */
 // Export all classes as named exports (so they work as both values and types)
 export {
 	// Core classes
