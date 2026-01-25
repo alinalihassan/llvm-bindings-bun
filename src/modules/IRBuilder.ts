@@ -1765,13 +1765,17 @@ export class IRBuilder {
 
 	/**
 	 * Create an extract value instruction
+	 * Note: LLVM C API only supports extracting one field at a time.
+	 * For nested extracts, call this multiple times.
 	 * @param agg The aggregate value
-	 * @param idxs The indices
+	 * @param idxs The indices (only first index is used by LLVM C API)
 	 * @param name Optional name
 	 * @returns The result value
 	 */
 	public CreateExtractValue(agg: Value, idxs: number[], name?: string): Value {
-		const valueRef = ffi.LLVMBuildExtractValue(this.ref, agg.ref, idxs.length, cstring(name ?? ""));
+		assert(idxs.length > 0 && idxs[0] !== undefined, "At least one index is required");
+		const index = idxs[0];
+		const valueRef = ffi.LLVMBuildExtractValue(this.ref, agg.ref, index, cstring(name ?? ""));
 		assert(valueRef !== null, "Failed to create extract value instruction");
 
 		return new ExtractValueInst(valueRef);

@@ -1,11 +1,94 @@
 import { ffi } from "@/ffi";
+import type { LLVMContext } from "@/modules/LLVMContext";
 import { Type } from "@/modules/Type";
-import { assert, type LLVMTypeRef } from "@/utils";
+import { assert, cstring, type LLVMTypeRef } from "@/utils";
 
 /**
  * Class to represent struct types
  */
 export class StructType extends Type {
+	/**
+	 * Create a named struct type in a context.
+	 * The struct body can be set later with setBody().
+	 *
+	 * @param context The LLVM context
+	 * @param name The name of the struct
+	 * @returns A named StructType instance
+	 */
+	static createNamed(context: LLVMContext, name: string): StructType {
+		const structTypeRef = ffi.LLVMStructCreateNamed(context.ref, cstring(name));
+		assert(structTypeRef !== null, `Failed to create named struct type: ${name}`);
+		return new StructType(structTypeRef);
+	}
+
+	/**
+	 * Create a struct type in a specific context.
+	 *
+	 * @param context The LLVM context
+	 * @param elementTypes Array of element types
+	 * @param isPacked Whether the struct is packed
+	 * @returns A StructType instance
+	 */
+	static getInContext(
+		context: LLVMContext,
+		elementTypes: Type[],
+		isPacked: boolean = false,
+	): StructType {
+		if (elementTypes.length === 0) {
+			const elementTypesBuffer = new ArrayBuffer(0);
+			const elementTypesView = new BigUint64Array(elementTypesBuffer);
+			const structTypeRef = ffi.LLVMStructTypeInContext(context.ref, elementTypesView, 0, isPacked);
+			assert(structTypeRef !== null, "Failed to create struct type in context");
+			return new StructType(structTypeRef);
+		}
+
+		const elementTypesBuffer = new ArrayBuffer(elementTypes.length * 8);
+		const elementTypesView = new BigUint64Array(elementTypesBuffer);
+
+		for (let i = 0; i < elementTypes.length; i++) {
+			const elementType = elementTypes[i];
+			assert(elementType !== undefined, `Element type at index ${i} is undefined`);
+			assert(elementType.ref !== null, `Element type at index ${i} is null`);
+			elementTypesView[i] = BigInt(elementType.ref);
+		}
+
+		const structTypeRef = ffi.LLVMStructTypeInContext(
+			context.ref,
+			elementTypesView,
+			elementTypes.length,
+			isPacked,
+		);
+		assert(structTypeRef !== null, "Failed to create struct type in context");
+		return new StructType(structTypeRef);
+	}
+
+	/**
+	 * Set the body of an opaque struct type.
+	 *
+	 * @param elementTypes Array of element types
+	 * @param isPacked Whether the struct is packed
+	 */
+	setBody(elementTypes: Type[], isPacked: boolean = false): void {
+		if (elementTypes.length === 0) {
+			const elementTypesBuffer = new ArrayBuffer(0);
+			const elementTypesView = new BigUint64Array(elementTypesBuffer);
+			ffi.LLVMStructSetBody(this.ref, elementTypesView, 0, isPacked);
+			return;
+		}
+
+		const elementTypesBuffer = new ArrayBuffer(elementTypes.length * 8);
+		const elementTypesView = new BigUint64Array(elementTypesBuffer);
+
+		for (let i = 0; i < elementTypes.length; i++) {
+			const elementType = elementTypes[i];
+			assert(elementType !== undefined, `Element type at index ${i} is undefined`);
+			assert(elementType.ref !== null, `Element type at index ${i} is null`);
+			elementTypesView[i] = BigInt(elementType.ref);
+		}
+
+		ffi.LLVMStructSetBody(this.ref, elementTypesView, elementTypes.length, isPacked);
+	}
+
 	/**
 	 * This static method is the primary way of constructing a StructType.
 	 *

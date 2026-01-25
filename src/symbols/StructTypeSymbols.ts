@@ -9,6 +9,31 @@ const StructTypeSymbols = {
 		],
 		returns: /* LLVMTypeRef */ FFIType.ptr,
 	},
+	LLVMStructTypeInContext: {
+		args: [
+			/* C: LLVMContextRef */ FFIType.ptr,
+			/* ElementTypes: LLVMTypeRef * */ FFIType.ptr,
+			/* ElementCount: unsigned */ FFIType.u32,
+			/* Packed: LLVMBool */ FFIType.bool,
+		],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMStructCreateNamed: {
+		args: [
+			/* C: LLVMContextRef */ FFIType.ptr,
+			/* Name: const char * */ FFIType.cstring,
+		],
+		returns: /* LLVMTypeRef */ FFIType.ptr,
+	},
+	LLVMStructSetBody: {
+		args: [
+			/* StructTy: LLVMTypeRef */ FFIType.ptr,
+			/* ElementTypes: LLVMTypeRef * */ FFIType.ptr,
+			/* ElementCount: unsigned */ FFIType.u32,
+			/* Packed: LLVMBool */ FFIType.bool,
+		],
+		returns: /* void */ FFIType.void,
+	},
 	LLVMStructGetTypeAtIndex: {
 		args: [/* StructTy: LLVMTypeRef */ FFIType.ptr, /* i: unsigned */ FFIType.u32],
 		returns: /* LLVMTypeRef */ FFIType.ptr,

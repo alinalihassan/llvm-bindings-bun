@@ -4,6 +4,9 @@ import { assert } from "@/utils";
 import { StructType } from "../types/StructType";
 
 export class ConstantStruct extends Constant {
+	/**
+	 * Create an anonymous constant struct with the given values
+	 */
 	public static get(type: StructType, values: Constant[]): ConstantStruct {
 		const valuesRef = values.map((value) => value.ref);
 		const argsBuffer = new ArrayBuffer(valuesRef.length * 8);
@@ -17,6 +20,24 @@ export class ConstantStruct extends Constant {
 
 		const constantRef = ffi.LLVMConstStruct(argsView, values.length, type.isPacked());
 		assert(constantRef !== null, "Failed to create constant struct");
+		return new ConstantStruct(constantRef);
+	}
+
+	/**
+	 * Create a named constant struct with the given type and values
+	 */
+	public static getNamed(type: StructType, values: Constant[]): ConstantStruct {
+		const argsBuffer = new ArrayBuffer(values.length * 8);
+		const argsView = new BigUint64Array(argsBuffer);
+		for (let i = 0; i < values.length; i++) {
+			const val = values[i]?.ref;
+			assert(val !== undefined && val !== null, "Value reference is null");
+			// biome-ignore lint/suspicious/noExplicitAny: LLVM pointer values need to be cast to BigInt
+			argsView[i] = BigInt(val as any);
+		}
+
+		const constantRef = ffi.LLVMConstNamedStruct(type.ref, argsView, values.length);
+		assert(constantRef !== null, "Failed to create named constant struct");
 		return new ConstantStruct(constantRef);
 	}
 
